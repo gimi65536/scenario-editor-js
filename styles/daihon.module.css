@@ -1,0 +1,70 @@
+.dialogue {
+	background-color: transparent;
+	border-style: var(--border-style);
+	border-width: var(--border-width);
+	padding: 5px;
+	font-size: 1rem;
+}
+
+.dialogue>* {
+	margin-top: 10px;
+}
+
+.dialogue>*:first-child {
+	margin-top: 0;
+}
+
+.sentence {
+	display: flex;
+}
+
+.speaker {
+	margin-right: 0;
+}
+
+.speaker::after {
+	content: "：";
+}
+
+.text {
+	flex-grow: 1;
+}
+
+.ruleline {
+	display: flex;
+	flex-direction: row;
+}
+
+.ruleline::before,
+.ruleline::after {
+	content: "";
+	flex: 1 1;
+	border-bottom: 1px solid #000;
+	margin: auto;
+}
+
+.cast {
+	margin: 10px auto;
+	display: table;
+	width: inherit;
+	border-collapse: separate;
+	border-spacing: 10px;
+}
+
+.cast-row {
+	display: table-row;
+}
+
+.cast-head,
+.cast-button,
+.cast-name,
+.cast-abbr,
+.cast-gender,
+.cast-casting,
+.cast-showing {
+	display: table-cell;
+}
+
+.cast-head {
+	font-weight: bold;
+}

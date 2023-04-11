@@ -1,0 +1,3227 @@
+{
+	"Base": "gimi65536",
+	"Version": "0.0.3",
+	"MacroStart": "-(",
+	"MacroStop": ")-",
+	"MacroSplit": "/",
+	"Title": "賽馬娘 Pretty Derby Season 2 第二話",
+	"ScenarioInfo": {
+		"index": "NTUCCC 109SS VAD07",
+		"date": "2021/5/13",
+		"image": "uma/main.png",
+		"imagelist": "uma/01.png"
+	},
+	"Character": {
+		"東海帝王": {
+			"color": "#3376d2",
+			"abbreviated": "帝",
+			"gender": "♀/公",
+			"cast": "Machico",
+			"order": 0
+		},
+		"目白麥昆": {
+			"color": "#00b5be",
+			"abbreviated": "麥",
+			"gender": "♀/公",
+			"cast": "大西沙織",
+			"order": 1
+		},
+		"訓練師": {
+			"color": "#f3d874",
+			"abbreviated": "訓",
+			"gender": "♂",
+			"cast": "沖野晃司",
+			"order": 2
+		},
+		"特別週": {
+			"color": "#ee6dcb",
+			"abbreviated": "特",
+			"gender": "♀/公",
+			"cast": "和氣あず未",
+			"order": 3
+		},
+		"無聲鈴鹿": {
+			"color": "#29bd70",
+			"abbreviated": "鈴",
+			"gender": "♀/公",
+			"cast": "高野麻里佳",
+			"order": 4
+		},
+		"伏特加": {
+			"color": "#d4c200",
+			"abbreviated": "伏",
+			"gender": "♀/母",
+			"cast": "大橋彩香",
+			"order": 5
+		},
+		"大和赤驥": {
+			"color": "#4f64d8",
+			"abbreviated": "大",
+			"gender": "♀/母",
+			"cast": "木村千咲",
+			"order": 6
+		},
+		"黃金船": {
+			"color": "#da3c57",
+			"abbreviated": "船",
+			"gender": "♀/公",
+			"cast": "上田瞳",
+			"order": 7
+		},
+		"魯鐸象徵": {
+			"color": "#1c7763",
+			"abbreviated": "皇",
+			"gender": "♀/公",
+			"cast": "田所あずさ",
+			"order": 8
+		},
+		"草上飛": {
+			"color": "#3a34ac",
+			"abbreviated": "草",
+			"gender": "♀/公",
+			"cast": "前田玲奈",
+			"order": 9
+		},
+		"北部玄駒": {
+			"color": "#5a6065",
+			"abbreviated": "北",
+			"gender": "♀/公",
+			"cast": "矢野妃菜喜",
+			"order": 10
+		},
+		"優秀素質": {
+			"color": "#28a959",
+			"abbreviated": "優",
+			"gender": "♀/公",
+			"cast": "前田佳織里",
+			"order": 11
+		},
+		"雙渦輪": {
+			"color": "#1985d2",
+			"abbreviated": "渦",
+			"gender": "♀/公",
+			"cast": "花井美春",
+			"order": 12
+		},
+		"狄杜斯": {
+			"color": "#49b73f",
+			"abbreviated": "狄",
+			"gender": "♀/母",
+			"cast": "田澤茉純",
+			"order": 13
+		},
+		"摩耶重砲": {
+			"color": "#f57d38",
+			"abbreviated": "摩",
+			"gender": "♀/公",
+			"cast": "星谷美緒",
+			"order": 14
+		},
+		"利昂那塔": {
+			"color": "#2769dc",
+			"abbreviated": "利",
+			"gender": "♀/公",
+			"cast": "青山吉能",
+			"order": 15
+		},
+		"執事": {
+			"color": "#b4c1d2",
+			"abbreviated": "爺",
+			"gender": "♂",
+			"cast": "梅津秀行",
+			"order": 16
+		},
+		"醫生": {
+			"color": "#a5a29a",
+			"abbreviated": "醫",
+			"gender": "♂",
+			"cast": "宇垣秀成",
+			"order": 17
+		},
+		"美容師": {
+			"color": "#c398a0",
+			"abbreviated": "美",
+			"gender": "♀",
+			"cast": "美幸キャスリン",
+			"order": 18
+		},
+		"客人": {
+			"color": "#614354",
+			"abbreviated": "客",
+			"gender": "♀",
+			"cast": "河上明日香",
+			"order": 19
+		},
+		"路人甲": {
+			"color": "#aa4b1e",
+			"abbreviated": "甲",
+			"gender": "♂",
+			"cast": "有隅融",
+			"order": 23
+		},
+		"路人乙": {
+			"color": "#7a3721",
+			"abbreviated": "乙",
+			"gender": "♂",
+			"cast": "上西哲平",
+			"order": 24
+		},
+		"南坂": {
+			"color": "#969263",
+			"abbreviated": "南",
+			"gender": "♂",
+			"cast": "古川慎",
+			"order": 20
+		},
+		"赤坂美聡": {
+			"color": "#40979b",
+			"abbreviated": "實",
+			"gender": "♀",
+			"cast": "明坂聡美",
+			"order": 21
+		},
+		"細江純子": {
+			"color": "#3e5376",
+			"abbreviated": "細",
+			"gender": "♀",
+			"cast": "細江純子",
+			"order": 22
+		},
+		"路人丙": {
+			"color": "#4d485a",
+			"abbreviated": "丙",
+			"gender": "♂",
+			"cast": "",
+			"order": 25
+		},
+		"路人丁": {
+			"color": "#5c5357",
+			"abbreviated": "丁",
+			"gender": "♀",
+			"cast": "",
+			"order": 26
+		},
+		"物理治療師": {
+			"color": "#64466d",
+			"abbreviated": "物",
+			"gender": "♂",
+			"cast": "",
+			"order": 27
+		},
+		"廚師": {
+			"color": "#737262",
+			"abbreviated": "廚",
+			"gender": "♂",
+			"cast": "",
+			"order": 29
+		},
+		"針灸師": {
+			"color": "#755848",
+			"abbreviated": "針",
+			"gender": "♀",
+			"cast": "",
+			"order": 28
+		},
+		"甜點師": {
+			"color": "#786579",
+			"abbreviated": "甜",
+			"gender": "♂",
+			"cast": "",
+			"order": 30
+		},
+		"主治醫生": {
+			"color": "#657192",
+			"abbreviated": "主",
+			"gender": "♂",
+			"cast": "",
+			"order": 31
+		},
+		"馬娘Ａ": {
+			"color": "#c33ab3",
+			"abbreviated": "Ａ",
+			"gender": "♀/公",
+			"cast": "",
+			"order": 32
+		},
+		"馬娘Ｂ": {
+			"color": "#d2b22b",
+			"abbreviated": "Ｂ",
+			"gender": "♀/公",
+			"cast": "",
+			"order": 33
+		},
+		"車掌": {
+			"color": "#ff0000",
+			"abbreviated": "車",
+			"gender": "♂",
+			"cast": "",
+			"order": 34
+		}
+	},
+	"Dialogue": [
+		{
+			"Text": "（嗯……）",
+			"Info": {
+				"speaker": "醫",
+				"speaker_list": [
+					"醫生"
+				]
+			}
+		},
+		{
+			"Text": "訓練師太誇張啦，我一點事都沒有的",
+			"Info": {
+				"speaker": "帝",
+				"speaker_list": [
+					"東海帝王"
+				]
+			}
+		},
+		{
+			"Text": "就怕有個萬一，還是讓醫生看看比較好",
+			"Info": {
+				"speaker": "訓",
+				"speaker_list": [
+					"訓練師"
+				]
+			}
+		},
+		{
+			"Text": "快點結束吧，我還要為了菊花賞鍛鍊呢",
+			"Info": {
+				"speaker": "帝",
+				"speaker_list": [
+					"東海帝王"
+				]
+			}
+		},
+		{
+			"Text": "東海帝王",
+			"Info": {
+				"speaker": "醫",
+				"speaker_list": [
+					"醫生"
+				]
+			}
+		},
+		{
+			"Text": "什麼？",
+			"Info": {
+				"speaker": "帝",
+				"speaker_list": [
+					"東海帝王"
+				]
+			}
+		},
+		{
+			"Text": "折了",
+			"Info": {
+				"speaker": "醫",
+				"speaker_list": [
+					"醫生"
+				]
+			}
+		},
+		{
+			"Text": "（誒？）",
+			"Info": {
+				"speaker": "帝、訓",
+				"speaker_list": [
+					"東海帝王",
+					"訓練師"
+				]
+			}
+		},
+		{
+			"Text": "是骨折，要回歸比賽得等明年春天了吧",
+			"Info": {
+				"speaker": "醫",
+				"speaker_list": [
+					"醫生"
+				]
+			}
+		},
+		{
+			"Text": "（誒）",
+			"Info": {
+				"speaker": "訓",
+				"speaker_list": [
+					"訓練師"
+				]
+			}
+		},
+		{
+			"Text": "（誒！？）",
+			"Info": {
+				"speaker": "帝",
+				"speaker_list": [
+					"東海帝王"
+				]
+			}
+		},
+		{
+			"Text": "請住院吧",
+			"Info": {
+				"speaker": "醫",
+				"speaker_list": [
+					"醫生"
+				]
+			}
+		},
+		{
+			"Text": "住院？（上）不要，不要不要不要……（略）",
+			"Info": {
+				"speaker": "帝",
+				"speaker_list": [
+					"東海帝王"
+				]
+			}
+		},
+		{
+			"Text": "真的骨折了嗎？",
+			"Info": {
+				"speaker": "訓",
+				"speaker_list": [
+					"訓練師"
+				]
+			}
+		},
+		{
+			"Text": "骨折了，總之先打上止痛針吧",
+			"Info": {
+				"speaker": "醫",
+				"speaker_list": [
+					"醫生"
+				]
+			}
+		},
+		{
+			"Text": "（誒？）（慘叫）",
+			"Info": {
+				"speaker": "帝",
+				"speaker_list": [
+					"東海帝王"
+				]
+			}
+		},
+		{
+			"Text": "-( separate/OP ユメヲカケル )-",
+			"Info": {
+				"speaker": "",
+				"speaker_list": []
+			}
+		},
+		{
+			"Text": "キミと-( ruby/夢/ゆめ )-をかけるよ",
+			"Info": {
+				"speaker": "",
+				"speaker_list": []
+			}
+		},
+		{
+			"Text": "-( ruby/何回/なんかい )-だって-( ruby/勝/か )-ち-( ruby/進/すす )-め　-( ruby/勝/しょう )--( ruby/利/り )-のその-( ruby/先/さき )-へ!",
+			"Info": {
+				"speaker": "",
+				"speaker_list": []
+			}
+		},
+		{
+			"Text": "",
+			"Info": {
+				"speaker": "",
+				"speaker_list": []
+			}
+		},
+		{
+			"Text": "Sunshine　-( ruby/前/まえ )-を-( ruby/向/む )-けば　Passion　-( ruby/高/たか )--( ruby/鳴/な )-るファンファーレ",
+			"Info": {
+				"speaker": "",
+				"speaker_list": []
+			}
+		},
+		{
+			"Text": "-( ruby/青空/あおぞら )--( ruby/一/いっ )--( ruby/直/ちょく )--( ruby/線/せん )-!(-( ruby/目指/めざ )-せ-( ruby/一着/テッペン )-!)",
+			"Info": {
+				"speaker": "",
+				"speaker_list": []
+			}
+		},
+		{
+			"Text": "ちょっとヘコむときは　パっと-( ruby/耳/みみ )--( ruby/澄/す )-ませてFeel Me!",
+			"Info": {
+				"speaker": "",
+				"speaker_list": []
+			}
+		},
+		{
+			"Text": "その-( ruby/背/せ )--( ruby/中/なか )-　-( ruby/押/お )-してたいから",
+			"Info": {
+				"speaker": "",
+				"speaker_list": []
+			}
+		},
+		{
+			"Text": "",
+			"Info": {
+				"speaker": "",
+				"speaker_list": []
+			}
+		},
+		{
+			"Text": "-( ruby/気持/きも )-ち-( ruby/一/いち )--( ruby/列/れつ )-　それぞれに-( ruby/続/つづ )-く-( ruby/地/ち )--( ruby/平/へい )--( ruby/線/せん )-　-( ruby/蹴/け )-って",
+			"Info": {
+				"speaker": "",
+				"speaker_list": []
+			}
+		},
+		{
+			"Text": "(No More!)-( ruby/迷/まよ )-わないで",
+			"Info": {
+				"speaker": "",
+				"speaker_list": []
+			}
+		},
+		{
+			"Text": "(Let's Go!)-( ruby/止/と )-まらず-( ruby/行/い )-こう!",
+			"Info": {
+				"speaker": "",
+				"speaker_list": []
+			}
+		},
+		{
+			"Text": "",
+			"Info": {
+				"speaker": "",
+				"speaker_list": []
+			}
+		},
+		{
+			"Text": "キミと-( ruby/夢/ゆめ )-をかけるよ",
+			"Info": {
+				"speaker": "",
+				"speaker_list": []
+			}
+		},
+		{
+			"Text": "-( ruby/何回/なんかい )-だって　-( ruby/巻/ま )-き-( ruby/起/お )-こせスパート",
+			"Info": {
+				"speaker": "",
+				"speaker_list": []
+			}
+		},
+		{
+			"Text": "-( ruby/諦/あきら )-めないで　I Believe!",
+			"Info": {
+				"speaker": "",
+				"speaker_list": []
+			}
+		},
+		{
+			"Text": "いつか-( ruby/決/き )-めたゴールに",
+			"Info": {
+				"speaker": "",
+				"speaker_list": []
+			}
+		},
+		{
+			"Text": "Try!-( ruby/届/とど )-け　-( ruby/全速/ぜんそく )-で",
+			"Info": {
+				"speaker": "",
+				"speaker_list": []
+			}
+		},
+		{
+			"Text": "-( ruby/走/はし )-りまくろう　Never Give Up",
+			"Info": {
+				"speaker": "",
+				"speaker_list": []
+			}
+		},
+		{
+			"Text": "-( ruby/風/かぜ )-も-( ruby/音/おと )-もヒカリも",
+			"Info": {
+				"speaker": "",
+				"speaker_list": []
+			}
+		},
+		{
+			"Text": "-( ruby/追/お )-い-( ruby/越/こ )-しちゃって　-( ruby/誰/だれ )-も-( ruby/知/し )-らない-( ruby/明日/あした )-へ-( ruby/進/すす )-め!",
+			"Info": {
+				"speaker": "",
+				"speaker_list": []
+			}
+		},
+		{
+			"Text": "(ほら)キミと-( ruby/夢/ゆめ )-を-( ruby/重/かさ )-ねてる",
+			"Info": {
+				"speaker": "",
+				"speaker_list": []
+			}
+		},
+		{
+			"Text": "(ほら)その-( ruby/姿/すがた )-この-( ruby/瞳/ひとみ )-　-( ruby/映/うつ )-ってるから",
+			"Info": {
+				"speaker": "",
+				"speaker_list": []
+			}
+		},
+		{
+			"Text": "-( separate )-",
+			"Info": {
+				"speaker": "",
+				"speaker_list": []
+			}
+		},
+		{
+			"Text": "妳剛才說什麼？",
+			"Info": {
+				"speaker": "訓",
+				"speaker_list": [
+					"訓練師"
+				]
+			}
+		},
+		{
+			"Text": "我說要參加菊花賞",
+			"Info": {
+				"speaker": "帝",
+				"speaker_list": [
+					"東海帝王"
+				]
+			}
+		},
+		{
+			"Text": "就算要參加，可是妳……",
+			"Info": {
+				"speaker": "訓",
+				"speaker_list": [
+					"訓練師"
+				]
+			}
+		},
+		{
+			"Text": "六個月才能痊癒？明年春天復出？那又怎麼樣，你以為對方這麼說我就能放棄菊花賞嗎？",
+			"Info": {
+				"speaker": "帝",
+				"speaker_list": [
+					"東海帝王"
+				]
+			}
+		},
+		{
+			"Text": "不會的",
+			"Info": {
+				"speaker": "訓",
+				"speaker_list": [
+					"訓練師"
+				]
+			}
+		},
+		{
+			"Text": "我絕對要參加，然後絕對要贏",
+			"Info": {
+				"speaker": "帝",
+				"speaker_list": [
+					"東海帝王"
+				]
+			}
+		},
+		{
+			"Text": "……沒辦法，想個計劃吧",
+			"Info": {
+				"speaker": "訓",
+				"speaker_list": [
+					"訓練師"
+				]
+			}
+		},
+		{
+			"Text": "拜託啦，三冠馬娘在此一舉啊",
+			"Info": {
+				"speaker": "帝",
+				"speaker_list": [
+					"東海帝王"
+				]
+			}
+		},
+		{
+			"Text": "好好，首先要乖乖住院",
+			"Info": {
+				"speaker": "訓",
+				"speaker_list": [
+					"訓練師"
+				]
+			}
+		},
+		{
+			"Text": "（誒）我討厭醫院",
+			"Info": {
+				"speaker": "帝",
+				"speaker_list": [
+					"東海帝王"
+				]
+			}
+		},
+		{
+			"Text": "-( separate )-",
+			"Info": {
+				"speaker": "",
+				"speaker_list": []
+			}
+		},
+		{
+			"Text": "住院？不可能，明明比賽和Live都很完美",
+			"Info": {
+				"speaker": "北",
+				"speaker_list": [
+					"北部玄駒"
+				]
+			}
+		},
+		{
+			"Text": "（哭泣）",
+			"Info": {
+				"speaker": "美",
+				"speaker_list": [
+					"美容師"
+				]
+			}
+		},
+		{
+			"Text": "（誒！？）",
+			"Info": {
+				"speaker": "客",
+				"speaker_list": [
+					"客人"
+				]
+			}
+		},
+		{
+			"Text": "菊花賞，東海帝王要是上了絕對能贏呢",
+			"Info": {
+				"speaker": "甲",
+				"speaker_list": [
+					"路人甲"
+				]
+			}
+		},
+		{
+			"Text": "可是現在受傷沒法參加了吧",
+			"Info": {
+				"speaker": "乙",
+				"speaker_list": [
+					"路人乙"
+				]
+			}
+		},
+		{
+			"Text": "就是這個問題",
+			"Info": {
+				"speaker": "甲",
+				"speaker_list": [
+					"路人甲"
+				]
+			}
+		},
+		{
+			"Text": "菊花賞是11月嗎，好！",
+			"Info": {
+				"speaker": "訓",
+				"speaker_list": [
+					"訓練師"
+				]
+			}
+		},
+		{
+			"Text": "我回來啦！",
+			"Info": {
+				"speaker": "帝",
+				"speaker_list": [
+					"東海帝王"
+				]
+			}
+		},
+		{
+			"Text": "帝王？",
+			"Info": {
+				"speaker": "眾",
+				"speaker_list": [
+					"目白麥昆",
+					"特別週",
+					"伏特加",
+					"大和赤驥",
+					"黃金船"
+				]
+			}
+		},
+		{
+			"Text": "妳已經出院了？",
+			"Info": {
+				"speaker": "麥",
+				"speaker_list": [
+					"目白麥昆"
+				]
+			}
+		},
+		{
+			"Text": "（耶）",
+			"Info": {
+				"speaker": "帝",
+				"speaker_list": [
+					"東海帝王"
+				]
+			}
+		},
+		{
+			"Text": "看起來很有精神啊",
+			"Info": {
+				"speaker": "船",
+				"speaker_list": [
+					"黃金船"
+				]
+			}
+		},
+		{
+			"Text": "又要吵鬧起來了呢",
+			"Info": {
+				"speaker": "大",
+				"speaker_list": [
+					"大和赤驥"
+				]
+			}
+		},
+		{
+			"Text": "那麼擔心，虧妳能說",
+			"Info": {
+				"speaker": "伏",
+				"speaker_list": [
+					"伏特加"
+				]
+			}
+		},
+		{
+			"Text": "（蛤！？）",
+			"Info": {
+				"speaker": "大",
+				"speaker_list": [
+					"大和赤驥"
+				]
+			}
+		},
+		{
+			"Text": "帝王，完成啦：東海帝王，菊花賞復出完美計劃",
+			"Info": {
+				"speaker": "訓",
+				"speaker_list": [
+					"訓練師"
+				]
+			}
+		},
+		{
+			"Text": "這麼厚！看起來很厲害的樣子……大家怎麼了",
+			"Info": {
+				"speaker": "帝",
+				"speaker_list": [
+					"東海帝王"
+				]
+			}
+		},
+		{
+			"Text": "訓練師，你是認真的嗎",
+			"Info": {
+				"speaker": "麥",
+				"speaker_list": [
+					"目白麥昆"
+				]
+			}
+		},
+		{
+			"Text": "我是認真的，只要帝王不放棄，就全力支持她，我已經決定了",
+			"Info": {
+				"speaker": "訓",
+				"speaker_list": [
+					"訓練師"
+				]
+			}
+		},
+		{
+			"Text": "我不會放棄的，在菊花賞上復出比賽",
+			"Info": {
+				"speaker": "帝",
+				"speaker_list": [
+					"東海帝王"
+				]
+			}
+		},
+		{
+			"Text": "只是希望妳保證一點",
+			"Info": {
+				"speaker": "訓",
+				"speaker_list": [
+					"訓練師"
+				]
+			}
+		},
+		{
+			"Text": "什麼？",
+			"Info": {
+				"speaker": "帝",
+				"speaker_list": [
+					"東海帝王"
+				]
+			}
+		},
+		{
+			"Text": "我們會堅持到最後一刻，但到時候如果被醫生阻止了，就只能放棄了",
+			"Info": {
+				"speaker": "訓",
+				"speaker_list": [
+					"訓練師"
+				]
+			}
+		},
+		{
+			"Text": "嗯，知道了",
+			"Info": {
+				"speaker": "帝",
+				"speaker_list": [
+					"東海帝王"
+				]
+			}
+		},
+		{
+			"Text": "（突然開始號泣）",
+			"Info": {
+				"speaker": "船",
+				"speaker_list": [
+					"黃金船"
+				]
+			}
+		},
+		{
+			"Text": "嚇我一跳，怎麼了？",
+			"Info": {
+				"speaker": "帝",
+				"speaker_list": [
+					"東海帝王"
+				]
+			}
+		},
+		{
+			"Text": "我現在超級感動！帝王，我願意為妳做任何事！",
+			"Info": {
+				"speaker": "船",
+				"speaker_list": [
+					"黃金船"
+				]
+			}
+		},
+		{
+			"Text": "倒是被妳嚇到了",
+			"Info": {
+				"speaker": "帝",
+				"speaker_list": [
+					"東海帝王"
+				]
+			}
+		},
+		{
+			"Text": "我也希望帝王能實現夢想",
+			"Info": {
+				"speaker": "特",
+				"speaker_list": [
+					"特別週"
+				]
+			}
+		},
+		{
+			"Text": "嗯，我會成為不敗的三冠馬娘",
+			"Info": {
+				"speaker": "帝",
+				"speaker_list": [
+					"東海帝王"
+				]
+			}
+		},
+		{
+			"Text": "說到這份上就沒辦法了呢",
+			"Info": {
+				"speaker": "麥",
+				"speaker_list": [
+					"目白麥昆"
+				]
+			}
+		},
+		{
+			"Text": "是呀，放棄的話比賽就……",
+			"Info": {
+				"speaker": "大",
+				"speaker_list": [
+					"大和赤驥"
+				]
+			}
+		},
+		{
+			"Text": "加油啊！帝王",
+			"Info": {
+				"speaker": "伏",
+				"speaker_list": [
+					"伏特加"
+				]
+			}
+		},
+		{
+			"Text": "交給我吧",
+			"Info": {
+				"speaker": "帝",
+				"speaker_list": [
+					"東海帝王"
+				]
+			}
+		},
+		{
+			"Text": "好！馬上開始吧",
+			"Info": {
+				"speaker": "訓",
+				"speaker_list": [
+					"訓練師"
+				]
+			}
+		},
+		{
+			"Text": "（欸？）",
+			"Info": {
+				"speaker": "帝",
+				"speaker_list": [
+					"東海帝王"
+				]
+			}
+		},
+		{
+			"Text": "通往菊花賞之路，其一",
+			"Info": {
+				"speaker": "訓",
+				"speaker_list": [
+					"訓練師"
+				]
+			}
+		},
+		{
+			"Text": "-( separate )-",
+			"Info": {
+				"speaker": "",
+				"speaker_list": []
+			}
+		},
+		{
+			"Text": "帝王出院了呢",
+			"Info": {
+				"speaker": "草",
+				"speaker_list": [
+					"草上飛"
+				]
+			}
+		},
+		{
+			"Text": "嗯，出院後馬上來找我了",
+			"Info": {
+				"speaker": "皇",
+				"speaker_list": [
+					"魯鐸象徵"
+				]
+			}
+		},
+		{
+			"Text": "我回來啦！會長",
+			"Info": {
+				"speaker": "帝",
+				"speaker_list": [
+					"東海帝王"
+				]
+			}
+		},
+		{
+			"Text": "妳出院好快啊",
+			"Info": {
+				"speaker": "皇",
+				"speaker_list": [
+					"魯鐸象徵"
+				]
+			}
+		},
+		{
+			"Text": "是吧～看著吧會長，我馬上就能跑起來",
+			"Info": {
+				"speaker": "帝",
+				"speaker_list": [
+					"東海帝王"
+				]
+			}
+		},
+		{
+			"Text": "那種事……",
+			"Info": {
+				"speaker": "草",
+				"speaker_list": [
+					"草上飛"
+				]
+			}
+		},
+		{
+			"Text": "接下來就是和自己的戰鬥了呢，就像妳當時那樣",
+			"Info": {
+				"speaker": "皇",
+				"speaker_list": [
+					"魯鐸象徵"
+				]
+			}
+		},
+		{
+			"Text": "是",
+			"Info": {
+				"speaker": "草",
+				"speaker_list": [
+					"草上飛"
+				]
+			}
+		},
+		{
+			"Text": "開始",
+			"Info": {
+				"speaker": "訓",
+				"speaker_list": [
+					"訓練師"
+				]
+			}
+		},
+		{
+			"Text": "（跑）",
+			"Info": {
+				"speaker": "特、船",
+				"speaker_list": [
+					"特別週",
+					"黃金船"
+				]
+			}
+		},
+		{
+			"Text": "這是什麼復健",
+			"Info": {
+				"speaker": "麥",
+				"speaker_list": [
+					"目白麥昆"
+				]
+			}
+		},
+		{
+			"Text": "說是意象訓練",
+			"Info": {
+				"speaker": "帝",
+				"speaker_list": [
+					"東海帝王"
+				]
+			}
+		},
+		{
+			"Text": "要抱有復出的想像，看著其她人跑，去想自己要怎麼跑",
+			"Info": {
+				"speaker": "訓",
+				"speaker_list": [
+					"訓練師"
+				]
+			}
+		},
+		{
+			"Text": "要是我的話，這個速度，佔到好位置就不會讓出來。小特和黃金船都很能追，可是一邊感受這份壓力，直到最後都要讓對方看我的背影",
+			"Info": {
+				"speaker": "帝",
+				"speaker_list": [
+					"東海帝王"
+				]
+			}
+		},
+		{
+			"Text": "那麼，也請好好看著我跑的樣子，雖然我不認為妳的想像能跟得上。訓練師，接下來我也要跑",
+			"Info": {
+				"speaker": "麥",
+				"speaker_list": [
+					"目白麥昆"
+				]
+			}
+		},
+		{
+			"Text": "帝王，這是我用舊的，給妳啦",
+			"Info": {
+				"speaker": "伏",
+				"speaker_list": [
+					"伏特加"
+				]
+			}
+		},
+		{
+			"Text": "好沉！這是什麼……啞鈴？",
+			"Info": {
+				"speaker": "帝",
+				"speaker_list": [
+					"東海帝王"
+				]
+			}
+		},
+		{
+			"Text": "帝王能舉幾公斤？",
+			"Info": {
+				"speaker": "伏",
+				"speaker_list": [
+					"伏特加"
+				]
+			}
+		},
+		{
+			"Text": "（啊！）伏特加搶跑，不公平",
+			"Info": {
+				"speaker": "大",
+				"speaker_list": [
+					"大和赤驥"
+				]
+			}
+		},
+		{
+			"Text": "有什麼不好",
+			"Info": {
+				"speaker": "伏",
+				"speaker_list": [
+					"伏特加"
+				]
+			}
+		},
+		{
+			"Text": "帝王，用這個",
+			"Info": {
+				"speaker": "大",
+				"speaker_list": [
+					"大和赤驥"
+				]
+			}
+		},
+		{
+			"Text": "（嗯？）",
+			"Info": {
+				"speaker": "帝",
+				"speaker_list": [
+					"東海帝王"
+				]
+			}
+		},
+		{
+			"Text": "這種時候心情才是最重要的",
+			"Info": {
+				"speaker": "大",
+				"speaker_list": [
+					"大和赤驥"
+				]
+			}
+		},
+		{
+			"Text": "謝謝",
+			"Info": {
+				"speaker": "帝",
+				"speaker_list": [
+					"東海帝王"
+				]
+			}
+		},
+		{
+			"Text": "帝王，用這個吧，小黃金船號",
+			"Info": {
+				"speaker": "船",
+				"speaker_list": [
+					"黃金船"
+				]
+			}
+		},
+		{
+			"Text": "這個要怎麼開？",
+			"Info": {
+				"speaker": "帝",
+				"speaker_list": [
+					"東海帝王"
+				]
+			}
+		},
+		{
+			"Text": "就是這樣……咦？不動了",
+			"Info": {
+				"speaker": "船",
+				"speaker_list": [
+					"黃金船"
+				]
+			}
+		},
+		{
+			"Text": "帝王，晚上能去妳的房間嗎",
+			"Info": {
+				"speaker": "特",
+				"speaker_list": [
+					"特別週"
+				]
+			}
+		},
+		{
+			"Text": "（嗯？）",
+			"Info": {
+				"speaker": "帝",
+				"speaker_list": [
+					"東海帝王"
+				]
+			}
+		},
+		{
+			"Text": "-( separate )-",
+			"Info": {
+				"speaker": "",
+				"speaker_list": []
+			}
+		},
+		{
+			"Text": "復健時的注意點？",
+			"Info": {
+				"speaker": "鈴",
+				"speaker_list": [
+					"無聲鈴鹿"
+				]
+			}
+		},
+		{
+			"Text": "嗯，我覺得問鈴鹿最好",
+			"Info": {
+				"speaker": "特",
+				"speaker_list": [
+					"特別週"
+				]
+			}
+		},
+		{
+			"Text": "（背景睡死）",
+			"Info": {
+				"speaker": "摩",
+				"speaker_list": [
+					"摩耶重砲"
+				]
+			}
+		},
+		{
+			"Text": "對不起，鈴鹿，我明明說不用了",
+			"Info": {
+				"speaker": "帝",
+				"speaker_list": [
+					"東海帝王"
+				]
+			}
+		},
+		{
+			"Text": "太好了，妳比想像中還要精神呢",
+			"Info": {
+				"speaker": "鈴",
+				"speaker_list": [
+					"無聲鈴鹿"
+				]
+			}
+		},
+		{
+			"Text": "嗯，鈴鹿也是，是不是瘦了？",
+			"Info": {
+				"speaker": "帝",
+				"speaker_list": [
+					"東海帝王"
+				]
+			}
+		},
+		{
+			"Text": "是呢，適應這邊的飯菜花了點時間",
+			"Info": {
+				"speaker": "鈴",
+				"speaker_list": [
+					"無聲鈴鹿"
+				]
+			}
+		},
+		{
+			"Text": "鈴鹿，要我再給妳寄紅蘿蔔嗎",
+			"Info": {
+				"speaker": "特",
+				"speaker_list": [
+					"特別週"
+				]
+			}
+		},
+		{
+			"Text": "已經夠多了，謝謝。帝王，Derby恭喜妳",
+			"Info": {
+				"speaker": "鈴",
+				"speaker_list": [
+					"無聲鈴鹿"
+				]
+			}
+		},
+		{
+			"Text": "嗯，謝謝",
+			"Info": {
+				"speaker": "帝",
+				"speaker_list": [
+					"東海帝王"
+				]
+			}
+		},
+		{
+			"Text": "接下來是菊花賞？",
+			"Info": {
+				"speaker": "鈴",
+				"speaker_list": [
+					"無聲鈴鹿"
+				]
+			}
+		},
+		{
+			"Text": "嗯",
+			"Info": {
+				"speaker": "帝",
+				"speaker_list": [
+					"東海帝王"
+				]
+			}
+		},
+		{
+			"Text": "復健會很辛苦的，有所覺悟了嗎？",
+			"Info": {
+				"speaker": "鈴",
+				"speaker_list": [
+					"無聲鈴鹿"
+				]
+			}
+		},
+		{
+			"Text": "……嗯！",
+			"Info": {
+				"speaker": "帝",
+				"speaker_list": [
+					"東海帝王"
+				]
+			}
+		},
+		{
+			"Text": "最重要的是不要太勉強自己，急著趕進度會傷到其它部位",
+			"Info": {
+				"speaker": "鈴",
+				"speaker_list": [
+					"無聲鈴鹿"
+				]
+			}
+		},
+		{
+			"Text": "訓練師也說了一樣的話，可是沒什麼時間了",
+			"Info": {
+				"speaker": "帝",
+				"speaker_list": [
+					"東海帝王"
+				]
+			}
+		},
+		{
+			"Text": "是呢，妳的心情我理解，可是，好好休息也是復健的重要一環哦，而且休息時也有事可以做",
+			"Info": {
+				"speaker": "鈴",
+				"speaker_list": [
+					"無聲鈴鹿"
+				]
+			}
+		},
+		{
+			"Text": "（誒？）",
+			"Info": {
+				"speaker": "帝",
+				"speaker_list": [
+					"東海帝王"
+				]
+			}
+		},
+		{
+			"Text": "帝王",
+			"Info": {
+				"speaker": "麥",
+				"speaker_list": [
+					"目白麥昆"
+				]
+			}
+		},
+		{
+			"Text": "那傢伙幹什麼呢？",
+			"Info": {
+				"speaker": "船",
+				"speaker_list": [
+					"黃金船"
+				]
+			}
+		},
+		{
+			"Text": "研究",
+			"Info": {
+				"speaker": "特",
+				"speaker_list": [
+					"特別週"
+				]
+			}
+		},
+		{
+			"Text": "研究？",
+			"Info": {
+				"speaker": "船",
+				"speaker_list": [
+					"黃金船"
+				]
+			}
+		},
+		{
+			"Text": "昨天鈴鹿告訴她的",
+			"Info": {
+				"speaker": "特",
+				"speaker_list": [
+					"特別週"
+				]
+			}
+		},
+		{
+			"Text": "好！我也來教她。京都的外圈不要從第三個轉角前發力哦。（上）聽著，絕對哦",
+			"Info": {
+				"speaker": "船",
+				"speaker_list": [
+					"黃金船"
+				]
+			}
+		},
+		{
+			"Text": "真是的，好吵",
+			"Info": {
+				"speaker": "帝",
+				"speaker_list": [
+					"東海帝王"
+				]
+			}
+		},
+		{
+			"Text": "先前的比賽真可惜",
+			"Info": {
+				"speaker": "渦",
+				"speaker_list": [
+					"雙渦輪"
+				]
+			}
+		},
+		{
+			"Text": "那個",
+			"Info": {
+				"speaker": "優",
+				"speaker_list": [
+					"優秀素質"
+				]
+			}
+		},
+		{
+			"Text": "（嗯？）",
+			"Info": {
+				"speaker": "渦、南",
+				"speaker_list": [
+					"雙渦輪",
+					"南坂"
+				]
+			}
+		},
+		{
+			"Text": "我要是說想參加菊花賞，你怎麼看？",
+			"Info": {
+				"speaker": "優",
+				"speaker_list": [
+					"優秀素質"
+				]
+			}
+		},
+		{
+			"Text": "菊花賞，G1？",
+			"Info": {
+				"speaker": "渦",
+				"speaker_list": [
+					"雙渦輪"
+				]
+			}
+		},
+		{
+			"Text": "果然不行嗎",
+			"Info": {
+				"speaker": "優",
+				"speaker_list": [
+					"優秀素質"
+				]
+			}
+		},
+		{
+			"Text": "渦輪也想參加！",
+			"Info": {
+				"speaker": "渦",
+				"speaker_list": [
+					"雙渦輪"
+				]
+			}
+		},
+		{
+			"Text": "渦輪還要多贏下幾場才行",
+			"Info": {
+				"speaker": "南",
+				"speaker_list": [
+					"南坂"
+				]
+			}
+		},
+		{
+			"Text": "會贏的！下一場比賽會贏的！",
+			"Info": {
+				"speaker": "渦",
+				"speaker_list": [
+					"雙渦輪"
+				]
+			}
+		},
+		{
+			"Text": "之後的比賽都拿下第一，能勉強趕上嗎",
+			"Info": {
+				"speaker": "優",
+				"speaker_list": [
+					"優秀素質"
+				]
+			}
+		},
+		{
+			"Text": "稍等一下",
+			"Info": {
+				"speaker": "南",
+				"speaker_list": [
+					"南坂"
+				]
+			}
+		},
+		{
+			"Text": "很有幹勁嘛，素質，為什麼？",
+			"Info": {
+				"speaker": "渦",
+				"speaker_list": [
+					"雙渦輪"
+				]
+			}
+		},
+		{
+			"Text": "帝王可能會參加",
+			"Info": {
+				"speaker": "優",
+				"speaker_list": [
+					"優秀素質"
+				]
+			}
+		},
+		{
+			"Text": "（啊）",
+			"Info": {
+				"speaker": "渦",
+				"speaker_list": [
+					"雙渦輪"
+				]
+			}
+		},
+		{
+			"Text": "東海帝王嗎？可是她……",
+			"Info": {
+				"speaker": "南",
+				"speaker_list": [
+					"南坂"
+				]
+			}
+		},
+		{
+			"Text": "帝王沒有放棄。所以，雖然我也可能沒法參加，但是……贏下這個、這個，贏下小倉紀念，這樣就能參加了嗎？",
+			"Info": {
+				"speaker": "優",
+				"speaker_list": [
+					"優秀素質"
+				]
+			}
+		},
+		{
+			"Text": "（啊……）是",
+			"Info": {
+				"speaker": "南",
+				"speaker_list": [
+					"南坂"
+				]
+			}
+		},
+		{
+			"Text": "來訓練吧！訓練",
+			"Info": {
+				"speaker": "渦",
+				"speaker_list": [
+					"雙渦輪"
+				]
+			}
+		},
+		{
+			"Text": "好，來做吧！",
+			"Info": {
+				"speaker": "優",
+				"speaker_list": [
+					"優秀素質"
+				]
+			}
+		},
+		{
+			"Text": "（哦！）",
+			"Info": {
+				"speaker": "渦",
+				"speaker_list": [
+					"雙渦輪"
+				]
+			}
+		},
+		{
+			"Text": "-( separate )-",
+			"Info": {
+				"speaker": "",
+				"speaker_list": []
+			}
+		},
+		{
+			"Text": "帝王，加油啊！",
+			"Info": {
+				"speaker": "丙",
+				"speaker_list": [
+					"路人丙"
+				]
+			}
+		},
+		{
+			"Text": "我一直在關注妳",
+			"Info": {
+				"speaker": "丁",
+				"speaker_list": [
+					"路人丁"
+				]
+			}
+		},
+		{
+			"Text": "（被送到目白家別莊）什麼？什麼？什麼？什麼什麼什麼？這是什麼？",
+			"Info": {
+				"speaker": "帝",
+				"speaker_list": [
+					"東海帝王"
+				]
+			}
+		},
+		{
+			"Text": "妳要趕上菊花賞吧",
+			"Info": {
+				"speaker": "麥",
+				"speaker_list": [
+					"目白麥昆"
+				]
+			}
+		},
+		{
+			"Text": "這位是目白家專用物理治療師",
+			"Info": {
+				"speaker": "爺",
+				"speaker_list": [
+					"執事"
+				]
+			}
+		},
+		{
+			"Text": "我是物理治療師",
+			"Info": {
+				"speaker": "物",
+				"speaker_list": [
+					"物理治療師"
+				]
+			}
+		},
+		{
+			"Text": "針灸師",
+			"Info": {
+				"speaker": "爺",
+				"speaker_list": [
+					"執事"
+				]
+			}
+		},
+		{
+			"Text": "我是針灸師",
+			"Info": {
+				"speaker": "針",
+				"speaker_list": [
+					"針灸師"
+				]
+			}
+		},
+		{
+			"Text": "廚師",
+			"Info": {
+				"speaker": "爺",
+				"speaker_list": [
+					"執事"
+				]
+			}
+		},
+		{
+			"Text": "我是廚師",
+			"Info": {
+				"speaker": "廚",
+				"speaker_list": [
+					"廚師"
+				]
+			}
+		},
+		{
+			"Text": "甜點師",
+			"Info": {
+				"speaker": "爺",
+				"speaker_list": [
+					"執事"
+				]
+			}
+		},
+		{
+			"Text": "我是甜點師",
+			"Info": {
+				"speaker": "甜",
+				"speaker_list": [
+					"甜點師"
+				]
+			}
+		},
+		{
+			"Text": "關於帝王大人的安排，這個週末請在敝宅好好休息",
+			"Info": {
+				"speaker": "爺",
+				"speaker_list": [
+					"執事"
+				]
+			}
+		},
+		{
+			"Text": "（哈……）麥昆，怎麼回事",
+			"Info": {
+				"speaker": "帝",
+				"speaker_list": [
+					"東海帝王"
+				]
+			}
+		},
+		{
+			"Text": "只是物盡其用罷了，還有主治醫生",
+			"Info": {
+				"speaker": "麥",
+				"speaker_list": [
+					"目白麥昆"
+				]
+			}
+		},
+		{
+			"Text": "（誒）",
+			"Info": {
+				"speaker": "帝",
+				"speaker_list": [
+					"東海帝王"
+				]
+			}
+		},
+		{
+			"Text": "我是主治醫生",
+			"Info": {
+				"speaker": "主",
+				"speaker_list": [
+					"主治醫生"
+				]
+			}
+		},
+		{
+			"Text": "（誒……啊！）為什麼還拿著注射器！？",
+			"Info": {
+				"speaker": "帝",
+				"speaker_list": [
+					"東海帝王"
+				]
+			}
+		},
+		{
+			"Text": "因為我是大小姐的主治醫生",
+			"Info": {
+				"speaker": "主",
+				"speaker_list": [
+					"主治醫生"
+				]
+			}
+		},
+		{
+			"Text": "簡直莫名其妙啊",
+			"Info": {
+				"speaker": "帝",
+				"speaker_list": [
+					"東海帝王"
+				]
+			}
+		},
+		{
+			"Text": "那我先走了。有不明白的地方，隨時叫我",
+			"Info": {
+				"speaker": "麥",
+				"speaker_list": [
+					"目白麥昆"
+				]
+			}
+		},
+		{
+			"Text": "我說了莫名其妙了吧（啊！）麥昆，不要讓我一個人，拜託了……",
+			"Info": {
+				"speaker": "帝",
+				"speaker_list": [
+					"東海帝王"
+				]
+			}
+		},
+		{
+			"Text": "-( separate/帝王慘叫 )-",
+			"Info": {
+				"speaker": "",
+				"speaker_list": []
+			}
+		},
+		{
+			"Text": "（哦！）",
+			"Info": {
+				"speaker": "眾",
+				"speaker_list": []
+			}
+		},
+		{
+			"Text": "拆石膏了",
+			"Info": {
+				"speaker": "特",
+				"speaker_list": [
+					"特別週"
+				]
+			}
+		},
+		{
+			"Text": "護具也很快就能拿掉",
+			"Info": {
+				"speaker": "帝",
+				"speaker_list": [
+					"東海帝王"
+				]
+			}
+		},
+		{
+			"Text": "接下來才是正戲，沒問題吧",
+			"Info": {
+				"speaker": "訓",
+				"speaker_list": [
+					"訓練師"
+				]
+			}
+		},
+		{
+			"Text": "嗯",
+			"Info": {
+				"speaker": "帝",
+				"speaker_list": [
+					"東海帝王"
+				]
+			}
+		},
+		{
+			"Text": "甜點、甜點、甜點",
+			"Info": {
+				"speaker": "眾",
+				"speaker_list": [
+					"目白麥昆",
+					"特別週",
+					"伏特加",
+					"大和赤驥",
+					"黃金船"
+				]
+			}
+		},
+		{
+			"Text": "想跑起來嗎，帝王",
+			"Info": {
+				"speaker": "訓",
+				"speaker_list": [
+					"訓練師"
+				]
+			}
+		},
+		{
+			"Text": "那當然！",
+			"Info": {
+				"speaker": "帝",
+				"speaker_list": [
+					"東海帝王"
+				]
+			}
+		},
+		{
+			"Text": "積聚那份慾望，把想跑的慾望化成能量，讓妳的腳想起來，它是為了跑而生的",
+			"Info": {
+				"speaker": "訓",
+				"speaker_list": [
+					"訓練師"
+				]
+			}
+		},
+		{
+			"Text": "哦！",
+			"Info": {
+				"speaker": "帝",
+				"speaker_list": [
+					"東海帝王"
+				]
+			}
+		},
+		{
+			"Text": "小特，不要分心",
+			"Info": {
+				"speaker": "船",
+				"speaker_list": [
+					"黃金船"
+				]
+			}
+		},
+		{
+			"Text": "我還是很在意",
+			"Info": {
+				"speaker": "特",
+				"speaker_list": [
+					"特別週"
+				]
+			}
+		},
+		{
+			"Text": "我們能做到的，只有讓帝王看著我們奔跑的背影",
+			"Info": {
+				"speaker": "麥",
+				"speaker_list": [
+					"目白麥昆"
+				]
+			}
+		},
+		{
+			"Text": "是",
+			"Info": {
+				"speaker": "特",
+				"speaker_list": [
+					"特別週"
+				]
+			}
+		},
+		{
+			"Text": "說得好，麥昆",
+			"Info": {
+				"speaker": "伏",
+				"speaker_list": [
+					"伏特加"
+				]
+			}
+		},
+		{
+			"Text": "既然這樣",
+			"Info": {
+				"speaker": "大",
+				"speaker_list": [
+					"大和赤驥"
+				]
+			}
+		},
+		{
+			"Text": "好卑鄙！",
+			"Info": {
+				"speaker": "伏",
+				"speaker_list": [
+					"伏特加"
+				]
+			}
+		},
+		{
+			"Text": "我也要上啦",
+			"Info": {
+				"speaker": "特",
+				"speaker_list": [
+					"特別週"
+				]
+			}
+		},
+		{
+			"Text": "要比一比嗎",
+			"Info": {
+				"speaker": "船",
+				"speaker_list": [
+					"黃金船"
+				]
+			}
+		},
+		{
+			"Text": "我不會輸的",
+			"Info": {
+				"speaker": "麥",
+				"speaker_list": [
+					"目白麥昆"
+				]
+			}
+		},
+		{
+			"Text": "真是的！我也想盡情地跑",
+			"Info": {
+				"speaker": "帝",
+				"speaker_list": [
+					"東海帝王"
+				]
+			}
+		},
+		{
+			"Text": "沒錯，不要忘了這份心情",
+			"Info": {
+				"speaker": "訓",
+				"speaker_list": [
+					"訓練師"
+				]
+			}
+		},
+		{
+			"Text": "-( separate/帝王復健中 )-",
+			"Info": {
+				"speaker": "",
+				"speaker_list": []
+			}
+		},
+		{
+			"Text": "可以坐這嗎",
+			"Info": {
+				"speaker": "優",
+				"speaker_list": [
+					"優秀素質"
+				]
+			}
+		},
+		{
+			"Text": "（？）　嗯！",
+			"Info": {
+				"speaker": "帝",
+				"speaker_list": [
+					"東海帝王"
+				]
+			}
+		},
+		{
+			"Text": "情況怎麼樣",
+			"Info": {
+				"speaker": "優",
+				"speaker_list": [
+					"優秀素質"
+				]
+			}
+		},
+		{
+			"Text": "順利得很，那還用說",
+			"Info": {
+				"speaker": "帝",
+				"speaker_list": [
+					"東海帝王"
+				]
+			}
+		},
+		{
+			"Text": "帝王果然厲害呢",
+			"Info": {
+				"speaker": "優",
+				"speaker_list": [
+					"優秀素質"
+				]
+			}
+		},
+		{
+			"Text": "素質也風頭正勁啊，三連勝",
+			"Info": {
+				"speaker": "帝",
+				"speaker_list": [
+					"東海帝王"
+				]
+			}
+		},
+		{
+			"Text": "算是吧",
+			"Info": {
+				"speaker": "優",
+				"speaker_list": [
+					"優秀素質"
+				]
+			}
+		},
+		{
+			"Text": "打擾了",
+			"Info": {
+				"speaker": "狄",
+				"speaker_list": [
+					"狄杜斯"
+				]
+			}
+		},
+		{
+			"Text": "來了呢",
+			"Info": {
+				"speaker": "優",
+				"speaker_list": [
+					"優秀素質"
+				]
+			}
+		},
+		{
+			"Text": "素質，她是？",
+			"Info": {
+				"speaker": "帝",
+				"speaker_list": [
+					"東海帝王"
+				]
+			}
+		},
+		{
+			"Text": "Canopus又有新成員了",
+			"Info": {
+				"speaker": "優",
+				"speaker_list": [
+					"優秀素質"
+				]
+			}
+		},
+		{
+			"Text": "我是狄杜斯，請多關照",
+			"Info": {
+				"speaker": "狄",
+				"speaker_list": [
+					"狄杜斯"
+				]
+			}
+		},
+		{
+			"Text": "請多關照",
+			"Info": {
+				"speaker": "帝",
+				"speaker_list": [
+					"東海帝王"
+				]
+			}
+		},
+		{
+			"Text": "我們Canopus的目標是全校第一的隊伍",
+			"Info": {
+				"speaker": "狄",
+				"speaker_list": [
+					"狄杜斯"
+				]
+			}
+		},
+		{
+			"Text": "是嗎",
+			"Info": {
+				"speaker": "優",
+				"speaker_list": [
+					"優秀素質"
+				]
+			}
+		},
+		{
+			"Text": "素質不是說目標越大越好嗎",
+			"Info": {
+				"speaker": "狄",
+				"speaker_list": [
+					"狄杜斯"
+				]
+			}
+		},
+		{
+			"Text": "有嗎？我說過嗎",
+			"Info": {
+				"speaker": "優",
+				"speaker_list": [
+					"優秀素質"
+				]
+			}
+		},
+		{
+			"Text": "沒關係，只要按我的計劃進行就可以達成目標，我們需要的是壓倒性的比賽經驗，（上）為此需要能承受嚴酷賽程的肉體……（略）",
+			"Info": {
+				"speaker": "狄",
+				"speaker_list": [
+					"狄杜斯"
+				]
+			}
+		},
+		{
+			"Text": "又進來了個有趣的孩子呢",
+			"Info": {
+				"speaker": "帝",
+				"speaker_list": [
+					"東海帝王"
+				]
+			}
+		},
+		{
+			"Text": "是呢……話說，帝王",
+			"Info": {
+				"speaker": "優",
+				"speaker_list": [
+					"優秀素質"
+				]
+			}
+		},
+		{
+			"Text": "（嗯？）",
+			"Info": {
+				"speaker": "帝",
+				"speaker_list": [
+					"東海帝王"
+				]
+			}
+		},
+		{
+			"Text": "我接下來要參加預選賽，贏下來，然後參加菊花賞。我等妳，我的夢想就是贏過妳",
+			"Info": {
+				"speaker": "優",
+				"speaker_list": [
+					"優秀素質"
+				]
+			}
+		},
+		{
+			"Text": "嗯",
+			"Info": {
+				"speaker": "帝",
+				"speaker_list": [
+					"東海帝王"
+				]
+			}
+		},
+		{
+			"Text": "-( separate/帝王復健中 )-",
+			"Info": {
+				"speaker": "",
+				"speaker_list": []
+			}
+		},
+		{
+			"Text": "牛奶是必須的，需要鈣質",
+			"Info": {
+				"speaker": "伏",
+				"speaker_list": [
+					"伏特加"
+				]
+			}
+		},
+		{
+			"Text": "橘子，維他命C",
+			"Info": {
+				"speaker": "大",
+				"speaker_list": [
+					"大和赤驥"
+				]
+			}
+		},
+		{
+			"Text": "還需要蜂蜜",
+			"Info": {
+				"speaker": "麥",
+				"speaker_list": [
+					"目白麥昆"
+				]
+			}
+		},
+		{
+			"Text": "紅蘿蔔、紅蘿蔔，紅蘿蔔最優先",
+			"Info": {
+				"speaker": "特",
+				"speaker_list": [
+					"特別週"
+				]
+			}
+		},
+		{
+			"Text": "好呀，最後加上補充精力的大蒜……帝王！",
+			"Info": {
+				"speaker": "船",
+				"speaker_list": [
+					"黃金船"
+				]
+			}
+		},
+		{
+			"Text": "妳們在做什麼",
+			"Info": {
+				"speaker": "帝",
+				"speaker_list": [
+					"東海帝王"
+				]
+			}
+		},
+		{
+			"Text": "為了帝王開發新飲料",
+			"Info": {
+				"speaker": "特",
+				"speaker_list": [
+					"特別週"
+				]
+			}
+		},
+		{
+			"Text": "真是的，我的天皇賞也接近了哦",
+			"Info": {
+				"speaker": "麥",
+				"speaker_list": [
+					"目白麥昆"
+				]
+			}
+		},
+		{
+			"Text": "來試喝啊",
+			"Info": {
+				"speaker": "伏",
+				"speaker_list": [
+					"伏特加"
+				]
+			}
+		},
+		{
+			"Text": "不加大蒜",
+			"Info": {
+				"speaker": "大",
+				"speaker_list": [
+					"大和赤驥"
+				]
+			}
+		},
+		{
+			"Text": "為什麼",
+			"Info": {
+				"speaker": "船",
+				"speaker_list": [
+					"黃金船"
+				]
+			}
+		},
+		{
+			"Text": "真是的，也聽聽我的意見啊",
+			"Info": {
+				"speaker": "帝",
+				"speaker_list": [
+					"東海帝王"
+				]
+			}
+		},
+		{
+			"Text": "大蒜可以加嗎",
+			"Info": {
+				"speaker": "船",
+				"speaker_list": [
+					"黃金船"
+				]
+			}
+		},
+		{
+			"Text": "當然不行",
+			"Info": {
+				"speaker": "帝",
+				"speaker_list": [
+					"東海帝王"
+				]
+			}
+		},
+		{
+			"Text": "-( separate )-",
+			"Info": {
+				"speaker": "",
+				"speaker_list": []
+			}
+		},
+		{
+			"Text": "怎麼辦，要換鞋嗎……不，用穿不慣的鞋跑太不現實了。要去磐城市的馬娘專用溫泉嗎……不，現在突然的刺激風險太大，有固定效果的褲襪也不是沒有，但這可是G1，要加入比賽服已經趕不上了……",
+			"Info": {
+				"speaker": "訓",
+				"speaker_list": [
+					"訓練師"
+				]
+			}
+		},
+		{
+			"Text": "真是的，弄得這麼亂",
+			"Info": {
+				"speaker": "帝",
+				"speaker_list": [
+					"東海帝王"
+				]
+			}
+		},
+		{
+			"Text": "帝王？妳不是去醫院了嗎",
+			"Info": {
+				"speaker": "訓",
+				"speaker_list": [
+					"訓練師"
+				]
+			}
+		},
+		{
+			"Text": "必須遵守約定呢",
+			"Info": {
+				"speaker": "帝",
+				"speaker_list": [
+					"東海帝王"
+				]
+			}
+		},
+		{
+			"Text": "（察覺）",
+			"Info": {
+				"speaker": "訓",
+				"speaker_list": [
+					"訓練師"
+				]
+			}
+		},
+		{
+			"Text": "堅持到最後一刻，但到時候如果被醫生阻止了，就只能放棄了。是吧？我對菊花賞……",
+			"Info": {
+				"speaker": "帝",
+				"speaker_list": [
+					"東海帝王"
+				]
+			}
+		},
+		{
+			"Text": "還沒有，現在放棄還太早了！一定會有什麼辦法的……帝王，我一定會讓妳成為不敗的三冠馬娘",
+			"Info": {
+				"speaker": "訓",
+				"speaker_list": [
+					"訓練師"
+				]
+			}
+		},
+		{
+			"Text": "不用了，已經夠了",
+			"Info": {
+				"speaker": "帝",
+				"speaker_list": [
+					"東海帝王"
+				]
+			}
+		},
+		{
+			"Text": "帝王……",
+			"Info": {
+				"speaker": "訓",
+				"speaker_list": [
+					"訓練師"
+				]
+			}
+		},
+		{
+			"Text": "我還不能全力奔跑，但還要勉強出戰菊花賞，和全力以赴的大家比賽什麼的，我做不到。謝謝你，為我做了這麼多。真是的，這是什麼表情",
+			"Info": {
+				"speaker": "帝",
+				"speaker_list": [
+					"東海帝王"
+				]
+			}
+		},
+		{
+			"Text": "抱歉",
+			"Info": {
+				"speaker": "訓",
+				"speaker_list": [
+					"訓練師"
+				]
+			}
+		},
+		{
+			"Text": "都說了算了。我說訓練師",
+			"Info": {
+				"speaker": "帝",
+				"speaker_list": [
+					"東海帝王"
+				]
+			}
+		},
+		{
+			"Text": "怎麼了",
+			"Info": {
+				"speaker": "訓",
+				"speaker_list": [
+					"訓練師"
+				]
+			}
+		},
+		{
+			"Text": "我有個請求",
+			"Info": {
+				"speaker": "帝",
+				"speaker_list": [
+					"東海帝王"
+				]
+			}
+		},
+		{
+			"Text": "-( separate )-",
+			"Info": {
+				"speaker": "",
+				"speaker_list": []
+			}
+		},
+		{
+			"Text": "謝謝你帶我來",
+			"Info": {
+				"speaker": "帝",
+				"speaker_list": [
+					"東海帝王"
+				]
+			}
+		},
+		{
+			"Text": "帝王，要吃什麼嗎？我請客",
+			"Info": {
+				"speaker": "訓",
+				"speaker_list": [
+					"訓練師"
+				]
+			}
+		},
+		{
+			"Text": "那就烤紅蘿蔔、紅蘿蔔汁，還有巧克力香蕉",
+			"Info": {
+				"speaker": "帝",
+				"speaker_list": [
+					"東海帝王"
+				]
+			}
+		},
+		{
+			"Text": "喂，妳倒是客氣一下啊",
+			"Info": {
+				"speaker": "訓",
+				"speaker_list": [
+					"訓練師"
+				]
+			}
+		},
+		{
+			"Text": "拜託了",
+			"Info": {
+				"speaker": "帝",
+				"speaker_list": [
+					"東海帝王"
+				]
+			}
+		},
+		{
+			"Text": "等著吧",
+			"Info": {
+				"speaker": "訓",
+				"speaker_list": [
+					"訓練師"
+				]
+			}
+		},
+		{
+			"Text": "不要對她說點什麼嗎",
+			"Info": {
+				"speaker": "草",
+				"speaker_list": [
+					"草上飛"
+				]
+			}
+		},
+		{
+			"Text": "不需要，帝王不是會止步於此的馬娘",
+			"Info": {
+				"speaker": "皇",
+				"speaker_list": [
+					"魯鐸象徵"
+				]
+			}
+		},
+		{
+			"Text": "其實是不知道要說點什麼吧",
+			"Info": {
+				"speaker": "草",
+				"speaker_list": [
+					"草上飛"
+				]
+			}
+		},
+		{
+			"Text": "妳真嚴格",
+			"Info": {
+				"speaker": "皇",
+				"speaker_list": [
+					"魯鐸象徵"
+				]
+			}
+		},
+		{
+			"Text": "對不起",
+			"Info": {
+				"speaker": "草",
+				"speaker_list": [
+					"草上飛"
+				]
+			}
+		},
+		{
+			"Text": "就是這樣。可是，爬上來吧，帝王",
+			"Info": {
+				"speaker": "皇",
+				"speaker_list": [
+					"魯鐸象徵"
+				]
+			}
+		},
+		{
+			"Text": "京都賽場晴空萬里，到底是哪位馬娘能拿到菊花勳章呢",
+			"Info": {
+				"speaker": "實",
+				"speaker_list": [
+					"赤坂美聡"
+				]
+			}
+		},
+		{
+			"Text": "東海帝王真遺憾呢，好想看她拿到三冠的樣子",
+			"Info": {
+				"speaker": "細",
+				"speaker_list": [
+					"細江純子"
+				]
+			}
+		},
+		{
+			"Text": "焦點是Derby第二的-( ruby/利昂那塔/レオダーバン )-、現在四連勝中的優秀素質嗎",
+			"Info": {
+				"speaker": "實",
+				"speaker_list": [
+					"赤坂美聡"
+				]
+			}
+		},
+		{
+			"Text": "是呢，她們看起來很鎮定，值得期待",
+			"Info": {
+				"speaker": "細",
+				"speaker_list": [
+					"細江純子"
+				]
+			}
+		},
+		{
+			"Text": "-( separate/菊花賞開場小號 )-",
+			"Info": {
+				"speaker": "",
+				"speaker_list": []
+			}
+		},
+		{
+			"Text": "所有馬娘都進閘了，菊花賞　漂亮的起跑，一起衝了出去，慢慢排成一條豎線，衝在前頭的是-( ruby/南東迷霧/ホクセイシプレー )-，後面是-( ruby/白野橘/フジアンバーワン )-，內側是-( ruby/K2造訪/フジヤマケンザン )-，利昂那塔跟在外道",
+			"Info": {
+				"speaker": "實",
+				"speaker_list": [
+					"赤坂美聡"
+				]
+			}
+		},
+		{
+			"Text": "（上）開始了……",
+			"Info": {
+				"speaker": "帝",
+				"speaker_list": [
+					"東海帝王"
+				]
+			}
+		},
+		{
+			"Text": "比賽一開始，大家衝得有點猛，後面是優秀素質",
+			"Info": {
+				"speaker": "實",
+				"speaker_list": [
+					"赤坂美聡"
+				]
+			}
+		},
+		{
+			"Text": "她現在四連勝，值得期待哦",
+			"Info": {
+				"speaker": "細",
+				"speaker_list": [
+					"細江純子"
+				]
+			}
+		},
+		{
+			"Text": "歡呼聲像潮水一樣傾注向馬娘們，能不能冷靜的跑下去，是勝負的關鍵吧",
+			"Info": {
+				"speaker": "實",
+				"speaker_list": [
+					"赤坂美聡"
+				]
+			}
+		},
+		{
+			"Text": "要是我的話，這裡就在中間跑，在那觀察情況。旁邊有在Derby競爭過的那孩子，素質跟在後面，肯定會努力追上我",
+			"Info": {
+				"speaker": "帝",
+				"speaker_list": [
+					"東海帝王"
+				]
+			}
+		},
+		{
+			"Text": "比賽繼續抱團推進，第三個轉角前面，要爬坡了，第一仍舊是南東迷霧",
+			"Info": {
+				"speaker": "實",
+				"speaker_list": [
+					"赤坂美聡"
+				]
+			}
+		},
+		{
+			"Text": "到此為止都要忍耐 在下一個彎啟動",
+			"Info": {
+				"speaker": "帝",
+				"speaker_list": [
+					"東海帝王"
+				]
+			}
+		},
+		{
+			"Text": "優秀素質、優秀素質，然後是利昂那塔。紅色勝負服，八號-( ruby/呼吸舞蹈/イブキマイカグラ )-也上來了。十八個人聚成一團，好厲害的比賽、好厲害的比賽",
+			"Info": {
+				"speaker": "實",
+				"speaker_list": [
+					"赤坂美聡"
+				]
+			}
+		},
+		{
+			"Text": "這可勝負難料了",
+			"Info": {
+				"speaker": "細",
+				"speaker_list": [
+					"細江純子"
+				]
+			}
+		},
+		{
+			"Text": "現在開始呼地超上去，站上第一。沒人能……追上我……會長",
+			"Info": {
+				"speaker": "帝",
+				"speaker_list": [
+					"東海帝王"
+				]
+			}
+		},
+		{
+			"Text": "利昂那塔領先，外側優秀素質也追上來了",
+			"Info": {
+				"speaker": "實",
+				"speaker_list": [
+					"赤坂美聡"
+				]
+			}
+		},
+		{
+			"Text": "不讓你說，不讓你說，不讓你說，不讓你說，決不讓你們說帝王如果參加就怎麼樣！",
+			"Info": {
+				"speaker": "優",
+				"speaker_list": [
+					"優秀素質"
+				]
+			}
+		},
+		{
+			"Text": "/* サクラヤマトオー */才不會輸給帝王！",
+			"Info": {
+				"speaker": "Ａ",
+				"speaker_list": [
+					"馬娘Ａ"
+				]
+			}
+		},
+		{
+			"Text": "是我們更強！",
+			"Info": {
+				"speaker": "眾",
+				"speaker_list": []
+			}
+		},
+		{
+			"Text": "更強！",
+			"Info": {
+				"speaker": "眾",
+				"speaker_list": []
+			}
+		},
+		{
+			"Text": "/* シャコーグレイド */更強！",
+			"Info": {
+				"speaker": "Ｂ",
+				"speaker_list": [
+					"馬娘Ｂ"
+				]
+			}
+		},
+		{
+			"Text": "上……上啊！跑啊！",
+			"Info": {
+				"speaker": "帝",
+				"speaker_list": [
+					"東海帝王"
+				]
+			}
+		},
+		{
+			"Text": "利昂那塔、利昂那塔，第一名衝線了！她稱霸了大混戰的菊花賞！",
+			"Info": {
+				"speaker": "實",
+				"speaker_list": [
+					"赤坂美聡"
+				]
+			}
+		},
+		{
+			"Text": "成功啦！",
+			"Info": {
+				"speaker": "利",
+				"speaker_list": [
+					"利昂那塔"
+				]
+			}
+		},
+		{
+			"Text": "可惡！",
+			"Info": {
+				"speaker": "優",
+				"speaker_list": [
+					"優秀素質"
+				]
+			}
+		},
+		{
+			"Text": "第四，盡力啦！",
+			"Info": {
+				"speaker": "渦",
+				"speaker_list": [
+					"雙渦輪"
+				]
+			}
+		},
+		{
+			"Text": "太狡猾了大家，都這麼帥氣",
+			"Info": {
+				"speaker": "帝",
+				"speaker_list": [
+					"東海帝王"
+				]
+			}
+		},
+		{
+			"Text": "帝王",
+			"Info": {
+				"speaker": "訓",
+				"speaker_list": [
+					"訓練師"
+				]
+			}
+		},
+		{
+			"Text": "（啊）",
+			"Info": {
+				"speaker": "帝",
+				"speaker_list": [
+					"東海帝王"
+				]
+			}
+		},
+		{
+			"Text": "抱歉來晚了，我買來啦",
+			"Info": {
+				"speaker": "訓",
+				"speaker_list": [
+					"訓練師"
+				]
+			}
+		},
+		{
+			"Text": "（嘿）謝謝。回家吧",
+			"Info": {
+				"speaker": "帝",
+				"speaker_list": [
+					"東海帝王"
+				]
+			}
+		},
+		{
+			"Text": "-( separate )-",
+			"Info": {
+				"speaker": "",
+				"speaker_list": []
+			}
+		},
+		{
+			"Text": "（吶）訓練師，大家都好厲害啊",
+			"Info": {
+				"speaker": "帝",
+				"speaker_list": [
+					"東海帝王"
+				]
+			}
+		},
+		{
+			"Text": "那當然，大家都懷著堅定的信念挑戰菊花賞。和妳在Derby競爭過的傢伙、拚命一路贏過來的傢伙，妳也是吧",
+			"Info": {
+				"speaker": "訓",
+				"speaker_list": [
+					"訓練師"
+				]
+			}
+		},
+		{
+			"Text": "我？",
+			"Info": {
+				"speaker": "帝",
+				"speaker_list": [
+					"東海帝王"
+				]
+			}
+		},
+		{
+			"Text": "贏得菊花賞，成為不敗的三冠馬娘，妳不是為此才拚命復健的嗎",
+			"Info": {
+				"speaker": "訓",
+				"speaker_list": [
+					"訓練師"
+				]
+			}
+		},
+		{
+			"Text": "不過還是沒能趕上（啊）不要做出這麼陰沉的表情啊　我發現了一件事，沒能實現三冠，但我沒輸",
+			"Info": {
+				"speaker": "帝",
+				"speaker_list": [
+					"東海帝王"
+				]
+			}
+		},
+		{
+			"Text": "帝王",
+			"Info": {
+				"speaker": "訓",
+				"speaker_list": [
+					"訓練師"
+				]
+			}
+		},
+		{
+			"Text": "我還能成為不敗的馬娘，對吧",
+			"Info": {
+				"speaker": "帝",
+				"speaker_list": [
+					"東海帝王"
+				]
+			}
+		},
+		{
+			"Text": "……沒錯，成為不敗的馬娘！",
+			"Info": {
+				"speaker": "訓",
+				"speaker_list": [
+					"訓練師"
+				]
+			}
+		},
+		{
+			"Text": "嗯！",
+			"Info": {
+				"speaker": "帝",
+				"speaker_list": [
+					"東海帝王"
+				]
+			}
+		},
+		{
+			"Text": "這樣一來，就得考慮復出後的訓練方案了呢，好期待啊",
+			"Info": {
+				"speaker": "訓",
+				"speaker_list": [
+					"訓練師"
+				]
+			}
+		},
+		{
+			"Text": "拜託你啦，訓練師",
+			"Info": {
+				"speaker": "帝",
+				"speaker_list": [
+					"東海帝王"
+				]
+			}
+		},
+		{
+			"Text": "喔！包在我身上",
+			"Info": {
+				"speaker": "訓",
+				"speaker_list": [
+					"訓練師"
+				]
+			}
+		},
+		{
+			"Text": "車內請安靜",
+			"Info": {
+				"speaker": "車",
+				"speaker_list": [
+					"車掌"
+				]
+			}
+		},
+		{
+			"Text": "對不起",
+			"Info": {
+				"speaker": "帝、訓",
+				"speaker_list": [
+					"東海帝王",
+					"訓練師"
+				]
+			}
+		},
+		{
+			"Text": "-( separate/ED -( ruby/木/こ )--( ruby/漏/も )-れ-( ruby/日/ひ )-のエール )-",
+			"Info": {
+				"speaker": "",
+				"speaker_list": []
+			}
+		},
+		{
+			"Text": "-( ruby/通/とお )-り-( ruby/雨/あめ )-に-( ruby/凍/こご )-えながら　ぎゅっと-( ruby/膝/ひざ )--( ruby/抱/だ )-いてた　だけど",
+			"Info": {
+				"speaker": "",
+				"speaker_list": []
+			}
+		},
+		{
+			"Text": "-( ruby/諦/あきら )-めそうになった-( ruby/瞬/しゅん )--( ruby/間/かん )-に　-( ruby/背/せ )--( ruby/中/なか )-に-( ruby/感/かん )-じた-( ruby/願/ねが )-い",
+			"Info": {
+				"speaker": "",
+				"speaker_list": []
+			}
+		},
+		{
+			"Text": "",
+			"Info": {
+				"speaker": "",
+				"speaker_list": []
+			}
+		},
+		{
+			"Text": "-( ruby/運命/うんめい )-の-( ruby/意地/いじ )--( ruby/悪/わる )-",
+			"Info": {
+				"speaker": "",
+				"speaker_list": []
+			}
+		},
+		{
+			"Text": "そっと-( ruby/蹴飛/けと )-ばせる-( ruby/私/わたし )-へと",
+			"Info": {
+				"speaker": "",
+				"speaker_list": []
+			}
+		},
+		{
+			"Text": "-( ruby/大/だい )--( ruby/丈/じょう )--( ruby/夫/ぶ )-　なってみせる",
+			"Info": {
+				"speaker": "",
+				"speaker_list": []
+			}
+		},
+		{
+			"Text": "",
+			"Info": {
+				"speaker": "",
+				"speaker_list": []
+			}
+		},
+		{
+			"Text": "ほら-( ruby/降/ふ )-り-( ruby/注/そそ )-ぐ-( ruby/冷/つめ )-たさも",
+			"Info": {
+				"speaker": "",
+				"speaker_list": []
+			}
+		},
+		{
+			"Text": "いつかはきっと-( ruby/変/か )-わってくよ",
+			"Info": {
+				"speaker": "",
+				"speaker_list": []
+			}
+		},
+		{
+			"Text": "-( ruby/何/なん )--( ruby/度/ど )-だって　-( ruby/光/ひか )-れる　-( ruby/夢/ゆめ )-と-( ruby/一緒/いっしょ )-なら",
+			"Info": {
+				"speaker": "",
+				"speaker_list": []
+			}
+		},
+		{
+			"Text": "まだ-( ruby/駆/か )-け-( ruby/抜/ぬ )-ける　-( ruby/途/と )--( ruby/中/ちゅう )-でも",
+			"Info": {
+				"speaker": "",
+				"speaker_list": []
+			}
+		},
+		{
+			"Text": "-( ruby/信/しん )-じられるよ　この-( ruby/道/みち )-を",
+			"Info": {
+				"speaker": "",
+				"speaker_list": []
+			}
+		},
+		{
+			"Text": "Believe to Run",
+			"Info": {
+				"speaker": "",
+				"speaker_list": []
+			}
+		},
+		{
+			"Text": "エールが-( ruby/聞/き )-こえてる　-( ruby/木/こ )--( ruby/漏/も )-れ-( ruby/日/び )-のように",
+			"Info": {
+				"speaker": "",
+				"speaker_list": []
+			}
+		},
+		{
+			"Text": "-( separate )-",
+			"Info": {
+				"speaker": "",
+				"speaker_list": []
+			}
+		}
+	]
+}

@@ -1,0 +1,129 @@
+{
+	"$schema": "https://json-schema.org/draft/2020-12/schema",
+	"$id": "scenario://gimi65536.0.0.3.schema.json",
+	"title": "Scenario gimi65536 0.0.3",
+	"description": "Scenario exchange format 0.0.3 in JSON",
+	"type": "object",
+	"properties": {
+		"Base": {"description": "Must be gimi65536",
+			"type": "string",
+			"enum": [
+				"gimi65536"
+			]
+		},
+		"Version": {
+			"description": "Must be 0.0.3",
+			"type": "string",
+			"enum": [
+				"0.0.3"
+			]
+		},
+		"MacroStart": {
+			"description": "Start sign of macro",
+			"type": "string"
+		},
+		"MacroStop": {
+			"description": "Stop sign of macro",
+			"type": "string"
+		},
+		"MacroSplit": {
+			"description": "Split sign in macro",
+			"type": "string"
+		},
+		"Title": {
+			"description": "Scenario title",
+			"type": "string"
+		},
+		"ScenarioInfo": {
+			"description": "Scenario info",
+			"type": "object"
+		},
+		"Character": {
+			"description": "Character list (stored in object, however)",
+			"type": "object",
+			"additionalProperties": {
+				"description": "Single character",
+				"type": "object",
+				"properties": {
+					"color": {
+						"description": "Color used in displayer (not restricted to #RGB)",
+						"type": "string"
+					},
+					"abbreviated": {
+						"description": "Abbreviation of the character",
+						"type": "string"
+					},
+					"gender": {
+						"description": "Gender of the character",
+						"type": "string"
+					},
+					"cast": {
+						"description": "Cast of the character",
+						"type": "string"
+					},
+					"order": {
+						"description": "Order in the virtual character array",
+						"type": "integer"
+					}
+				},
+				"required": [
+					"color",
+					"abbreviated",
+					"gender",
+					"cast",
+					"order"
+				]
+			}
+		},
+		"Dialogue": {
+			"description": "Dialogue list",
+			"type": "array",
+			"items": {
+				"description": "Single dialogue",
+				"type": "object",
+				"properties": {
+					"Text": {
+						"description": "Text",
+						"type": "string"
+					},
+					"Info": {
+						"description": "Information of the dialogue",
+						"type": "object",
+						"properties": {
+							"speaker": {
+								"description": "Speaker name displayed",
+								"type": "string"
+							},
+							"speaker_list": {
+								"description": "List of the speakers in the character list",
+								"type": "array",
+								"items": {
+									"description": "Single speaker",
+									"type": "string"
+								}
+							}
+						},
+						"required": [
+							"speaker",
+							"speaker_list"
+						]
+					}
+				},
+				"required": [
+					"Text",
+					"Info"
+				]
+			}
+		}
+	},
+	"required": [
+		"Base",
+		"Version",
+		"MacroStart",
+		"MacroStop",
+		"MacroSplit",
+		"Title",
+		"ScenarioInfo",
+		"Character"
+	]
+}

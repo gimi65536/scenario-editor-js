@@ -183,7 +183,7 @@
 								"type": "string"
 							},
 							"children": {
-								"description": "Sub-components",
+								"description": "Children of the macro",
 								"type": "array",
 								"items": {
 									"$ref": "#/$def/dialogue-component"

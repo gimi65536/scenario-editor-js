@@ -1,0 +1,202 @@
+{
+	"$schema": "https://json-schema.org/draft/2020-12/schema",
+	"$id": "scenario://gimi65536.xyz/schema/0/1/0/",
+	"title": "Scenario gimi65536 0.1.0",
+	"description": "Scenario exchange format 0.1.0 in JSON",
+	"type": "object",
+	"properties": {
+		"base": {
+			"description": "Must be gimi65536",
+			"type": "string",
+			"enum": [
+				"gimi65536"
+			]
+		},
+		"version": {
+			"description": "Must be 0.1.0",
+			"type": "string",
+			"enum": [
+				"0.1.0"
+			]
+		},
+		"macro_start": {
+			"description": "Start sign of macro",
+			"type": "string"
+		},
+		"macro_end": {
+			"description": "Stop sign of macro",
+			"type": "string"
+		},
+		"macro_split": {
+			"description": "Split sign in macro",
+			"type": "string"
+		},
+		"title": {
+			"description": "Scenario title",
+			"type": "string"
+		},
+		"info": {
+			"description": "Scenario info",
+			"type": "object"
+		},
+		"characters": {
+			"description": "Character list",
+			"type": "object",
+			"properties": {
+				"order": {
+					"description": "Orders of all ID for characters",
+					"$ref": "#/$def/order"
+				},
+				"reference": {
+					"description": "Actual ID-character mapping",
+					"$ref": "#/$def/mapping",
+					"additionalProperties": {
+						"$ref": "#/$def/character"
+					}
+				}
+			},
+			"required": [
+				"order",
+				"reference"
+			]
+		},
+		"dialogues": {
+			"description": "Dialogue list",
+			"type": "object",
+			"properties": {
+				"order": {
+					"description": "Orders of all ID for dialogues",
+					"$ref": "#/$def/order"
+				},
+				"reference": {
+					"description": "Actual ID-dialogue mapping",
+					"$ref": "#/$def/mapping",
+					"additionalProperties": {
+						"$ref": "#/$def/dialogue"
+					}
+				}
+			},
+			"required": [
+				"order",
+				"reference"
+			]
+		}
+	},
+	"required": [
+		"base",
+		"version",
+		"macro_start",
+		"macro_end",
+		"macro_split",
+		"title",
+		"info",
+		"characters",
+		"dialogues"
+	],
+	"$def": {
+		"order": {
+			"type": "array",
+			"items": {
+				"description": "Single ID",
+				"type": "string",
+				"format": "uuid"
+			}
+		},
+		"mapping": {
+			"type": "object",
+			"propertyNames": {
+				"format": "uuid"
+			}
+		},
+		"character": {
+			"description": "Single character",
+			"type": "object",
+			"properties": {
+				"name": {
+					"description": "Name of the character",
+					"type": "string"
+				},
+				"color": {
+					"description": "Color used in displayer (not restricted to #RGB)",
+					"type": "string"
+				},
+				"abbreviated": {
+					"description": "Abbreviation of the character",
+					"type": "string"
+				},
+				"gender": {
+					"description": "Gender of the character",
+					"type": "string"
+				},
+				"cast": {
+					"description": "Cast of the character",
+					"type": "string"
+				}
+			},
+			"additionalProperties": true,
+			"required": [
+				"name"
+			]
+		},
+		"dialogue": {
+			"description": "Single dialogue",
+			"type": "object",
+			"properties": {
+				"components": {
+					"$ref": "#/$def/dialogue-component"
+				},
+				"speaker": {
+					"description": "Speaker name displayed",
+					"type": "string"
+				},
+				"speakers_list": {
+					"description": "List of the speakers' ID in the character list",
+					"type": "array",
+					"items": {
+						"description": "Single speaker",
+						"type": "string",
+						"format": "uuid"
+					}
+				}
+			},
+			"additionalProperties": true,
+			"required": [
+				"components",
+				"speakers_list"
+			]
+		},
+		"dialogue-component": {
+			"description": "Components of the dialogue",
+			"type": "array",
+			"items": {
+				"oneOf": [
+					{
+						"description": "Single component (plaintext)",
+						"type": "string"
+					},
+					{
+						"description": "Single component (macro)",
+						"type": "object",
+						"properties": {
+							"identifier": {
+								"description": "Macro identifier",
+								"type": "string"
+							},
+							"children": {
+								"description": "Sub-components",
+								"type": "array",
+								"items": {
+									"$ref": "#/$def/dialogue-component"
+								}
+							}
+						},
+						"required": [
+							"identifier",
+							"children"
+						]
+					}
+				]
+			}
+		}
+	}
+}

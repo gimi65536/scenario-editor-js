@@ -17,8 +17,8 @@ export default function TestScenario(){
 			const json = JSON.parse(e.target.result);
 			// Do sanitization here...
 			console.log(json);
-			setScenario(json);
-			await processObject2Scenario(json);
+			const result = await processObject2Scenario(json);
+			setScenario(result);
 		};
 		reader.readAsText(file);
 	}

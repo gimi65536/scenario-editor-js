@@ -2,7 +2,6 @@ Macro_start=1
 Any=2
 Macro_end=3
 Split=4
-Space=5
 '-('=1
 ')-'=3
 '/'=4

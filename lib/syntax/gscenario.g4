@@ -6,5 +6,5 @@ options {
 
 text: ( plaintext | macro )* ;
 text_in_macro: plaintext ( Split text )* ;
-macro: Macro_start Space* text_in_macro Space* Macro_end ;
-plaintext: (Any | Space)+ ;
+macro: Macro_start text_in_macro Macro_end ;
+plaintext: Any+ ;

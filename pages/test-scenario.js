@@ -23,6 +23,14 @@ export default function TestScenario(){
 		reader.readAsText(file);
 	}
 
+	function handleDownload(){
+		const jsonString = `data:text/json;chatset=utf-8,${encodeURIComponent(JSON.stringify(scenario))}`;
+		const link = document.createElement('a');
+		link.href = jsonString;
+		link.download = `${scenario.title}.json`;
+		link.click();
+	}
+
 	return (
 		<>
 			<Button variant="contained" component="label">
@@ -35,6 +43,14 @@ export default function TestScenario(){
 				/>
 			</Button>
 			<textarea defaultValue={scenario && JSON.stringify(scenario)} />
+			{scenario ?
+				<Button
+					variant="contained"
+					onClick={handleDownload}
+				>
+					Download
+				</Button>
+			: ""}
 		</>
 	);
 }

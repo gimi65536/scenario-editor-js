@@ -1,9 +1,19 @@
 import { useState } from 'react';
+import { useImmer } from "use-immer";
 import { Button } from '@mui/material';
+import VideoComponent from '@/lib/videoJs';
 
 export default function VideoPreview(){
-	const [videoUrl, setVideoUrl] = useState(null);
-	const [mime, setMime] = useState(null);
+	const [option, updateUption] = useImmer({
+		autoplay: false,
+		controls: true,
+		responsive: true,
+		fluid: true,
+		sources: [{
+			src: undefined,
+			type: undefined
+		}]
+	});
 
 	function handleFileChange(e){
 		const file = e.target.files[0];
@@ -13,11 +23,13 @@ export default function VideoPreview(){
 		const reader = new FileReader();
 		reader.onload = (e) => {
 			const url = e.target.result;
-			if(url === videoUrl){
+			if(url === option.sources[0].src){
 				return;
 			}
-			setVideoUrl(url);
-			setMime(file.type);
+			updateUption(draft => {
+				draft.sources[0].src = url;
+				draft.sources[0].type = file.type;
+			});
 			console.log(file.size);
 		};
 		reader.readAsDataURL(file);
@@ -34,11 +46,7 @@ export default function VideoPreview(){
 					onChange={handleFileChange}
 				/>
 			</Button>
-			{videoUrl ?
-				<video controls src={videoUrl} >
-					<source src={videoUrl} type={mime} />
-				</video>
-				: ""}
+			{option.sources[0].src ? <VideoComponent option={option} /> : ""}
 		</>
 	);
 }

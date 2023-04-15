@@ -10,7 +10,7 @@ function reducer(draft, action){
 }
 
 export default function TestUndo(){
-	const [counter, undo, redo, update, reset] = useUndoRedo({value: 0}, reducer);
+	const [counter, isModified, undo, redo, update, unrestorableUpdate, setUnmodified, reset] = useUndoRedo({value: 0}, reducer);
 	return (
 		<>
 			<div>
@@ -26,8 +26,9 @@ export default function TestUndo(){
 			<div>
 				<Button onClick={() => undo()}>Undo</Button>
 				<Button onClick={() => redo()}>Redo</Button>
+				<Button onClick={() => setUnmodified()}>Save</Button>
 			</div>
-			<p>Counter: {counter.value}</p>
+			<p>Counter: {counter.value}</p>{isModified ? <p>Modified</p> : ""}
 		</>
 	);
 }

@@ -1,4 +1,4 @@
-import useUndoRedo from '@/lib/undo';
+import useUndoReducer from '@/lib/undo';
 import { Button } from '@mui/material';
 
 function reducer(draft, action){
@@ -10,7 +10,7 @@ function reducer(draft, action){
 }
 
 export default function TestUndo(){
-	const [counter, isModified, undo, redo, update, unrestorableUpdate, setUnmodified, reset] = useUndoRedo({value: 0}, reducer, 10, 5);
+	const [counter, isModified, undo, redo, update, set, irreversibleSet, setUnmodified, reset] = useUndoReducer({value: 0}, reducer, 10, 5);
 	return (
 		<>
 			<div>

@@ -10,7 +10,7 @@ function reducer(draft, action){
 }
 
 export default function TestUndo(){
-	const [counter, isModified, undo, redo, update, set, irreversibleSet, setUnmodified, reset] = useUndoReducer({value: 0}, reducer, 10, 5);
+	const [counter, isModified, undo, redo, update, set, irreversibleSet, setUnmodified, reset] = useUndoReducer(reducer, {value: 0}, 10, 5);
 	return (
 		<>
 			<div>

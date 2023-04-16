@@ -28,6 +28,12 @@ export default function TestUndo(){
 				<Button onClick={() => redo()}>Redo</Button>
 				<Button onClick={() => setUnmodified()}>Save</Button>
 			</div>
+			<div>
+				<Button onClick={() => set({ value: 3.14 })}>Set to 3.14</Button>
+				<Button onClick={() => irreversibleSet({ value: 1.414 })}>Irreversibly set to 1.414</Button>
+				<Button onClick={() => reset()}>Reset stack</Button>
+				<Button onClick={() => reset({ value: 0 })}>Reset to 0</Button>
+			</div>
 			<p>Counter: {counter.value}</p>{isModified ? <p>Modified</p> : ""}
 		</>
 	);

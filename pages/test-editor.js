@@ -1,5 +1,5 @@
 import React, { useMemo, useState, useCallback } from "react";
-import { createEditor, Editor, Transforms, Range } from "slate";
+import { createEditor, Editor, Transforms, Range, Text, Element, Node } from "slate";
 import { Slate, Editable, withReact } from "slate-react";
 import {
 	Button
@@ -16,13 +16,151 @@ const InlineChromiumBugfix = () => (
 	</span>
 )
 
+const macros = new Map([
+	["separate_line", {
+		macroName: "separate",
+		displayName: "分隔線",
+		childrenNumber: 0,
+		canSub: []
+	}],
+	["separate_text", {
+		macroName: "separate",
+		displayName: "有字分隔線",
+		childrenNumber: 1,
+		canSub: [true]
+	}],
+	["ruby", {
+		macroName: "ruby",
+		displayName: "假名",
+		childrenNumber: 2,
+		canSub: [false, false]
+	}],
+])
+
+const withMacro = (editor) => {
+	const {
+		insertData,
+		insertText,
+		isInline,
+		isElementReadOnly,
+		isSelectable,
+		normalizeNode,
+	} = editor;
+
+	editor.isInline = (element) =>
+		element.type === 'macro' || element.type === 'macroslot' || isInline(element);
+
+	editor.normalizeNode = (entry) => {
+		const [node, path] = entry;
+
+		if (Element.isElement(node)) {
+			if (node.type === 'macro'){
+				for (const [child, childPath] of Node.children(editor, path)) {
+					if (Text.isText(child) && child.text.length > 0) {
+						// Every text child in macro should be empty
+						// This ensures the text nodes in macro could not be editable (back-end control)
+						Transforms.delete(editor, { at: childPath });
+						return;
+					}
+					// TODO Normalize slot number to prevent accidently removal
+				}
+			}
+		}
+		normalizeNode(entry);
+	};
+
+	return editor;
+};
+
+// https://github.com/ianstormtaylor/slate/issues/419#issuecomment-590135015
+function withSingleLine(editor) {
+	const { normalizeNode } = editor;
+
+	editor.normalizeNode = ([node, path]) => {
+		if (path.length === 0) {
+			if (editor.children.length > 1) {
+				Transforms.mergeNodes(editor);
+			}
+		}
+		return normalizeNode([node, path]);
+	};
+
+	return editor;
+}
+
+const insertMacro = (editor, macroName) => {
+	if(editor.selection){
+		wrapMacro(editor, macroName);
+	}
+};
+
+const wrapMacro = (editor, macroName) => {
+	if(isMacroActive(editor, macroName)){
+		unwrapMacro(editor, macroName);
+	}
+	//
+};
+
+const unwrapMacro = (editor, macroName) => {
+	//
+};
+
+const isMacroActive = (editor, macroName) => {
+	const [nodes] = Editor.nodes(editor, {
+		match: n =>
+			!Editor.isEditor(n) && SlateElement.isElement(n) && n.type === 'macro' && n.macroName === 'macroName',
+	})
+	return !!nodes
+};
+
 const TextEditor = () => {
-	const editor = useMemo(() => withReact(createEditor()), []);
+	const editor = useMemo(() => withMacro(withSingleLine(withReact(createEditor()))), []);
 
 	const [value, setValue] = useState([
 		{
 			type: "paragraph",
-			children: [{ text: "123" }],
+			children: [
+				{ text: "123" },
+				{
+					type: "macro",
+					macroName: "separate_text",
+					children: [
+						{ text: "" },
+						{
+							type: "macroslot",
+							index: 0,
+							children: [
+								{ text: "OP ユメヲカケル" }
+							]
+						},
+						{ text: "" },
+					]
+				},
+				{ text: "789" },
+				{
+					type: "macro",
+					macroName: "ruby",
+					children: [
+						{ text: "" },
+						{
+							type: "macroslot",
+							index: 0,
+							children: [
+								{ text: "私" }
+							]
+						},
+						{
+							type: "macroslot",
+							index: 1,
+							children: [
+								{ text: "わたし" }
+							]
+						},
+						{ text: "" },
+					]
+				},
+				{ text: "012" },
+			],
 		},
 	]);
 
@@ -48,31 +186,48 @@ const TextEditor = () => {
 	const renderElement = useCallback(({ attributes, children, element }) => {
 		switch (element.type) {
 			case "paragraph":
-				return <span {...attributes} style={{ padding: "2px 6px" }}><InlineChromiumBugfix />{children}<InlineChromiumBugfix /></span>;
-			case "blockquote":
-				return <blockquote {...attributes}>{children}</blockquote>;
-			case "list-item":
-				return <li {...attributes}>{children}</li>;
-			case "bulleted-list":
-				return <ul {...attributes}>{children}</ul>;
-			case "numbered-list":
-				return <ol {...attributes}>{children}</ol>;
+				return <p {...attributes}>{children}</p>;
+			case "macro":
+				return <span {...attributes}
+					style={{padding: "0 6px", backgroundColor: "grey"}}
+				>
+					<span contentEditable={false}>{macros.get(element.macroName).displayName}</span>
+					<InlineChromiumBugfix />{children}<InlineChromiumBugfix />
+				</span>;
+				// TODO Add button to delete a macro
+			case "macroslot":
+				return <span {...attributes}
+					style={{margin: "0 3px"}}
+				>
+					<InlineChromiumBugfix />{children}<InlineChromiumBugfix />
+				</span>;
 			default:
 				return <span {...attributes}>{children}</span>;
+		}
+	}, []);
+
+	const renderLeaf = useCallback(({ attributes, children, leaf }) => {
+		// This ensures the text nodes in macro could not be editable (front-end control)
+		if (children.props.parent.type !== 'macro'){
+			// Normal
+			return <span {...attributes}>{children}</span>;
+		}else{
+			return <span {...attributes} contentEditable={false} >{children}</span>;
 		}
 	}, []);
 
 	return (
 		<Slate editor={editor} value={value} onChange={(newValue) => setValue(newValue)}>
 			<div>
-				<Button onClick={() => insertBlock("paragraph")}>Add Paragraph</Button>
-				<Button onClick={() => insertBlock("blockquote")}>Add Quote</Button>
-				<Button onClick={() => insertBlock("list-item")}>Add List Item</Button>
-				<Button onClick={() => insertBlock("bulleted-list")}>Add Bullet List</Button>
-				<Button onClick={() => insertBlock("numbered-list")}>Add Numbered List</Button>
-				<Button onClick={() => console.log(editor)}>Inspect</Button>
+				{Array.from(macros).map(([macroName, spec]) => {
+					return <Button key={macroName}>{spec.displayName}</Button>;
+				})}
 			</div>
-			<Editable renderElement={renderElement} />
+			<div>
+				<Button onClick={() => console.log(editor)}>Inspect</Button>
+				<Button onClick={() => editor.selection && console.log(Editor.parent(editor, editor.selection))}>Inspect Node</Button>
+			</div>
+			<Editable renderElement={renderElement} renderLeaf={renderLeaf} />
 		</Slate>
 	);
 };

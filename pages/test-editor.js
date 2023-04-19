@@ -1,9 +1,11 @@
 import React, { useMemo, useState, useCallback } from "react";
 import { createEditor, Editor, Transforms, Range, Text, Element, Node } from "slate";
 import { Slate, Editable, withReact } from "slate-react";
+import { withHistory } from 'slate-history'
 import {
 	Button
 } from "@mui/material";
+import { isKeyHotkey } from 'is-hotkey';
 
 // Put this at the start and end of an inline component to work around this Chromium bug:
 // https://bugs.chromium.org/p/chromium/issues/detail?id=1249405
@@ -55,6 +57,8 @@ const withMacro = (editor) => {
 
 		if (Element.isElement(node)) {
 			if (node.type === 'macro'){
+				const macroName = node.macroName;
+				let nextIndex = 0;
 				for (const [child, childPath] of Node.children(editor, path)) {
 					if (Text.isText(child) && child.text.length > 0) {
 						// Every text child in macro should be empty
@@ -62,17 +66,46 @@ const withMacro = (editor) => {
 						Transforms.delete(editor, { at: childPath });
 						return;
 					}
-					// TODO Normalize slot number to prevent accidently removal
+					// Normalize slot number to prevent accidently removal
+					// Since users cannot move slots (ensured by our insertData),
+					// we only focus on the lack of the slots.
+					if(Element.isElement(child)){
+						if(child.type !== 'macroslot'){
+							// Although this cannot happened if our editor constraints well
+							Transforms.delete(editor, { at: childPath });
+							return;
+						}
+						if(child.index != nextIndex){
+							// Insert lacked nodes
+							Transforms.insertNodes(editor, {
+								type: "macroslot",
+								index: nextIndex,
+								children: [
+									{ text: "" }
+								]
+							}, { at: childPath });
+							return;
+						}else{
+							nextIndex++;
+						}
+					}
 				}
 			}
 		}
 		normalizeNode(entry);
 	};
 
+	editor.insertData = (data) => {
+		// Never paste fragments to ensure the structures
+		const text = data.getData('text/plain');
+		insertText(text);
+	}
+
 	return editor;
 };
 
 // https://github.com/ianstormtaylor/slate/issues/419#issuecomment-590135015
+// This prevents multiple paragraphs.
 function withSingleLine(editor) {
 	const { normalizeNode } = editor;
 
@@ -89,16 +122,53 @@ function withSingleLine(editor) {
 }
 
 const insertMacro = (editor, macroName) => {
-	if(editor.selection){
+	/*if(editor.selection){
 		wrapMacro(editor, macroName);
-	}
+	}*/
+	wrapMacro(editor, macroName);
 };
 
 const wrapMacro = (editor, macroName) => {
-	if(isMacroActive(editor, macroName)){
+	/*if(isMacroActive(editor, macroName)){
 		unwrapMacro(editor, macroName);
-	}
+	}*/
 	//
+	const { selection } = editor;
+	const isCollapsed = selection && Range.isCollapsed(selection);
+	const macroInfo = macros.get(macroName);
+	let element = {
+		type: 'macro',
+		macroName,
+		children: [
+			{ text: "" },
+			...[...Array(macroInfo.childrenNumber).keys()].map(index => {return {
+				type: "macroslot",
+				index,
+				children: [
+					{ text: "" }
+				]
+			};
+			}),
+			{ text: "" },
+		]
+	};
+	if (selection && !isCollapsed && macroInfo.childrenNumber > 0){
+		element.children[1].children[0].text = Editor.string(editor, selection);
+	}
+	Transforms.insertNodes(editor, element);
+	Transforms.collapse(editor, { edge: 'end' })
+	// Now if the cursor is in the un-editable part
+	if(editor.selection){
+		const [node, path] = Editor.node(editor, editor.selection);
+		console.assert(Text.isText(node), "Not a text");
+		if (editor.selection.anchor.path.length % 2 === 1){
+			const [parent, parentPath] = Editor.parent(editor, path);
+			if(Element.isElement(parent) && parent.type === 'macro'){
+				// Change the cursor
+				Transforms.select(editor, Editor.after(editor, parentPath));
+			}
+		}
+	}
 };
 
 const unwrapMacro = (editor, macroName) => {
@@ -114,7 +184,7 @@ const isMacroActive = (editor, macroName) => {
 };
 
 const TextEditor = () => {
-	const editor = useMemo(() => withMacro(withSingleLine(withReact(createEditor()))), []);
+	const editor = useMemo(() => withMacro(withSingleLine(withHistory(withReact(createEditor())))), []);
 
 	const [value, setValue] = useState([
 		{
@@ -188,13 +258,17 @@ const TextEditor = () => {
 			case "paragraph":
 				return <p {...attributes}>{children}</p>;
 			case "macro":
+				console.log(element);
 				return <span {...attributes}
-					style={{padding: "0 6px", backgroundColor: "grey"}}
+					style={{padding: "0 6px", backgroundColor: "grey", color: "white"}}
 				>
-					<span contentEditable={false}>{macros.get(element.macroName).displayName}</span>
-					<InlineChromiumBugfix />{children}<InlineChromiumBugfix />
+					<span contentEditable={false}>({macros.get(element.macroName).displayName}</span>
+					{children}
+					<span contentEditable={false}>)</span>
+					<button contentEditable={false} onClick={() => console.log(editor.selection)}>刪除</button>
 				</span>;
 				// TODO Add button to delete a macro
+				// But how to get path here?
 			case "macroslot":
 				return <span {...attributes}
 					style={{margin: "0 3px"}}
@@ -216,18 +290,46 @@ const TextEditor = () => {
 		}
 	}, []);
 
+	const onKeyDown = event => {
+		const { selection } = editor;
+
+		// Default left/right behavior is unit:'character'.
+		// This fails to distinguish between two cursor positions, such as
+		// <inline>foo<cursor/></inline> vs <inline>foo</inline><cursor/>.
+		// Here we modify the behavior to unit:'offset'.
+		// This lets the user step into and out of the inline without stepping over characters.
+		// You may wish to customize this further to only use unit:'offset' in specific cases.
+		if (selection && Range.isCollapsed(selection)) {
+			const { nativeEvent } = event
+			if (isKeyHotkey('left', nativeEvent)) {
+				event.preventDefault();
+				do{
+					Transforms.move(editor, { unit: 'offset', reverse: true });
+				} while (Editor.parent(editor, editor.selection)[0].type === 'macro');
+				return;
+			}
+			if (isKeyHotkey('right', nativeEvent)) {
+				event.preventDefault();
+				do {
+					Transforms.move(editor, { unit: 'offset' });
+				} while (Editor.parent(editor, editor.selection)[0].type === 'macro');
+				return;
+			}
+		}
+	}
+
 	return (
 		<Slate editor={editor} value={value} onChange={(newValue) => setValue(newValue)}>
 			<div>
 				{Array.from(macros).map(([macroName, spec]) => {
-					return <Button key={macroName}>{spec.displayName}</Button>;
+					return <Button key={macroName} onClick={() => insertMacro(editor, macroName)}>{spec.displayName}</Button>;
 				})}
 			</div>
 			<div>
 				<Button onClick={() => console.log(editor)}>Inspect</Button>
 				<Button onClick={() => editor.selection && console.log(Editor.parent(editor, editor.selection))}>Inspect Node</Button>
 			</div>
-			<Editable renderElement={renderElement} renderLeaf={renderLeaf} />
+			<Editable renderElement={renderElement} renderLeaf={renderLeaf} onKeyDown={onKeyDown} />
 		</Slate>
 	);
 };

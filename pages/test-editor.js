@@ -37,7 +37,16 @@ const macros = new Map([
 		childrenNumber: 2,
 		canSub: [false, false]
 	}],
-])
+]);
+
+const macrosReverse = new Map();
+for(const [macroNameInSlate, info] of macros){
+	const macroName = info.macroName;
+	if(!macrosReverse.has(macroName)){
+		macrosReverse.set(macroName, new Map());
+	}
+	macrosReverse.get(macroName).set(info.childrenNumber, macroNameInSlate);
+}
 
 const withMacro = (editor) => {
 	const {
@@ -189,9 +198,9 @@ const insertMacro = (editor, macroNameInSlate) => {
 	}
 };
 
-const slateToScenario = (value, outmost = true) => {
+const slateToComponents = (value, outmost = true) => {
 	if(outmost){
-		return slateToScenario(value[0].children, false);
+		return slateToComponents(value[0].children, false);
 	}
 	const result = value.map(node => {
 		if(Text.isText(node)){
@@ -208,7 +217,7 @@ const slateToScenario = (value, outmost = true) => {
 				children: node.children
 					.filter(child => Element.isElement(child) && child.type === 'macroslot')
 					.map(slot => {
-						return slateToScenario(slot.children, false);
+						return slateToComponents(slot.children, false);
 					})
 			}
 		}
@@ -216,72 +225,131 @@ const slateToScenario = (value, outmost = true) => {
 	return result.filter(child => child !== '');
 };
 
+const componentsToSlate = (components, outmost = true) => {
+	if(outmost){
+		return [
+			{
+				type: "paragraph",
+				children: componentsToSlate(components, false)
+			}
+		];
+	}
+	// We don't do normalization here: it is the responsibility to the normalizer
+	return components.map(component => {
+		if(typeof component === 'string'){
+			return { text: component };
+		}
+		const macroName = component.identifier;
+		const numberOfSlots = component.children.length;
+		// Find name in slate
+		const macroNameInSlate = macrosReverse.get(macroName)?.get(numberOfSlots);
+		if(macroNameInSlate !== undefined){
+			return {
+				type: "macro",
+				macroName: macroNameInSlate,
+				children: component.children.map((child, index) => {
+					return {
+						type: "macroslot",
+						index,
+						children: componentsToSlate(child, false)
+					}
+				})
+			}
+		}else{
+			// Unknown macro
+			return { text: "Unknown macro" };
+		}
+	});
+};
+
+const testSlate = [
+	{
+		type: "paragraph",
+		children: [
+			{ text: "123" },
+			{
+				type: "macro",
+				macroName: "separate_text",
+				children: [
+					{
+						type: "macroslot",
+						index: 0,
+						children: [
+							{ text: "OP ユメヲカケル" }
+						]
+					},
+				]
+			},
+			{ text: "789" },
+			{
+				type: "macro",
+				macroName: "ruby",
+				children: [
+					{
+						type: "macroslot",
+						index: 0,
+						children: [
+							{ text: "私" }
+						]
+					},
+					{
+						type: "macroslot",
+						index: 1,
+						children: [
+							{ text: "わたし" }
+						]
+					},
+				]
+			},
+			{ text: "012" },
+			{
+				type: "macro",
+				macroName: "separate_text",
+				children: [
+					{
+						type: "macroslot",
+						index: 0,
+						children: [
+							{ text: "OP ユメヲカケル" }
+						]
+					},
+				]
+			},
+			{ text: "345" },
+		],
+	},
+];
+
+const testComponents = [
+	"123",
+	{
+		"identifier": "separate",
+		"children": [
+			["OP ユメヲカケル"]
+		]
+	},
+	"789",
+	{
+		"identifier": "ruby",
+		"children": [
+			["私"],
+			["わたし"]
+		]
+	},
+	"012",
+	{
+		"identifier": "separate",
+		"children": [
+			["OP ユメヲカケル"]
+		]
+	},
+	"345"
+];
+
 const TextEditor = () => {
 	const editor = useMemo(() => withMacro(withSingleLine(withHistory(withReact(createEditor())))), []);
 
-	const [value, setValue] = useState([
-		{
-			type: "paragraph",
-			children: [
-				{ text: "123" },
-				{
-					type: "macro",
-					macroName: "separate_text",
-					children: [
-						{ text: "" },
-						{
-							type: "macroslot",
-							index: 0,
-							children: [
-								{ text: "OP ユメヲカケル" }
-							]
-						},
-						{ text: "" },
-					]
-				},
-				{ text: "789" },
-				{
-					type: "macro",
-					macroName: "ruby",
-					children: [
-						{ text: "" },
-						{
-							type: "macroslot",
-							index: 0,
-							children: [
-								{ text: "私" }
-							]
-						},
-						{
-							type: "macroslot",
-							index: 1,
-							children: [
-								{ text: "わたし" }
-							]
-						},
-						{ text: "" },
-					]
-				},
-				{ text: "012" },
-				{
-					type: "macro",
-					macroName: "separate_text",
-					children: [
-						{ text: "" },
-						{
-							type: "macroslot",
-							index: 0,
-							children: [
-								{ text: "OP ユメヲカケル" }
-							]
-						},
-						{ text: "" },
-					]
-				},
-				{ text: "345" },
-			],
-		},
-	]);
+	const [value, setValue] = useState(componentsToSlate(testComponents));
 
 	console.log(value);
 
@@ -367,7 +435,7 @@ const TextEditor = () => {
 			<Editable renderElement={renderElement} renderLeaf={renderLeaf} onKeyDown={onKeyDown} />
 			<div>
 				<pre style={{whiteSpace: "pre-wrap"}}>
-					{JSON.stringify(slateToScenario(value))}
+					{JSON.stringify(slateToComponents(value))}
 				</pre>
 			</div>
 		</Slate>

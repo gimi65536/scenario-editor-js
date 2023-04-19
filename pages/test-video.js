@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useImmer } from "use-immer";
 import { Button } from '@mui/material';
-import VideoComponent from '@/lib/videoJs';
+import VideoComponent from '@/lib/video-js';
 
 export default function VideoPreview(){
 	const [option, updateUption] = useImmer({

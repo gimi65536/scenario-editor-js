@@ -39,14 +39,6 @@ const macros = new Map([
 	}],
 ])
 
-const controls = new Map([
-	[
-		"delete", {
-			displayName: "刪除"
-		}
-	],
-]);
-
 const withMacro = (editor) => {
 	const {
 		insertData,
@@ -58,23 +50,34 @@ const withMacro = (editor) => {
 	} = editor;
 
 	editor.isInline = (element) =>
-		element.type === 'macro' || element.type === 'macroslot' || element.type === 'control_button' || isInline(element);
-
-	editor.isSelectable = (element) => {
-		if(element.type === 'control_button'){
-			return false;
-		}
-		return isSelectable(element);
-	};
-
-	editor.isElementReadOnly = (element) => element.type === 'control_button' || isElementReadOnly(element);
+		element.type === 'macro' || element.type === 'macroslot' || isInline(element);
 
 	editor.normalizeNode = (entry) => {
 		const [node, path] = entry;
 
 		if (Element.isElement(node)) {
 			if (node.type === 'macro'){
-				const macroName = node.macroName;
+				const macroNameInSlate = node.macroName;
+				// Check if the macro is sub and the place can put sub
+				const levels = [...Editor.levels(editor, { at: path, reverse: true })];
+				if(levels.length >= 3){
+					const [parentNode, parentPath] = levels[1];
+					if(parentNode.type === 'macroslot'){
+						const index = parentNode.index;
+						const [grandNode, grandPath] = levels[2];
+						if(grandNode.type === 'macro' && macros.has(grandNode.macroName)){
+							const parentMacroInfo = macros.get(grandNode.macroName);
+							// Note that the incorrect index is not concered because it SHOULD NOT happen at all
+							if(!parentMacroInfo.canSub[index]){
+								// Cannot put sub macro here...
+								Transforms.unwrapNodes(editor, { at: path });
+								return;
+							}
+						}
+						// else? Nude slots are not processed here.
+					}
+				}
+				// Check children
 				let nextIndex = 0;
 				for (const [child, childPath] of Node.children(editor, path)) {
 					if (Text.isText(child) && child.text.length > 0) {
@@ -113,6 +116,7 @@ const withMacro = (editor) => {
 					// A nude slot should be unwrapped
 					// This helps us to implement macro unwrap
 					Transforms.unwrapNodes(editor, { at: path });
+					return;
 				}
 			}
 		}
@@ -145,56 +149,39 @@ function withSingleLine(editor) {
 	return editor;
 }
 
-const insertMacro = (editor, macroName) => {
-	/*if(editor.selection){
-		wrapMacro(editor, macroName);
-	}*/
-	wrapMacro(editor, macroName);
-};
-
-const wrapMacro = (editor, macroName) => {
-	/*if(isMacroActive(editor, macroName)){
-		unwrapMacro(editor, macroName);
-	}*/
-	//
+const insertMacro = (editor, macroNameInSlate) => {
 	const { selection } = editor;
 	const isCollapsed = selection && Range.isCollapsed(selection);
-	const macroInfo = macros.get(macroName);
+	const macroInfo = macros.get(macroNameInSlate);
 	let element = {
 		type: 'macro',
-		macroName,
+		macroName: macroNameInSlate,
 		children: [
 			{ text: "" },
-			...[...Array(macroInfo.childrenNumber).keys()].map(index => {return {
-				type: "macroslot",
-				index,
-				children: [
-					{ text: "" }
-				]
-			};
+			...[...Array(macroInfo.childrenNumber).keys()].map(index => {
+				return {
+					type: "macroslot",
+					index,
+					children: [
+						{ text: "" }
+					]
+				};
 			}),
-			{ text: "" },
-			{
-				type: "control_button",
-				effect: "delete",
-				children: [
-					{ text: "刪除" }
-				]
-			}
+			{ text: "" }
 		]
 	};
-	if (selection && !isCollapsed && macroInfo.childrenNumber > 0){
+	if (selection && !isCollapsed && macroInfo.childrenNumber > 0) {
 		element.children[1].children[0].text = Editor.string(editor, selection);
 	}
 	Transforms.insertNodes(editor, element);
 	Transforms.collapse(editor, { edge: 'end' })
 	// Now if the cursor is in the un-editable part
-	if(editor.selection){
+	if (editor.selection) {
 		const [node, path] = Editor.node(editor, editor.selection);
 		console.assert(Text.isText(node), "Not a text");
-		if (editor.selection.anchor.path.length % 2 === 1){
+		if (editor.selection.anchor.path.length % 2 === 1) {
 			const [parent, parentPath] = Editor.parent(editor, path);
-			if(Element.isElement(parent) && parent.type === 'macro'){
+			if (Element.isElement(parent) && parent.type === 'macro') {
 				// Change the cursor
 				Transforms.select(editor, Editor.after(editor, parentPath));
 			}
@@ -202,16 +189,31 @@ const wrapMacro = (editor, macroName) => {
 	}
 };
 
-const unwrapMacro = (editor, macroName) => {
-	//
-};
-
-const isMacroActive = (editor, macroName) => {
-	const [nodes] = Editor.nodes(editor, {
-		match: n =>
-			!Editor.isEditor(n) && SlateElement.isElement(n) && n.type === 'macro' && n.macroName === 'macroName',
-	})
-	return !!nodes
+const slateToScenario = (value, outmost = true) => {
+	if(outmost){
+		return slateToScenario(value[0].children, false);
+	}
+	const result = value.map(node => {
+		if(Text.isText(node)){
+			return node.text;
+		}else if(Element.isElement(node) && node.type === 'macro'){
+			const macroNameInSlate = node.macroName;
+			if(!macros.has(macroNameInSlate)){
+				return '';
+			}
+			const info = macros.get(macroNameInSlate);
+			const macroName = info.macroName;
+			return {
+				identifier: macroName,
+				children: node.children
+					.filter(child => Element.isElement(child) && child.type === 'macroslot')
+					.map(slot => {
+						return slateToScenario(slot.children, false);
+					})
+			}
+		}
+	});
+	return result.filter(child => child !== '');
 };
 
 const TextEditor = () => {
@@ -283,23 +285,6 @@ const TextEditor = () => {
 
 	console.log(value);
 
-	const insertBlock = useCallback((blockType) => {
-		const { selection } = editor;
-		const isCollapsed = selection && Range.isCollapsed(selection);
-
-		const newBlock = {
-			type: blockType,
-			children: isCollapsed ? [{ text: "" }] : [],
-		};
-
-		if (isCollapsed) {
-			Transforms.insertNodes(editor, newBlock)
-		} else {
-			Transforms.wrapNodes(editor, newBlock, { split: true })
-			Transforms.collapse(editor, { edge: 'end' })
-		}
-	}, [editor]);
-
 	const renderElement = useCallback(({ attributes, children, element }) => {
 		switch (element.type) {
 			case "paragraph":
@@ -370,15 +355,21 @@ const TextEditor = () => {
 	return (
 		<Slate editor={editor} value={value} onChange={(newValue) => setValue(newValue)}>
 			<div>
-				{Array.from(macros).map(([macroName, spec]) => {
-					return <Button key={macroName} onClick={() => insertMacro(editor, macroName)}>{spec.displayName}</Button>;
+				{Array.from(macros).map(([macroNameInSlate, spec]) => {
+					return <Button key={macroNameInSlate} onClick={() => insertMacro(editor, macroNameInSlate)}>{spec.displayName}</Button>;
 				})}
 			</div>
 			<div>
 				<Button onClick={() => console.log(editor)}>Inspect</Button>
 				<Button onClick={() => editor.selection && console.log(Editor.parent(editor, editor.selection))}>Inspect Node</Button>
+				<Button onClick={() => editor.selection && console.log(...Editor.levels(editor, { at: editor.selection, reverse: true }))}>Inspect Ancestors</Button>
 			</div>
 			<Editable renderElement={renderElement} renderLeaf={renderLeaf} onKeyDown={onKeyDown} />
+			<div>
+				<pre style={{whiteSpace: "pre-wrap"}}>
+					{JSON.stringify(slateToScenario(value))}
+				</pre>
+			</div>
 		</Slate>
 	);
 };

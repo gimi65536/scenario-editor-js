@@ -1,6 +1,6 @@
 import React, { useMemo, useState, useCallback } from "react";
 import { createEditor, Editor, Transforms, Range, Text, Element, Node } from "slate";
-import { Slate, Editable, withReact } from "slate-react";
+import { Slate, Editable, withReact, ReactEditor } from "slate-react";
 import { withHistory } from 'slate-history'
 import {
 	Button
@@ -39,6 +39,14 @@ const macros = new Map([
 	}],
 ])
 
+const controls = new Map([
+	[
+		"delete", {
+			displayName: "刪除"
+		}
+	],
+]);
+
 const withMacro = (editor) => {
 	const {
 		insertData,
@@ -50,7 +58,16 @@ const withMacro = (editor) => {
 	} = editor;
 
 	editor.isInline = (element) =>
-		element.type === 'macro' || element.type === 'macroslot' || isInline(element);
+		element.type === 'macro' || element.type === 'macroslot' || element.type === 'control_button' || isInline(element);
+
+	editor.isSelectable = (element) => {
+		if(element.type === 'control_button'){
+			return false;
+		}
+		return isSelectable(element);
+	};
+
+	editor.isElementReadOnly = (element) => element.type === 'control_button' || isElementReadOnly(element);
 
 	editor.normalizeNode = (entry) => {
 		const [node, path] = entry;
@@ -89,6 +106,13 @@ const withMacro = (editor) => {
 							nextIndex++;
 						}
 					}
+				}
+			}else if(node.type === 'macroslot'){
+				const [parentNode, parentPath] = Editor.parent(editor, path);
+				if(parentNode.type !== 'macro'){
+					// A nude slot should be unwrapped
+					// This helps us to implement macro unwrap
+					Transforms.unwrapNodes(editor, { at: path });
 				}
 			}
 		}
@@ -150,6 +174,13 @@ const wrapMacro = (editor, macroName) => {
 			};
 			}),
 			{ text: "" },
+			{
+				type: "control_button",
+				effect: "delete",
+				children: [
+					{ text: "刪除" }
+				]
+			}
 		]
 	};
 	if (selection && !isCollapsed && macroInfo.childrenNumber > 0){
@@ -230,6 +261,22 @@ const TextEditor = () => {
 					]
 				},
 				{ text: "012" },
+				{
+					type: "macro",
+					macroName: "separate_text",
+					children: [
+						{ text: "" },
+						{
+							type: "macroslot",
+							index: 0,
+							children: [
+								{ text: "OP ユメヲカケル" }
+							]
+						},
+						{ text: "" },
+					]
+				},
+				{ text: "345" },
 			],
 		},
 	]);
@@ -258,14 +305,16 @@ const TextEditor = () => {
 			case "paragraph":
 				return <p {...attributes}>{children}</p>;
 			case "macro":
-				console.log(element);
+				// Note that the onClick should get the path dynamically instead of evaluating here
+				// const path = ReactEditor.findPath(editor, element); <<< It cannot handle changed path
 				return <span {...attributes}
 					style={{padding: "0 6px", backgroundColor: "grey", color: "white"}}
 				>
 					<span contentEditable={false}>({macros.get(element.macroName).displayName}</span>
 					{children}
 					<span contentEditable={false}>)</span>
-					<button contentEditable={false} onClick={() => console.log(editor.selection)}>刪除</button>
+					<button contentEditable={false} onClick={() => Transforms.removeNodes(editor, { at: ReactEditor.findPath(editor, element) })}>刪除</button>
+					<button contentEditable={false} onClick={() => Transforms.unwrapNodes(editor, { at: ReactEditor.findPath(editor, element) })}>解除</button>
 				</span>;
 				// TODO Add button to delete a macro
 				// But how to get path here?
@@ -278,7 +327,7 @@ const TextEditor = () => {
 			default:
 				return <span {...attributes}>{children}</span>;
 		}
-	}, []);
+	}, [editor]);
 
 	const renderLeaf = useCallback(({ attributes, children, leaf }) => {
 		// This ensures the text nodes in macro could not be editable (front-end control)

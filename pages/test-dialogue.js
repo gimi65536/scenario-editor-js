@@ -1,4 +1,4 @@
-import { useState, useMemo, useRef, Fragment } from "react";
+import { useState, useMemo, useRef, Fragment, useCallback, useEffect } from "react";
 import {useImmerReducer} from 'use-immer';
 import { DataGrid } from "@mui/x-data-grid";
 import {
@@ -13,10 +13,16 @@ import {
 	parseDialogue,
 	componentsToText
 } from '@/lib/scenario';
+import Editor from '@/lib/dialogue-editor';
+import { componentsToSlate, slateToComponents } from '@/lib/dialogue-editor';
 import json from '@/test/NTUCCC 109SS VAD07-gimi65536 0.1.0.json';
 
 function reducer(draft, action){
-	//
+	if(action.type === 'edit_dialogue'){
+		const uuid = action.uuid;
+		const newComponents = action.components;
+		draft.dialogues.reference[uuid].components = newComponents;
+	}
 }
 
 function RenderText(props){
@@ -65,8 +71,15 @@ const columns = [
 export default function DialogueEditor(){
 	const [scenario, dispatch] = useImmerReducer(reducer, json);
 	const [selectedId, setSelectedId] = useState(null);
-	const [selectedRowValue, setSelectedRowValue] = useState("");
+	const [slateElement, setSlateElement] = useState(null);
 	const [editDialogOpen, setEditDialogOpen] = useState(false);
+
+	const textareaRef = useRef(null);
+	useEffect(() => {
+		if(scenario){
+			textareaRef.current.value = JSON.stringify(scenario);
+		}
+	});
 
 	// This could be a performance neck
 	const rows = useMemo(() => scenario.dialogues.order.map(uuid => {
@@ -79,26 +92,31 @@ export default function DialogueEditor(){
 			// To override the default behavior and let the dialog control the edit
 			e.defaultMuiPrevented = true;
 			setSelectedId(params.row.id);
-			/*
-			setSelectedRowValue(params.value);
-			setEditDialogOpen(true);*/
-			console.log(params);
+			const element = componentsToSlate(params.row.components)
+			setSlateElement(element);
+			setEditDialogOpen(true);
+			console.log(element);
 		}
 	};
 
-	const handleEditDialogClose = () => {
+	const handleEditDialogClose = useCallback(() => {
 		setEditDialogOpen(false);
 		setSelectedId(null);
-	};
+		setSlateElement(null);
+	}, []);
 
-	const handleSave = () => {
-		//selectedId.name = selectedRowValue;
+	const handleSave = useCallback(() => {
+		dispatch({
+			type: 'edit_dialogue',
+			uuid: selectedId,
+			components: slateToComponents(slateElement)
+		});
 		handleEditDialogClose();
-	};
+	}, [dispatch, selectedId, slateElement, handleEditDialogClose]);
 
-	const handleChange = (event) => {
-		setSelectedRowValue(event.target.value);
-	};
+	const handleChange = useCallback((newValue) => {
+		setSlateElement(newValue);
+	}, []);
 
 	return (
 		<div style={{ height: 800, width: "100%" }}>
@@ -108,32 +126,24 @@ export default function DialogueEditor(){
 				onCellEditStart={handleEditStart}
 				getRowHeight={() => 'auto'}
 			/>
-			<textarea defaultValue={scenario && JSON.stringify(scenario)} style={{width: "100%", height: "50%"}} />
+			<textarea style={{ width: "100%", height: "50%" }} ref={textareaRef} />
 			<EditDialog
 				open={editDialogOpen}
 				onClose={handleEditDialogClose}
 				onSave={handleSave}
 				onChange={handleChange}
-				value={selectedRowValue}
+				element={slateElement}
 			/>
 		</div>
 	);
 }
 
-const EditDialog = ({ open, onClose, onSave, onChange, value }) => {
+const EditDialog = ({ open, onClose, onSave, onChange, element }) => {
 	return (
 		<Dialog open={open} onClose={onClose}>
 			<DialogTitle>編輯台詞</DialogTitle>
 			<DialogContent>
-				<TextField
-					autoFocus
-					margin="dense"
-					label="Name"
-					type="text"
-					fullWidth
-					value={value}
-					onChange={onChange}
-				/>
+				{open ? <Editor element={element} onChange={onChange} /> : ""}
 			</DialogContent>
 			<DialogActions>
 				<Button onClick={onClose}>Cancel</Button>

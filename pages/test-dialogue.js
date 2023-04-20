@@ -1,6 +1,6 @@
 import { useState, useMemo, useRef, Fragment, useCallback, useEffect } from "react";
 import {useImmerReducer} from 'use-immer';
-import { DataGrid } from "@mui/x-data-grid";
+import { DataGrid, useGridApiContext, useGridApiRef } from "@mui/x-data-grid";
 import {
 	Button,
 	Dialog,
@@ -13,9 +13,32 @@ import {
 	parseDialogue,
 	componentsToText
 } from '@/lib/scenario';
+import { Element } from "slate";
 import Editor from '@/components/dialogue-editor';
 import { componentsToSlate, slateToComponents } from '@/lib/slate-dialogue';
 import json from '@/test/NTUCCC 109SS VAD07-gimi65536 0.1.0.json';
+
+function convertTo(components_or_element, to){
+	if(components_or_element.length === 0){
+		return components_or_element;
+	}
+	if (Element.isElement(components_or_element[0])) {
+		// Slate element
+		if (to === 'element') {
+			return components_or_element;
+		} else if (to === 'components') {
+			return slateToComponents(components_or_element);
+		}
+	}else{
+		// Components
+		if (to === 'element') {
+			return componentsToSlate(components_or_element);
+		} else if (to === 'components') {
+			return components_or_element;
+		}
+	}
+	throw "Unknown conversion.";
+}
 
 function reducer(draft, action){
 	if(action.type === 'edit_dialogue'){
@@ -25,11 +48,11 @@ function reducer(draft, action){
 	}
 }
 
-function RenderText(props){
-	return (<p>{render(props.row.components)}</p>);
+function renderText(params){
+	return (<p>{renderComponents(convertTo(params.value, 'components'))}</p>);
 }
 
-function render(components){
+function renderComponents(components){
 	return components.map((component, i) => {
 		if(typeof component === 'string'){
 			return <span key={i}>{component}</span>
@@ -37,6 +60,22 @@ function render(components){
 			return <Macro key={i} {...component} />
 		}
 	});
+}
+
+function renderTextEditor(params){
+	return <TextEditor {...params} />;
+}
+
+function TextEditor(props){
+	// This is a wrapper
+	const {id, value, field} = props;
+	const apiRef = useGridApiContext();
+	const slateElement = useMemo(() => convertTo(value, 'element'), [value]);
+	const onChange = useCallback((newValue) => {
+		apiRef.current.setEditCellValue({ id, field, value: newValue });
+	}, [apiRef, id, field]);
+
+	return <Editor element={slateElement} onChange={onChange} />;
 }
 
 function Macro({identifier, children}){
@@ -47,7 +86,7 @@ function Macro({identifier, children}){
 		<span>(
 			{identifier}/{
 				children
-				.map((child, i) => <Fragment key={i}>{render(child)}</Fragment>)
+				.map((child, i) => <Fragment key={i}>{renderComponents(child)}</Fragment>)
 				.reduce((prev, curr) => [].concat(prev, '/', curr))
 			}
 		)</span>
@@ -60,19 +99,19 @@ const columns = [
 		headerName: 'Speaker',
 	},
 	{
-		field: 'text',
+		field: 'components',
 		headerName: 'Text',
 		editable: true,
 		flex: true,
-		renderCell: RenderText
+		renderCell: renderText,
+		renderEditCell: renderTextEditor
 	}
 ];
 
 export default function DialogueEditor(){
 	const [scenario, dispatch] = useImmerReducer(reducer, json);
 	const [selectedId, setSelectedId] = useState(null);
-	const [slateElement, setSlateElement] = useState(null);
-	const [editDialogOpen, setEditDialogOpen] = useState(false);
+	const apiRef = useGridApiRef();
 
 	const textareaRef = useRef(null);
 	useEffect(() => {
@@ -88,34 +127,22 @@ export default function DialogueEditor(){
 
 	const handleEditStart = (params, e) => {
 		// Only call dialog when editing the text field
-		if (params.field == 'text') {
-			// To override the default behavior and let the dialog control the edit
-			e.defaultMuiPrevented = true;
+		if (params.field === 'components') {
 			setSelectedId(params.row.id);
-			const element = componentsToSlate(params.row.components)
-			setSlateElement(element);
-			setEditDialogOpen(true);
 		}
 	};
 
-	const handleEditDialogClose = useCallback(() => {
-		setEditDialogOpen(false);
-		setSelectedId(null);
-		setSlateElement(null);
-	}, []);
-
-	const handleSave = useCallback(() => {
-		dispatch({
-			type: 'edit_dialogue',
-			uuid: selectedId,
-			components: slateToComponents(slateElement)
-		});
-		handleEditDialogClose();
-	}, [dispatch, selectedId, slateElement, handleEditDialogClose]);
-
-	const handleChange = useCallback((newValue) => {
-		setSlateElement(newValue);
-	}, []);
+	const handleEditStop = useCallback((params, e) => {
+		if (params.field === 'components') {
+			const newRow = apiRef.current.getRowWithUpdatedValues(selectedId, 'components');
+			dispatch({
+				type: 'edit_dialogue',
+				uuid: selectedId,
+				components: convertTo(newRow.components, 'components')
+			});
+			setSelectedId(null);
+		}
+	}, [dispatch, selectedId, apiRef]);
 
 	return (
 		<div style={{ height: 800, width: "100%" }}>
@@ -123,31 +150,11 @@ export default function DialogueEditor(){
 				rows={rows}
 				columns={columns}
 				onCellEditStart={handleEditStart}
+				onCellEditStop={handleEditStop}
 				getRowHeight={() => 'auto'}
+				apiRef={apiRef}
 			/>
 			<textarea style={{ width: "100%", height: "50%" }} ref={textareaRef} />
-			<EditDialog
-				open={editDialogOpen}
-				onClose={handleEditDialogClose}
-				onSave={handleSave}
-				onChange={handleChange}
-				element={slateElement}
-			/>
 		</div>
 	);
 }
-
-const EditDialog = ({ open, onClose, onSave, onChange, element }) => {
-	return (
-		<Dialog open={open} onClose={onClose}>
-			<DialogTitle>編輯台詞</DialogTitle>
-			<DialogContent>
-				{open ? <Editor element={element} onChange={onChange} /> : ""}
-			</DialogContent>
-			<DialogActions>
-				<Button onClick={onClose}>Cancel</Button>
-				<Button onClick={onSave}>Save</Button>
-			</DialogActions>
-		</Dialog>
-	);
-};

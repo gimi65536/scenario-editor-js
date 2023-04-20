@@ -13,8 +13,8 @@ import {
 	parseDialogue,
 	componentsToText
 } from '@/lib/scenario';
-import Editor from '@/lib/dialogue-editor';
-import { componentsToSlate, slateToComponents } from '@/lib/dialogue-editor';
+import Editor from '@/components/dialogue-editor';
+import { componentsToSlate, slateToComponents } from '@/lib/slate-dialogue';
 import json from '@/test/NTUCCC 109SS VAD07-gimi65536 0.1.0.json';
 
 function reducer(draft, action){
@@ -95,7 +95,6 @@ export default function DialogueEditor(){
 			const element = componentsToSlate(params.row.components)
 			setSlateElement(element);
 			setEditDialogOpen(true);
-			console.log(element);
 		}
 	};
 

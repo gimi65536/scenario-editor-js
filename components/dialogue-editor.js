@@ -57,6 +57,11 @@ function TextEditor(props) {
 }
 
 function Macro({ identifier, children }) {
+	// Special Cases
+	if (identifier === 'ruby'){
+		return <span><ruby>{children[0]}<rp> (</rp><rt>{children[1]}</rt><rp> )</rp></ruby></span>;
+	}
+	// General Cases
 	if (children.length === 0) {
 		return <span>({identifier})</span>;
 	}

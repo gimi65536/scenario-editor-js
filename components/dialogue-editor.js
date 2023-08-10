@@ -2,6 +2,7 @@ import { useState, useMemo, Fragment, useCallback } from "react";
 import { DataGrid, useGridApiContext, useGridApiRef } from "@mui/x-data-grid";
 import { Element } from "slate";
 import SentenceEditor from '@/components/sentence-editor';
+import { renderMacro } from '@/lib/macro';
 import { componentsToSlate, slateToComponents } from '@/lib/slate-dialogue';
 
 function convertTo(components_or_element, to) {
@@ -58,8 +59,12 @@ function TextEditor(props) {
 
 function Macro({ identifier, children }) {
 	// Special Cases
-	if (identifier === 'ruby'){
-		return <span><ruby>{children[0]}<rp> (</rp><rt>{children[1]}</rt><rp> )</rp></ruby></span>;
+	if (renderMacro.has(identifier)){
+		const f = renderMacro.get(identifier);
+		const node = f(children);
+		if(node !== null){
+			return node;
+		}
 	}
 	// General Cases
 	if (children.length === 0) {

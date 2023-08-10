@@ -28,7 +28,7 @@ function convertTo(components_or_element, to) {
 }
 
 function renderText(params) {
-	return (<p>{renderComponents(convertTo(params.value, 'components'))}</p>);
+	return (<p style={{width: "100%"}}>{renderComponents(convertTo(params.value, 'components'))}</p>);
 }
 
 function renderComponents(components) {

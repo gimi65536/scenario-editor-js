@@ -215,7 +215,7 @@ const TextEditor = ({ element, onChange, test }) => {
 	);
 };
 
-export default function DialogueEditor({ element, onChange }) {
+export default function SentenceEditor({ element, onChange }) {
 	return <TextEditor element={element} onChange={onChange} />;
 }
 

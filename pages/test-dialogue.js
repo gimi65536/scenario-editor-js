@@ -14,7 +14,7 @@ import {
 	componentsToText
 } from '@/lib/scenario';
 import { Element } from "slate";
-import Editor from '@/components/dialogue-editor';
+import SentenceEditor from '@/components/sentence-editor';
 import { componentsToSlate, slateToComponents } from '@/lib/slate-dialogue';
 import json from '@/test/NTUCCC 109SS VAD07-gimi65536 0.1.0.json';
 
@@ -75,7 +75,7 @@ function TextEditor(props){
 		apiRef.current.setEditCellValue({ id, field, value: newValue });
 	}, [apiRef, id, field]);
 
-	return <Editor element={slateElement} onChange={onChange} />;
+	return <SentenceEditor element={slateElement} onChange={onChange} />;
 }
 
 function Macro({identifier, children}){

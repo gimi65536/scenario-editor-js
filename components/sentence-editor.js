@@ -155,7 +155,7 @@ const TextEditor = ({ element, onChange, test }) => {
 				</span>;
 			case "macroslot":
 				return <span {...attributes}
-					style={{ margin: "0 3px", borderStyle: "solid", borderWidth: 1 }}
+					style={{ margin: "0 3px", borderStyle: "solid", borderWidth: 1, display: "inline-block", minWidth: "0.2em" }}
 				>
 					<InlineChromiumBugfix />{children}<InlineChromiumBugfix />
 				</span>;

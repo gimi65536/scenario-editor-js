@@ -2,28 +2,7 @@ import { useRef, useEffect } from "react";
 import {useImmerReducer} from 'use-immer';
 import DialogueEditor from "@/components/dialogue-editor";
 import json from '@/test/NTUCCC 109SS VAD07-gimi65536 0.1.0.json';
-import { editFunctions } from "@/lib/scenario";
-
-function reducer(draft, action){
-	switch(action.type){
-		case 'edit_dialogue':
-			editFunctions.editDialogue(draft, action.uuid, action.components);
-			break;
-		case 'moveon_dialogue':
-			editFunctions.moveonDialogue(draft, action.uuid);
-			break;
-		case 'movedown_dialogue':
-			editFunctions.movedownDialogue(draft, action.uuid);
-			break;
-		case 'add_dialogue_below':
-			editFunctions.addDialogueBelow(draft, action.uuid);
-			break;
-		case 'delete_dialogue':
-			editFunctions.deleteDialogue(draft, action.uuid);
-			break;
-		default:
-	}
-}
+import reducer from "@/lib/reducer";
 
 export default function TestDialogueEditor(){
 	const [scenario, dispatch] = useImmerReducer(reducer, json);

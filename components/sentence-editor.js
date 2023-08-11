@@ -22,66 +22,6 @@ const InlineChromiumBugfix = () => (
 	</span>
 )
 
-/*
-const testSlate = [
-	{
-		type: "paragraph",
-		children: [
-			{ text: "123" },
-			{
-				type: "macro",
-				macroName: "separate_text",
-				children: [
-					{
-						type: "macroslot",
-						index: 0,
-						children: [
-							{ text: "OP ユメヲカケル" }
-						]
-					},
-				]
-			},
-			{ text: "789" },
-			{
-				type: "macro",
-				macroName: "ruby",
-				children: [
-					{
-						type: "macroslot",
-						index: 0,
-						children: [
-							{ text: "私" }
-						]
-					},
-					{
-						type: "macroslot",
-						index: 1,
-						children: [
-							{ text: "わたし" }
-						]
-					},
-				]
-			},
-			{ text: "012" },
-			{
-				type: "macro",
-				macroName: "separate_text",
-				children: [
-					{
-						type: "macroslot",
-						index: 0,
-						children: [
-							{ text: "OP ユメヲカケル" }
-						]
-					},
-				]
-			},
-			{ text: "345" },
-		],
-	},
-];
-*/
-
 const testComponents = [
 	"123",
 	{

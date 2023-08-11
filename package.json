@@ -16,6 +16,7 @@
     "@mui/material": "^5.14.4",
     "@mui/x-data-grid": "^6.1.0",
     "antlr4": "^4.12.0",
+    "array-move": "^4.0.0",
     "eslint": "8.38.0",
     "eslint-config-next": "13.3.0",
     "immer": "^9.0.21",

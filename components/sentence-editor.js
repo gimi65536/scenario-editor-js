@@ -3,8 +3,10 @@ import { Editor, Transforms, Range } from "slate";
 import { Slate, Editable, ReactEditor } from "slate-react";
 import {
 	Button,
+	IconButton,
 	Stack
 } from "@mui/material";
+import { Delete, LinkOff } from "@mui/icons-material";
 import { isKeyHotkey } from 'is-hotkey';
 import { createEditor, insertMacro, slateToComponents, componentsToSlate } from '@/lib/slate-dialogue';
 import { slateMacros as macros } from '@/lib/macro';
@@ -129,35 +131,31 @@ const TextEditor = ({ element, onChange, test }) => {
 				// Note that the onClick should get the path dynamically instead of evaluating here
 				// const path = ReactEditor.findPath(editor, element); <<< It cannot handle changed path
 				return <span {...attributes}
-					style={{ padding: "0 6px", backgroundColor: "grey", color: "white" }}
+					style={{ padding: "0 6px", backgroundColor: "#DEDEDE" }}
 				>
 					<span contentEditable={false}>({macros.get(element.macroName).displayName}</span>
 					{children}
 					<span contentEditable={false}>)</span>
-					<Button
-						variant="contained"
+					<IconButton
 						size="small"
 						color="error"
 						contentEditable={false}
 						onClick={() => Transforms.removeNodes(editor, { at: ReactEditor.findPath(editor, element) })}
 					>
-						刪除
-					</Button>
-					<Button
-						variant="contained"
+						<Delete />
+					</IconButton>
+					<IconButton
 						size="small"
 						color="secondary"
 						contentEditable={false}
 						onClick={() => Transforms.unwrapNodes(editor, { at: ReactEditor.findPath(editor, element) })}
 					>
-						解除
-					</Button>
+						<LinkOff />
+					</IconButton>
 				</span>;
-			// TODO Add button to delete a macro
-			// But how to get path here?
 			case "macroslot":
 				return <span {...attributes}
-					style={{ margin: "0 3px" }}
+					style={{ margin: "0 3px", borderStyle: "solid", borderWidth: 1 }}
 				>
 					<InlineChromiumBugfix />{children}<InlineChromiumBugfix />
 				</span>;

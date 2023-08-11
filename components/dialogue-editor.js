@@ -87,6 +87,11 @@ function Macro({ identifier, children }) {
 
 const columns = [
 	{
+		field: 'lineno',
+		headerName: '#',
+		filterable: false,
+	},
+	{
 		field: 'speaker',
 		headerName: 'Speaker',
 	},
@@ -105,8 +110,12 @@ export default function DialogueEditor({scenario, dispatch}) {
 	const apiRef = useGridApiRef();
 
 	// This could be a performance neck
-	const rows = useMemo(() => scenario.dialogues.order.map(uuid => {
-		return { id: uuid, ...scenario.dialogues.reference[uuid] }
+	const rows = useMemo(() => scenario.dialogues.order.map((uuid, index) => {
+		return {
+			lineno: index + 1,
+			id: uuid,
+			...scenario.dialogues.reference[uuid],
+		}
 	}), [scenario]);
 
 	const handleEditStart = (params, e) => {

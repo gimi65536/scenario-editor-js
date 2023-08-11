@@ -61,7 +61,7 @@ function Macro({ identifier, children }) {
 	// Special Cases
 	if (renderMacro.has(identifier)){
 		const f = renderMacro.get(identifier);
-		const node = f(children);
+		const node = f(children, renderComponents);
 		if(node !== null){
 			return node;
 		}

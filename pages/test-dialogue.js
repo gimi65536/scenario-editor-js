@@ -1,14 +1,12 @@
 import { useRef, useEffect } from "react";
 import {useImmerReducer} from 'use-immer';
-import { DataGrid } from "@mui/x-data-grid";
 import DialogueEditor from "@/components/dialogue-editor";
 import json from '@/test/NTUCCC 109SS VAD07-gimi65536 0.1.0.json';
+import { editFunctions } from "@/lib/scenario";
 
 function reducer(draft, action){
 	if(action.type === 'edit_dialogue'){
-		const uuid = action.uuid;
-		const newComponents = action.components;
-		draft.dialogues.reference[uuid].components = newComponents;
+		editFunctions.editDialogue(draft, action.uuid, action.components);
 	}
 }
 

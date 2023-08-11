@@ -123,10 +123,22 @@ export default function DialogueEditor({scenario, dispatch}) {
 			type: 'actions',
 			flex: 0.5,
 			getActions: (params) => [
-				<GridActionsCellItem key={params.row.id} icon={<ArrowUpward />} label="向上" />,
-				<GridActionsCellItem key={params.row.id} icon={<ArrowDownward />} label="向下" />,
-				<GridActionsCellItem key={params.row.id} icon={<Add />} label="向下新增" />,
-				<GridActionsCellItem key={params.row.id} icon={<Delete />} label="刪除" />,
+				<GridActionsCellItem key={params.row.id}
+					icon={<ArrowUpward />}
+					label="向上"
+				/>,
+				<GridActionsCellItem key={params.row.id}
+					icon={<ArrowDownward />}
+					label="向下"
+				/>,
+				<GridActionsCellItem key={params.row.id}
+					icon={<Add />}
+					label="向下新增"
+				/>,
+				<GridActionsCellItem key={params.row.id}
+					icon={<Delete />}
+					label="刪除"
+				/>,
 			]
 		}
 	], [dispatch])

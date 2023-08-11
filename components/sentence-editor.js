@@ -2,7 +2,8 @@ import React, { useMemo, useState, useCallback, useEffect } from "react";
 import { Editor, Transforms, Range } from "slate";
 import { Slate, Editable, ReactEditor } from "slate-react";
 import {
-	Button
+	Button,
+	Stack
 } from "@mui/material";
 import { isKeyHotkey } from 'is-hotkey';
 import { createEditor, insertMacro, slateToComponents, componentsToSlate } from '@/lib/slate-dialogue';
@@ -202,16 +203,19 @@ const TextEditor = ({ element, onChange, test }) => {
 		</>
 	) : "";
 
+	// 10px padding follows the grid cell style
 	return (
-		<Slate editor={editor} value={value} onChange={onChange}>
+		<Stack direction="column" alignItems="start" style={{ padding: "0 10px" }}>
 			<div>
 				{Array.from(macros).map(([macroNameInSlate, spec]) => {
 					return <Button key={macroNameInSlate} onClick={() => insertMacro(editor, macroNameInSlate)}>{spec.displayName}</Button>;
 				})}
 			</div>
-			<Editable renderElement={renderElement} renderLeaf={renderLeaf} onKeyDown={onKeyDown} />
-			{testNode}
-		</Slate>
+			<Slate editor={editor} value={value} onChange={onChange}>
+				<Editable renderElement={renderElement} renderLeaf={renderLeaf} onKeyDown={onKeyDown} />
+				{testNode}
+			</Slate>
+		</Stack>
 	);
 };
 

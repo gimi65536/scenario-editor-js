@@ -32,6 +32,10 @@ function renderText(params) {
 }
 
 function renderComponents(components) {
+	if(components.length === 0){
+		return String.fromCodePoint(160);
+	}
+
 	return components.map((component, i) => {
 		if (typeof component === 'string') {
 			return <span key={i}>{component}</span>

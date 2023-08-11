@@ -1,5 +1,6 @@
 import { useState, useMemo, Fragment, useCallback } from "react";
-import { DataGrid, useGridApiContext, useGridApiRef } from "@mui/x-data-grid";
+import { DataGrid, GridActionsCellItem, useGridApiContext, useGridApiRef } from "@mui/x-data-grid";
+import { ArrowUpward, ArrowDownward, Add, Delete } from "@mui/icons-material";
 import { Element } from "slate";
 import SentenceEditor from '@/components/sentence-editor';
 import { renderMacro } from '@/lib/macro';
@@ -85,26 +86,6 @@ function Macro({ identifier, children }) {
 	);
 }
 
-const columns = [
-	{
-		field: 'lineno',
-		headerName: '#',
-		filterable: false,
-	},
-	{
-		field: 'speaker',
-		headerName: 'Speaker',
-	},
-	{
-		field: 'components',
-		headerName: 'Text',
-		editable: true,
-		flex: true,
-		renderCell: renderText,
-		renderEditCell: renderTextEditor
-	}
-];
-
 export default function DialogueEditor({scenario, dispatch}) {
 	const [selectedId, setSelectedId] = useState(null);
 	const apiRef = useGridApiRef();
@@ -117,6 +98,38 @@ export default function DialogueEditor({scenario, dispatch}) {
 			...scenario.dialogues.reference[uuid],
 		}
 	}), [scenario]);
+
+	const columns = useMemo(() => [
+		{
+			field: 'lineno',
+			headerName: '#',
+			filterable: false,
+		},
+		{
+			field: 'speaker',
+			headerName: 'Speaker',
+		},
+		{
+			field: 'components',
+			headerName: 'Text',
+			editable: true,
+			flex: 1,
+			renderCell: renderText,
+			renderEditCell: renderTextEditor
+		},
+		{
+			field: 'action',
+			headerName: 'Action',
+			type: 'actions',
+			flex: 0.5,
+			getActions: (params) => [
+				<GridActionsCellItem key={params.row.id} icon={<ArrowUpward />} label="向上" />,
+				<GridActionsCellItem key={params.row.id} icon={<ArrowDownward />} label="向下" />,
+				<GridActionsCellItem key={params.row.id} icon={<Add />} label="向下新增" />,
+				<GridActionsCellItem key={params.row.id} icon={<Delete />} label="刪除" />,
+			]
+		}
+	], [dispatch])
 
 	const handleEditStart = (params, e) => {
 		// Only call dialog when editing the text field

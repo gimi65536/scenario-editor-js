@@ -134,8 +134,24 @@ const TextEditor = ({ element, onChange, test }) => {
 					<span contentEditable={false}>({macros.get(element.macroName).displayName}</span>
 					{children}
 					<span contentEditable={false}>)</span>
-					<button contentEditable={false} onClick={() => Transforms.removeNodes(editor, { at: ReactEditor.findPath(editor, element) })}>刪除</button>
-					<button contentEditable={false} onClick={() => Transforms.unwrapNodes(editor, { at: ReactEditor.findPath(editor, element) })}>解除</button>
+					<Button
+						variant="contained"
+						size="small"
+						color="error"
+						contentEditable={false}
+						onClick={() => Transforms.removeNodes(editor, { at: ReactEditor.findPath(editor, element) })}
+					>
+						刪除
+					</Button>
+					<Button
+						variant="contained"
+						size="small"
+						color="secondary"
+						contentEditable={false}
+						onClick={() => Transforms.unwrapNodes(editor, { at: ReactEditor.findPath(editor, element) })}
+					>
+						解除
+					</Button>
 				</span>;
 			// TODO Add button to delete a macro
 			// But how to get path here?

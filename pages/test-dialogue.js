@@ -5,8 +5,23 @@ import json from '@/test/NTUCCC 109SS VAD07-gimi65536 0.1.0.json';
 import { editFunctions } from "@/lib/scenario";
 
 function reducer(draft, action){
-	if(action.type === 'edit_dialogue'){
-		editFunctions.editDialogue(draft, action.uuid, action.components);
+	switch(action.type){
+		case 'edit_dialogue':
+			editFunctions.editDialogue(draft, action.uuid, action.components);
+			break;
+		case 'moveon_dialogue':
+			editFunctions.moveonDialogue(draft, action.uuid);
+			break;
+		case 'movedown_dialogue':
+			editFunctions.movedownDialogue(draft, action.uuid);
+			break;
+		case 'add_dialogue_below':
+			editFunctions.addDialogueBelow(draft, action.uuid);
+			break;
+		case 'delete_dialogue':
+			editFunctions.deleteDialogue(draft, action.uuid);
+			break;
+		default:
 	}
 }
 

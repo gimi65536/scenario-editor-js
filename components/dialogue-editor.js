@@ -126,18 +126,34 @@ export default function DialogueEditor({scenario, dispatch}) {
 				<GridActionsCellItem key={params.row.id}
 					icon={<ArrowUpward />}
 					label="向上"
+					onClick={() => dispatch({
+						type: 'moveon_dialogue',
+						uuid: params.row.id
+					})}
 				/>,
 				<GridActionsCellItem key={params.row.id}
 					icon={<ArrowDownward />}
 					label="向下"
+					onClick={() => dispatch({
+						type: 'movedown_dialogue',
+						uuid: params.row.id
+					})}
 				/>,
 				<GridActionsCellItem key={params.row.id}
 					icon={<Add />}
 					label="向下新增"
+					onClick={() => dispatch({
+						type: 'add_dialogue_below',
+						uuid: params.row.id
+					})}
 				/>,
 				<GridActionsCellItem key={params.row.id}
 					icon={<Delete />}
 					label="刪除"
+					onClick={() => dispatch({
+						type: 'delete_dialogue',
+						uuid: params.row.id
+					})}
 				/>,
 			]
 		}

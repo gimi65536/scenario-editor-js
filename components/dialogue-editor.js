@@ -1,6 +1,6 @@
 import { useState, useMemo, Fragment, useCallback } from "react";
 import { DataGrid, GridActionsCellItem, useGridApiContext, useGridApiRef } from "@mui/x-data-grid";
-import { ArrowUpward, ArrowDownward, Add, Delete } from "@mui/icons-material";
+import { ArrowUpward, ArrowDownward, Add, Delete, Merge } from "@mui/icons-material";
 import { Element } from "slate";
 import SentenceEditor from '@/components/sentence-editor';
 import { renderMacro } from '@/lib/macro';
@@ -144,6 +144,14 @@ export default function DialogueEditor({scenario, dispatch}) {
 					label="向下新增"
 					onClick={() => dispatch({
 						type: 'add_dialogue_below',
+						uuid: params.row.id
+					})}
+				/>,
+				<GridActionsCellItem key={params.row.id}
+					icon={<Merge />}
+					label="向上合併"
+					onClick={() => dispatch({
+						type: 'merge_to_above',
 						uuid: params.row.id
 					})}
 				/>,

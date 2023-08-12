@@ -93,6 +93,7 @@ export default function DialogueEditor({scenario, dispatch}) {
 	// This could be a performance neck
 	const rows = useMemo(() => scenario.dialogues.order.map((uuid, index) => {
 		return {
+			index: index,
 			lineno: index + 1,
 			id: uuid,
 			...scenario.dialogues.reference[uuid],
@@ -128,7 +129,7 @@ export default function DialogueEditor({scenario, dispatch}) {
 					label="向上"
 					onClick={() => dispatch({
 						type: 'moveon_dialogue',
-						uuid: params.row.id
+						index: params.row.index
 					})}
 				/>,
 				<GridActionsCellItem key={params.row.id}
@@ -136,7 +137,7 @@ export default function DialogueEditor({scenario, dispatch}) {
 					label="向下"
 					onClick={() => dispatch({
 						type: 'movedown_dialogue',
-						uuid: params.row.id
+						index: params.row.index
 					})}
 				/>,
 				<GridActionsCellItem key={params.row.id}
@@ -144,7 +145,7 @@ export default function DialogueEditor({scenario, dispatch}) {
 					label="向下新增"
 					onClick={() => dispatch({
 						type: 'add_dialogue_below',
-						uuid: params.row.id
+						index: params.row.index
 					})}
 				/>,
 				<GridActionsCellItem key={params.row.id}
@@ -152,7 +153,7 @@ export default function DialogueEditor({scenario, dispatch}) {
 					label="向上合併"
 					onClick={() => dispatch({
 						type: 'merge_to_above',
-						uuid: params.row.id
+						index: params.row.index
 					})}
 				/>,
 				<GridActionsCellItem key={params.row.id}
@@ -160,7 +161,7 @@ export default function DialogueEditor({scenario, dispatch}) {
 					label="刪除"
 					onClick={() => dispatch({
 						type: 'delete_dialogue',
-						uuid: params.row.id
+						index: params.row.index
 					})}
 				/>,
 			]

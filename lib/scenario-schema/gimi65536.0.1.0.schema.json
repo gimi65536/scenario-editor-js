@@ -45,7 +45,8 @@
 			"properties": {
 				"order": {
 					"description": "Orders of all ID for characters",
-					"$ref": "#/$def/order"
+					"$ref": "#/$def/order",
+					"uniqueItems": true
 				},
 				"reference": {
 					"description": "Actual ID-character mapping",

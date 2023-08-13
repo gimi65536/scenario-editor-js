@@ -106,7 +106,7 @@ const TextEditor = ({ element, onChange, test }) => {
 
 	const renderLeaf = useCallback(({ attributes, children, leaf }) => {
 		// This ensures the text nodes in macro could not be editable (front-end control)
-		if (children.props.parent.type !== 'macro') {
+		if (children.props.parent === undefined || children.props.parent.type !== 'macro') {
 			// Normal
 			return <span {...attributes}>{children}</span>;
 		} else {
@@ -159,14 +159,14 @@ const TextEditor = ({ element, onChange, test }) => {
 
 	// 10px padding follows the grid cell style
 	return (
-		<Stack direction="column" alignItems="start" style={{ padding: "0 10px" }}>
+		<Stack direction="column" alignItems="start" style={{ padding: "0 10px", width: "100%" }}>
 			<div>
 				{Array.from(macros).map(([macroNameInSlate, spec]) => {
 					return <Button key={macroNameInSlate} onClick={() => insertMacro(editor, macroNameInSlate)}>{spec.displayName}</Button>;
 				})}
 			</div>
 			<Slate editor={editor} value={value} onChange={onChange}>
-				<Editable renderElement={renderElement} renderLeaf={renderLeaf} onKeyDown={onKeyDown} />
+				<Editable renderElement={renderElement} renderLeaf={renderLeaf} onKeyDown={onKeyDown} placeholder="在此輸入……" style={{width: "100%"}} />
 				{testNode}
 			</Slate>
 		</Stack>

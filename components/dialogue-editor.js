@@ -7,10 +7,7 @@ import { renderMacro } from '@/lib/macro';
 import { componentsToSlate, slateToComponents } from '@/lib/slate-dialogue';
 
 function convertTo(components_or_element, to) {
-	if (components_or_element.length === 0) {
-		return components_or_element;
-	}
-	if (Element.isElement(components_or_element[0])) {
+	if (components_or_element.length > 0 && Element.isElement(components_or_element[0])) {
 		// Slate element
 		if (to === 'element') {
 			return components_or_element;

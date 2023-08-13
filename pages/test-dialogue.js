@@ -3,12 +3,12 @@ import {useImmerReducer} from 'use-immer';
 import DialogueEditor from "@/components/dialogue-editor";
 import json from '@/test/NTUCCC 109SS VAD07-gimi65536 0.1.0.json';
 import reducer from "@/lib/reducer";
-import { hydrateImmutable, dehydrateImmutable } from "@/lib/scenario";
+import { hydrateImmutable, dehydrateImmutable, normalizeImmutable, validate } from "@/lib/scenario";
 import { enableMapSet } from "immer";
 enableMapSet();
 
 export default function TestDialogueEditor(){
-	const [scenario, dispatch] = useImmerReducer(reducer, hydrateImmutable(json));
+	const [scenario, dispatch] = useImmerReducer(reducer, hydrateImmutable(normalizeImmutable(validate(json), 1)));
 
 	const textareaRef = useRef(null);
 	useEffect(() => {

@@ -7,10 +7,7 @@ import { renderMacro } from '@/lib/macro';
 import { componentsToSlate, slateToComponents } from '@/lib/slate-dialogue';
 
 function convertTo(components_or_element, to) {
-	if (components_or_element.length === 0) {
-		return components_or_element;
-	}
-	if (Element.isElement(components_or_element[0])) {
+	if (components_or_element.length > 0 && Element.isElement(components_or_element[0])) {
 		// Slate element
 		if (to === 'element') {
 			return components_or_element;
@@ -87,12 +84,15 @@ function Macro({ identifier, children }) {
 }
 
 export default function DialogueEditor({scenario, dispatch}) {
+	// Although the scenario allows a dialogue to have more than 1 instance,
+	// we don't do that to make things easier.
 	const [selectedId, setSelectedId] = useState(null);
 	const apiRef = useGridApiRef();
 
 	// This could be a performance neck
 	const rows = useMemo(() => scenario.dialogues.order.map((uuid, index) => {
 		return {
+			index: index,
 			lineno: index + 1,
 			id: uuid,
 			...scenario.dialogues.reference[uuid],
@@ -128,7 +128,7 @@ export default function DialogueEditor({scenario, dispatch}) {
 					label="向上"
 					onClick={() => dispatch({
 						type: 'moveon_dialogue',
-						uuid: params.row.id
+						index: params.row.index
 					})}
 				/>,
 				<GridActionsCellItem key={params.row.id}
@@ -136,7 +136,7 @@ export default function DialogueEditor({scenario, dispatch}) {
 					label="向下"
 					onClick={() => dispatch({
 						type: 'movedown_dialogue',
-						uuid: params.row.id
+						index: params.row.index
 					})}
 				/>,
 				<GridActionsCellItem key={params.row.id}
@@ -144,7 +144,7 @@ export default function DialogueEditor({scenario, dispatch}) {
 					label="向下新增"
 					onClick={() => dispatch({
 						type: 'add_dialogue_below',
-						uuid: params.row.id
+						index: params.row.index
 					})}
 				/>,
 				<GridActionsCellItem key={params.row.id}
@@ -152,7 +152,7 @@ export default function DialogueEditor({scenario, dispatch}) {
 					label="向上合併"
 					onClick={() => dispatch({
 						type: 'merge_to_above',
-						uuid: params.row.id
+						index: params.row.index
 					})}
 				/>,
 				<GridActionsCellItem key={params.row.id}
@@ -160,7 +160,7 @@ export default function DialogueEditor({scenario, dispatch}) {
 					label="刪除"
 					onClick={() => dispatch({
 						type: 'delete_dialogue',
-						uuid: params.row.id
+						index: params.row.index
 					})}
 				/>,
 			]

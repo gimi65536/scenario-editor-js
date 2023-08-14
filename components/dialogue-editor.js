@@ -84,8 +84,7 @@ function Macro({ identifier, children }) {
 }
 
 export default function DialogueEditor({scenario, dispatch}) {
-	// Although the scenario allows a dialogue to have more than 1 instance,
-	// we don't do that to make things easier.
+	// The scenario should be in AM1 normalization
 	const [selectedId, setSelectedId] = useState(null);
 	const apiRef = useGridApiRef();
 

@@ -6,6 +6,10 @@ import SentenceEditor from '@/components/sentence-editor';
 import { renderMacro } from '@/lib/macro';
 import { componentsToSlate, slateToComponents } from '@/lib/slate-dialogue';
 
+/**
+ * @typedef {import('@/lib/scenario').Scenario} Scenario
+ */
+
 function convertTo(components_or_element, to) {
 	if (components_or_element.length > 0 && Element.isElement(components_or_element[0])) {
 		// Slate element

@@ -83,8 +83,12 @@ function Macro({ identifier, children }) {
 	);
 }
 
+/**
+ * The scenario should be in AM1 normalization.
+ * @param {Object} param
+ * @param {Scenario} param.scenario
+ */
 export default function DialogueEditor({scenario, dispatch}) {
-	// The scenario should be in AM1 normalization
 	const [selectedId, setSelectedId] = useState(null);
 	const apiRef = useGridApiRef();
 

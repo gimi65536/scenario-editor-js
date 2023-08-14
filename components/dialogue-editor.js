@@ -1,10 +1,26 @@
 import { useState, useMemo, Fragment, useCallback } from "react";
 import { DataGrid, GridActionsCellItem, useGridApiContext, useGridApiRef } from "@mui/x-data-grid";
 import { ArrowUpward, ArrowDownward, Add, Delete, Merge } from "@mui/icons-material";
+import {
+	Button,
+	Dialog,
+	DialogTitle,
+	DialogContent,
+	DialogActions,
+	DialogContentText,
+	TextField,
+	FormControl,
+	FormLabel,
+	FormHelperText,
+	FormGroup,
+	FormControlLabel,
+	Checkbox
+} from "@mui/material";
 import { Element } from "slate";
 import SentenceEditor from '@/components/sentence-editor';
 import { renderMacro } from '@/lib/macro';
 import { componentsToSlate, slateToComponents } from '@/lib/slate-dialogue';
+import { Set as ImmutableSet, OrderedMap } from "immutable";
 
 /**
  * @typedef {import('@/lib/scenario').Scenario} Scenario
@@ -93,7 +109,9 @@ function Macro({ identifier, children }) {
  * @param {Scenario} param.scenario
  */
 export default function DialogueEditor({scenario, dispatch}) {
-	const [selectedId, setSelectedId] = useState(null);
+	const [selectedId, setSelectedId] = useState(/** @type {?String} */(null));
+	const [selectedIdsEditSpeaker, setSelectedIdsEditSpeaker] =
+		useState(/** @type {ImmutableSet<String>} */(ImmutableSet()));
 	const apiRef = useGridApiRef();
 
 	// This could be a performance neck
@@ -115,6 +133,7 @@ export default function DialogueEditor({scenario, dispatch}) {
 		{
 			field: 'speaker',
 			headerName: 'Speaker',
+			editable: true,
 		},
 		{
 			field: 'components',
@@ -178,6 +197,11 @@ export default function DialogueEditor({scenario, dispatch}) {
 		// Only call dialog when editing the text field
 		if (params.field === 'components') {
 			setSelectedId(params.row.id);
+		}else if(params.field === 'speaker'){
+			// Do not use the default editing system
+			e.defaultMuiPrevented = true;
+			// Open dialog
+			setSelectedIdsEditSpeaker(selectedIdsEditSpeaker.add(params.row.id));
 		}
 	};
 
@@ -194,13 +218,116 @@ export default function DialogueEditor({scenario, dispatch}) {
 	}, [dispatch, selectedId, apiRef]);
 
 	return (
-		<DataGrid
-			rows={rows}
-			columns={columns}
-			onCellEditStart={handleEditStart}
-			onCellEditStop={handleEditStop}
-			getRowHeight={() => 'auto'}
-			apiRef={apiRef}
-		/>
+		<>
+			<DataGrid
+				rows={rows}
+				columns={columns}
+				onCellEditStart={handleEditStart}
+				onCellEditStop={handleEditStop}
+				getRowHeight={() => 'auto'}
+				apiRef={apiRef}
+			/>
+			<SpeakerDialog
+				scenario={scenario}
+				dispatch={dispatch}
+				selected={selectedIdsEditSpeaker}
+				onClose={() => setSelectedIdsEditSpeaker(selectedIdsEditSpeaker.clear())}
+			/>
+		</>
 	);
+}
+
+/**
+ * @param {Object} param
+ * @param {Scenario} param.scenario
+ * @param {ImmutableSet<String>} param.selected
+ */
+function SpeakerDialog({scenario, dispatch, selected: chosen, onClose}){
+	const [open, setOpen] = useState(false);
+	const [displayName, setDisplayName] = useState("");
+	const [chosenSpeaker, setChosenSpeaker] =
+		useState(/** @type {OrderedMap<String, Boolean>} */(OrderedMap()));
+
+	// Useful when multiple
+	const [displayNameModified, setDisplayNameModified] = useState(false);
+	const [chosenSpeakerModified, setChosenSpeakerModified] = useState(false);
+
+	if(!open && !chosen.isEmpty()){
+		// Initialize
+		setOpen(true);
+		setDisplayNameModified(false);
+		setChosenSpeakerModified(false);
+
+		const displaySet = chosen.map(uuid => scenario.dialogues.reference[uuid].speaker ?? "");
+		if(displaySet.size > 1){
+			// Inconsistent
+			setDisplayName("");
+		}else{
+			setDisplayName(displaySet.first());
+		}
+
+		const chosenSpeakerListSet = chosen.map(uuid => ImmutableSet(scenario.dialogues.reference[uuid].speakers_list));
+		const chosenSpeakerMap = (/** @type {OrderedMap<String, Boolean>} */(OrderedMap())).withMutations(map => {
+			for (const cuuid of scenario.characters.order) {
+				map = map.set(cuuid, false)
+			}
+			if (chosenSpeakerListSet.size > 1) {
+				// Inconsistent
+			} else {
+				/** @type {ImmutableSet<String>} */
+				const chosenSpeakerList = chosenSpeakerListSet.first();
+				for (const cuuid of chosenSpeakerList){
+					map = map.set(cuuid, true);
+				}
+			}
+		});
+		setChosenSpeaker(chosenSpeakerMap);
+	}else if(open && chosen.isEmpty()){
+		setOpen(false);
+	}
+
+	const handleClose = () => {
+		// ...
+		onClose();
+	};
+
+	return (<Dialog
+		open={open}
+		onClose={handleClose} // Automatically apply (more user-friendly)
+	>
+		<DialogTitle>更改說話者</DialogTitle>
+		<DialogContent sx={{display: "flex", flexDirection: "column"}}>
+			<DialogContentText>編輯說話者的顯示名稱，與實際參與這句台詞的角色</DialogContentText>
+			<TextField
+				label="顯示說話者"
+				helperText="在台詞冒號前方顯示的名稱"
+				value={displayName}
+				onChange={e => {
+					setDisplayName(e.target.value);
+					setDisplayNameModified(true);
+				}}
+				sx={{ m: 2 }}
+			/>
+			<FormControl sx={{ m: 2 }} component="fieldset" variant="standard">
+				<FormLabel>選擇說話者</FormLabel>
+				<FormHelperText>用來Highlight角色有哪些台詞</FormHelperText>
+				<FormGroup>
+					{chosenSpeaker.entrySeq().map(([cuuid, chosen]) => <FormControlLabel
+						key={cuuid}
+						label={scenario.characters.reference[cuuid].name}
+						control={
+							<Checkbox checked={chosen} onChange={(e) => {
+								setChosenSpeaker(chosenSpeaker.set(cuuid, e.target.checked));
+								setChosenSpeakerModified(true);
+							}} />
+						}
+					/>)}
+				</FormGroup>
+			</FormControl>
+		</DialogContent>
+		<DialogActions>
+			<Button onClick={onClose}>取消</Button>
+			<Button onClick={handleClose}>確定</Button>
+		</DialogActions>
+	</Dialog>);
 }

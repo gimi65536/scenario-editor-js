@@ -1,4 +1,20 @@
-import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Divider, IconButton, List, ListItem, ListItemText, Stack, TextField, Tooltip, Typography } from "@mui/material";
+import {
+	Button,
+	Dialog,
+	DialogActions,
+	DialogContent,
+	DialogContentText,
+	DialogTitle,
+	Divider,
+	IconButton,
+	List,
+	ListItem,
+	ListItemText,
+	Stack,
+	TextField,
+	Tooltip,
+	Typography
+} from "@mui/material";
 import { Circle, Edit, Delete } from "@mui/icons-material";
 import { useCallback, useState } from "react";
 import {
@@ -17,7 +33,7 @@ import { MuiColorInput } from "mui-color-input";
  * @param {Object} param
  * @param {Scenario} param.scenario
  */
-export default function CharacterEditor({scenario, dispatch}){
+export default function CharacterEditor({scenario, dispatch, sx}){
 	const [editingCharacter, setEditingCharacter] = useState(null);
 
 	const onDragEnd = useCallback(({destination, source}) => {
@@ -45,7 +61,8 @@ export default function CharacterEditor({scenario, dispatch}){
 					sx={{
 						height: "70%",
 						overflow: "auto",
-						m: 5
+						m: 5,
+						...sx
 					}}
 					{...provided.droppableProps}
 				>

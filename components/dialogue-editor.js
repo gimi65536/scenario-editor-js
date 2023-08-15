@@ -16,7 +16,8 @@ import {
 	FormControlLabel,
 	Checkbox,
 	Typography,
-	Tooltip
+	Tooltip,
+	Box
 } from "@mui/material";
 import { Element } from "slate";
 import SentenceEditor from '@/components/sentence-editor';
@@ -110,7 +111,7 @@ function Macro({ identifier, children }) {
  * @param {Object} param
  * @param {Scenario} param.scenario
  */
-export default function DialogueEditor({scenario, dispatch}) {
+export default function DialogueEditor({scenario, dispatch, sx}) {
 	const [selectedId, setSelectedId] = useState(/** @type {?String} */(null));
 	const [selectedIdsEditSpeaker, setSelectedIdsEditSpeaker] =
 		useState(/** @type {ImmutableSet<String>} */(ImmutableSet()));
@@ -220,7 +221,7 @@ export default function DialogueEditor({scenario, dispatch}) {
 	}, [dispatch, selectedId, apiRef]);
 
 	return (
-		<>
+		<Box sx={sx}>
 			<DataGrid
 				rows={rows}
 				columns={columns}
@@ -242,7 +243,7 @@ export default function DialogueEditor({scenario, dispatch}) {
 				selected={selectedIdsEditSpeaker}
 				onClose={() => setSelectedIdsEditSpeaker(selectedIdsEditSpeaker.clear())}
 			/>
-		</>
+		</Box>
 	);
 }
 

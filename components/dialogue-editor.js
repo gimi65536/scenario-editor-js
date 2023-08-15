@@ -17,7 +17,7 @@ import {
 	Checkbox,
 	Typography,
 	Tooltip,
-	Box
+	Stack
 } from "@mui/material";
 import { Element } from "slate";
 import SentenceEditor from '@/components/sentence-editor';
@@ -221,7 +221,7 @@ export default function DialogueEditor({scenario, dispatch, sx}) {
 	}, [dispatch, selectedId, apiRef]);
 
 	return (
-		<Box sx={sx}>
+		<Stack sx={{alignItems: "center", ...sx}}>
 			<DataGrid
 				rows={rows}
 				columns={columns}
@@ -229,6 +229,7 @@ export default function DialogueEditor({scenario, dispatch, sx}) {
 				onCellEditStop={handleEditStop}
 				getRowHeight={() => 'auto'}
 				apiRef={apiRef}
+				sx={{ alignSelf: "stretch" }}
 			/>
 			<Tooltip title="免費版MUI不提供多選，請搭配篩選器使用。免費版MUI最多一頁100句台詞，但要注意不只這一頁，所有頁面都在更改範圍。">
 				<Button
@@ -243,7 +244,7 @@ export default function DialogueEditor({scenario, dispatch, sx}) {
 				selected={selectedIdsEditSpeaker}
 				onClose={() => setSelectedIdsEditSpeaker(selectedIdsEditSpeaker.clear())}
 			/>
-		</Box>
+		</Stack>
 	);
 }
 

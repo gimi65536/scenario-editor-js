@@ -22,6 +22,7 @@ export default function TestDialogueEditor(){
 			<DialogueEditor
 				scenario={scenario}
 				dispatch={dispatch}
+				sx={{height: "100%"}}
 			/>
 			<textarea style={{ width: "100%", height: "50%" }} ref={textareaRef} />
 		</div>

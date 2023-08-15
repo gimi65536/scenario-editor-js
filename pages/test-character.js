@@ -22,6 +22,7 @@ export default function TestCharacterEditor(){
 			<CharacterEditor
 				scenario={scenario}
 				dispatch={dispatch}
+				sx={{ height: "100%" }}
 			/>
 			<textarea style={{ width: "100%", height: "50%" }} ref={textareaRef} />
 		</div>

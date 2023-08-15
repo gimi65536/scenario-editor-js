@@ -24,6 +24,7 @@ export default function TestUndo(){
 				<Button onClick={() => update({ type: 'minus', value: 100 })}>-100</Button>
 			</div>
 			<div>
+				<Button onClick={() => {}}>Do nothing</Button>
 				<Button onClick={() => undo()}>Undo</Button>
 				<Button onClick={() => redo()}>Redo</Button>
 				<Button onClick={() => setUnmodified()}>Save</Button>

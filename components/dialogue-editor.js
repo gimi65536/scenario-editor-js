@@ -242,7 +242,7 @@ export default function DialogueEditor({scenario, dispatch}) {
  * @param {Scenario} param.scenario
  * @param {ImmutableSet<String>} param.selected
  */
-function SpeakerDialog({scenario, dispatch, selected: chosen, onClose}){
+function SpeakerDialog({scenario, dispatch, selected, onClose}){
 	const [open, setOpen] = useState(false);
 	const [displayName, setDisplayName] = useState("");
 	const [chosenSpeaker, setChosenSpeaker] =
@@ -252,13 +252,13 @@ function SpeakerDialog({scenario, dispatch, selected: chosen, onClose}){
 	const [displayNameModified, setDisplayNameModified] = useState(false);
 	const [chosenSpeakerModified, setChosenSpeakerModified] = useState(false);
 
-	if(!open && !chosen.isEmpty()){
+	if(!open && !selected.isEmpty()){
 		// Initialize
 		setOpen(true);
 		setDisplayNameModified(false);
 		setChosenSpeakerModified(false);
 
-		const displaySet = chosen.map(uuid => scenario.dialogues.reference[uuid].speaker ?? "");
+		const displaySet = selected.map(uuid => scenario.dialogues.reference[uuid].speaker ?? "");
 		if(displaySet.size > 1){
 			// Inconsistent
 			setDisplayName("");
@@ -266,7 +266,7 @@ function SpeakerDialog({scenario, dispatch, selected: chosen, onClose}){
 			setDisplayName(displaySet.first());
 		}
 
-		const chosenSpeakerListSet = chosen.map(uuid => ImmutableSet(scenario.dialogues.reference[uuid].speakers_list));
+		const chosenSpeakerListSet = selected.map(uuid => ImmutableSet(scenario.dialogues.reference[uuid].speakers_list));
 		const chosenSpeakerMap = (/** @type {OrderedMap<String, Boolean>} */(OrderedMap())).withMutations(map => {
 			for (const cuuid of scenario.characters.order) {
 				map = map.set(cuuid, false)
@@ -282,14 +282,27 @@ function SpeakerDialog({scenario, dispatch, selected: chosen, onClose}){
 			}
 		});
 		setChosenSpeaker(chosenSpeakerMap);
-	}else if(open && chosen.isEmpty()){
+	}else if(open && selected.isEmpty()){
 		setOpen(false);
 	}
 
-	const handleClose = () => {
-		// ...
+	const handleClose = useCallback(() => {
+		if (displayNameModified){
+			dispatch({
+				type: "edit_speaker_name",
+				uuids: selected,
+				name: displayName
+			});
+		}
+		if (chosenSpeakerModified){
+			dispatch({
+				type: "edit_speakers",
+				uuids: selected,
+				characters: chosenSpeaker.filter((chosen) => chosen).valueSeq().toArray()
+			});
+		}
 		onClose();
-	};
+	}, [displayNameModified, chosenSpeakerModified, onClose, dispatch, selected, displayName, chosenSpeaker]);
 
 	return (<Dialog
 		open={open}

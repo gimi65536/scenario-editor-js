@@ -298,7 +298,7 @@ function SpeakerDialog({scenario, dispatch, selected, onClose}){
 			dispatch({
 				type: "edit_speakers",
 				uuids: selected,
-				characters: chosenSpeaker.filter((chosen) => chosen).valueSeq().toArray()
+				characters: chosenSpeaker.filter((chosen) => chosen).keySeq().toArray()
 			});
 		}
 		onClose();

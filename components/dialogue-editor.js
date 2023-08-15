@@ -15,7 +15,8 @@ import {
 	FormGroup,
 	FormControlLabel,
 	Checkbox,
-	Typography
+	Typography,
+	Tooltip
 } from "@mui/material";
 import { Element } from "slate";
 import SentenceEditor from '@/components/sentence-editor';
@@ -228,11 +229,13 @@ export default function DialogueEditor({scenario, dispatch}) {
 				getRowHeight={() => 'auto'}
 				apiRef={apiRef}
 			/>
-			<Button
-				onClick={() => setSelectedIdsEditSpeaker(ImmutableSet.of(...gridFilteredSortedRowIdsSelector(apiRef)))}
-			>
-				批次更改顯示中台詞的說話者
-			</Button>
+			<Tooltip title="免費版MUI不提供多選，請搭配篩選器使用。免費版MUI最多一頁100句台詞，但要注意不只這一頁，所有頁面都在更改範圍。">
+				<Button
+					onClick={() => setSelectedIdsEditSpeaker(ImmutableSet.of(...gridFilteredSortedRowIdsSelector(apiRef)))}
+				>
+					批次更改顯示中台詞的說話者
+				</Button>
+			</Tooltip>
 			<SpeakerDialog
 				scenario={scenario}
 				dispatch={dispatch}
@@ -318,7 +321,7 @@ function SpeakerDialog({scenario, dispatch, selected, onClose}){
 		<DialogContent sx={{display: "flex", flexDirection: "column"}}>
 			<DialogContentText>編輯說話者的顯示名稱，與實際參與這句台詞的角色</DialogContentText>
 			{selected.size >= 2 ?
-				<DialogContentText sx={{color: 'red'}}>多人模式</DialogContentText>
+				<DialogContentText sx={{color: 'red'}}>多人模式，正在更動{selected.size}句台詞</DialogContentText>
 				: ""
 			}
 			<TextField

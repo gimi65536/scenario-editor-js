@@ -352,7 +352,7 @@ function SpeakerDialog({scenario, dispatch, selected, onClose}){
 				<FormGroup>
 					{chosenSpeaker.entrySeq().map(([cuuid, chosen]) => <FormControlLabel
 						key={cuuid}
-						label={scenario.characters.reference[cuuid].name}
+						label={scenario.characters.reference[cuuid].name || "(無名氏)"}
 						control={
 							<Checkbox checked={chosen} onChange={(e) => {
 								setChosenSpeaker(chosenSpeaker.set(cuuid, e.target.checked));

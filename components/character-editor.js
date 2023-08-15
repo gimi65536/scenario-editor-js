@@ -1,11 +1,12 @@
-import { Button, Divider, IconButton, List, ListItem, ListItemText, Stack, Tooltip, Typography } from "@mui/material";
+import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Divider, IconButton, List, ListItem, ListItemText, Stack, TextField, Tooltip, Typography } from "@mui/material";
 import { Circle, Edit, Delete } from "@mui/icons-material";
-import { useCallback } from "react";
+import { useCallback, useState } from "react";
 import {
 	DragDropContext,
 	Draggable
 } from "react-beautiful-dnd";
 import Droppable from '@/components/dnd/StrictModeDroppable';
+import { MuiColorInput } from "mui-color-input";
 
 /**
  * @typedef {import('@/lib/scenario').Scenario} Scenario
@@ -17,6 +18,8 @@ import Droppable from '@/components/dnd/StrictModeDroppable';
  * @param {Scenario} param.scenario
  */
 export default function CharacterEditor({scenario, dispatch}){
+	const [editingCharacter, setEditingCharacter] = useState(null);
+
 	const onDragEnd = useCallback(({destination, source}) => {
 		if(!destination){
 			return;
@@ -27,6 +30,10 @@ export default function CharacterEditor({scenario, dispatch}){
 			to: destination.index
 		})
 	}, [dispatch]);
+
+	const onInfoDialogClose = useCallback(() => {
+		setEditingCharacter(null);
+	}, []);
 
 	return (
 		<>
@@ -53,7 +60,7 @@ export default function CharacterEditor({scenario, dispatch}){
 							secondaryAction={
 								<>
 									<Tooltip title={scenario.characters.reference[uuid].name ? `編輯 ${scenario.characters.reference[uuid].name} 的資訊` : "編輯"}>
-										<IconButton>
+										<IconButton onClick={() => setEditingCharacter(uuid)}>
 											<Edit />
 										</IconButton>
 									</Tooltip>
@@ -101,8 +108,95 @@ export default function CharacterEditor({scenario, dispatch}){
 		<Stack alignItems="center">
 			<Button variant="contained" onClick={() => dispatch({ type: 'add_character'})}>點擊新增角色</Button>
 		</Stack>
+		<CharacterInfoDialog
+			scenario={scenario}
+			dispatch={dispatch}
+			uuid={editingCharacter}
+			onClose={onInfoDialogClose}
+		/>
 		</>
-	)
+	);
 }
 
-function CharacterInfoDialog({scenario, dispatch, uuid}){}
+
+/**
+ * @param {Object} param
+ * @param {Scenario} param.scenario
+ * @param {String} param.uuid
+ */
+function CharacterInfoDialog({scenario, dispatch, uuid, onClose}){
+	const [open, setOpen] = useState(false);
+	const [name, setName] = useState("");
+	const [originName, setOriginName] = useState("");
+	const [abbreviated, setAbbreviated] = useState("");
+	const [color, setColor] = useState("");
+	const [gender, setGender] = useState("");
+	const [cast, setCast] = useState("");
+
+	if(!open && uuid){
+		// Initialize
+		setOpen(true);
+		setName(scenario.characters.reference[uuid].name);
+		setOriginName(scenario.characters.reference[uuid].name || "(無名氏)");
+		setAbbreviated(scenario.characters.reference[uuid].abbreviated ?? "");
+		setColor(scenario.characters.reference[uuid].color ?? "#000000");
+		setGender(scenario.characters.reference[uuid].gender ?? "");
+		setCast(scenario.characters.reference[uuid].cast ?? "");
+	}else if(open && !uuid){
+		setOpen(false);
+	}
+
+	const handleClose = useCallback(() => {
+		dispatch({
+			type: "edit_character_info",
+			uuid: uuid,
+			info: {name, abbreviated, color, gender, cast}
+		});
+		onClose();
+	}, [abbreviated, cast, color, dispatch, gender, name, onClose, uuid]);
+
+	return (<Dialog open={open} onClose={handleClose}>
+		<DialogTitle>更改角色資訊</DialogTitle>
+		<DialogContent>
+			<DialogContentText>更改{originName}的角色資訊</DialogContentText>
+			<Stack>
+				<TextField
+					label="角色名稱"
+					value={name}
+					onChange={(e) => setName(e.target.value)}
+					sx={{ m: 2 }}
+				/>
+				<TextField
+					label="略稱"
+					helperText="顯示在台詞引號前面的那個"
+					value={abbreviated}
+					onChange={(e) => setAbbreviated(e.target.value)}
+					sx={{ m: 2 }}
+				/>
+				<MuiColorInput
+					label="代表色"
+					value={color}
+					onChange={setColor}
+					isAlphaHidden
+					sx={{ m: 2 }}
+				/>
+				<TextField
+					label="性別"
+					value={gender}
+					onChange={(e) => setGender(e.target.value)}
+					sx={{ m: 2 }}
+				/>
+				<TextField
+					label="聲優"
+					value={cast}
+					onChange={(e) => setCast(e.target.value)}
+					sx={{ m: 2 }}
+				/>
+			</Stack>
+		</DialogContent>
+		<DialogActions>
+			<Button onClick={onClose} color="warning">取消</Button>
+			<Button onClick={handleClose}>確定</Button>
+		</DialogActions>
+	</Dialog>);
+}

@@ -296,20 +296,22 @@ function SpeakerDialog({scenario, dispatch, selected, onClose}){
 	}
 
 	const handleClose = useCallback(() => {
+		const actions = [];
 		if (displayNameModified){
-			dispatch({
+			actions.push({
 				type: "edit_speaker_name",
 				uuids: selected,
 				name: displayName
 			});
 		}
 		if (chosenSpeakerModified){
-			dispatch({
+			actions.push({
 				type: "edit_speakers",
 				uuids: selected,
 				characters: chosenSpeaker.filter((chosen) => chosen).keySeq().toArray()
 			});
 		}
+		dispatch(actions);
 		onClose();
 	}, [displayNameModified, chosenSpeakerModified, onClose, dispatch, selected, displayName, chosenSpeaker]);
 

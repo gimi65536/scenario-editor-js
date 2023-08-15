@@ -1,5 +1,5 @@
 import { useState, useMemo, Fragment, useCallback } from "react";
-import { DataGrid, GridActionsCellItem, useGridApiContext, useGridApiRef } from "@mui/x-data-grid";
+import { DataGrid, GridActionsCellItem, useGridApiContext, useGridApiRef, gridFilteredSortedRowIdsSelector } from "@mui/x-data-grid";
 import { ArrowUpward, ArrowDownward, Add, Delete, Merge } from "@mui/icons-material";
 import {
 	Button,
@@ -14,7 +14,8 @@ import {
 	FormHelperText,
 	FormGroup,
 	FormControlLabel,
-	Checkbox
+	Checkbox,
+	Typography
 } from "@mui/material";
 import { Element } from "slate";
 import SentenceEditor from '@/components/sentence-editor';
@@ -227,6 +228,11 @@ export default function DialogueEditor({scenario, dispatch}) {
 				getRowHeight={() => 'auto'}
 				apiRef={apiRef}
 			/>
+			<Button
+				onClick={() => setSelectedIdsEditSpeaker(ImmutableSet.of(...gridFilteredSortedRowIdsSelector(apiRef)))}
+			>
+				批次更改顯示中台詞的說話者
+			</Button>
 			<SpeakerDialog
 				scenario={scenario}
 				dispatch={dispatch}
@@ -311,9 +317,21 @@ function SpeakerDialog({scenario, dispatch, selected, onClose}){
 		<DialogTitle>更改說話者</DialogTitle>
 		<DialogContent sx={{display: "flex", flexDirection: "column"}}>
 			<DialogContentText>編輯說話者的顯示名稱，與實際參與這句台詞的角色</DialogContentText>
+			{selected.size >= 2 ?
+				<DialogContentText sx={{color: 'red'}}>多人模式</DialogContentText>
+				: ""
+			}
 			<TextField
 				label="顯示說話者"
-				helperText="在台詞冒號前方顯示的名稱"
+				helperText={
+					<>
+						<div>在台詞冒號前方顯示的名稱</div>
+						{selected.size >= 2 && displayNameModified ?
+							<div><Typography sx={{color: 'red'}} variant="inherit">已更改此欄位，所有台詞都將被更改</Typography></div>
+							: ""
+						}
+					</>
+				}
 				value={displayName}
 				onChange={e => {
 					setDisplayName(e.target.value);
@@ -324,6 +342,10 @@ function SpeakerDialog({scenario, dispatch, selected, onClose}){
 			<FormControl sx={{ m: 2 }} component="fieldset" variant="standard">
 				<FormLabel>選擇說話者</FormLabel>
 				<FormHelperText>用來Highlight角色有哪些台詞</FormHelperText>
+				{selected.size >= 2 && chosenSpeakerModified ?
+					<FormHelperText sx={{ color: 'red' }}>已更改此欄位，所有台詞都將被更改</FormHelperText>
+					: ""
+				}
 				<FormGroup>
 					{chosenSpeaker.entrySeq().map(([cuuid, chosen]) => <FormControlLabel
 						key={cuuid}

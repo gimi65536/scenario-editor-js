@@ -157,7 +157,8 @@
 						"description": "Single speaker",
 						"type": "string",
 						"format": "uuid"
-					}
+					},
+					"uniqueItems": true
 				}
 			},
 			"additionalProperties": true,

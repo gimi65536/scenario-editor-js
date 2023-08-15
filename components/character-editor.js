@@ -1,5 +1,5 @@
-import { Button, Divider, List, ListItem, ListItemText, Stack, Typography } from "@mui/material";
-import CircleIcon from '@mui/icons-material/Circle';
+import { Button, Divider, IconButton, List, ListItem, ListItemText, Stack, Tooltip, Typography } from "@mui/material";
+import { Circle, Edit, Delete } from "@mui/icons-material";
 import { useCallback } from "react";
 import {
 	DragDropContext,
@@ -50,6 +50,23 @@ export default function CharacterEditor({scenario, dispatch}){
 						<ListItem
 							ref={provided.innerRef}
 							sx={snapshot.isDragging && { background: "rgb(235, 235, 235)" }}
+							secondaryAction={
+								<>
+									<Tooltip title={scenario.characters.reference[uuid].name ? `編輯 ${scenario.characters.reference[uuid].name} 的資訊` : "編輯"}>
+										<IconButton>
+											<Edit />
+										</IconButton>
+									</Tooltip>
+									<Tooltip title="刪除">
+										<IconButton onClick={() => dispatch({
+											type: 'delete_character',
+											index: index
+										})}>
+											<Delete />
+										</IconButton>
+									</Tooltip>
+								</>
+							}
 							{...provided.draggableProps}
 							{...provided.dragHandleProps}
 						>
@@ -58,9 +75,16 @@ export default function CharacterEditor({scenario, dispatch}){
 								secondary={<div>
 									{scenario.characters.reference[uuid].abbreviated ? <div>{scenario.characters.reference[uuid].abbreviated}</div> : ""}
 									{scenario.characters.reference[uuid].color ?
-										<Typography sx={{ color: scenario.characters.reference[uuid].color }} variant="inherit"><CircleIcon/></Typography> : ""}
+										<Typography sx={{ color: scenario.characters.reference[uuid].color }} variant="inherit"><Circle /></Typography> : ""}
 									{scenario.characters.reference[uuid].gender ? <div>性別：{scenario.characters.reference[uuid].gender}</div> : ""}
 									{scenario.characters.reference[uuid].cast ? <div>聲優：{scenario.characters.reference[uuid].cast}</div> : ""}
+									<div>
+										共有
+										<Typography sx={{ fontWeight: "bold" }} variant="inherit" display="inline">
+											{scenario.__hydration.characterToDialogue.get(uuid).size}
+										</Typography>
+										句台詞
+									</div>
 								</div>}
 							/>
 						</ListItem>
@@ -80,3 +104,5 @@ export default function CharacterEditor({scenario, dispatch}){
 		</>
 	)
 }
+
+function CharacterInfoDialog({scenario, dispatch, uuid}){}

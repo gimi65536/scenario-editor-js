@@ -364,7 +364,7 @@ function SpeakerDialog({scenario, dispatch, selected, onClose}){
 			</FormControl>
 		</DialogContent>
 		<DialogActions>
-			<Button onClick={onClose}>取消</Button>
+			<Button onClick={onClose} color="warning">取消</Button>
 			<Button onClick={handleClose}>確定</Button>
 		</DialogActions>
 	</Dialog>);

@@ -1,4 +1,4 @@
-import { Box, Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, FormControl, FormHelperText, IconButton, MenuItem, Select, Stack, TextField } from "@mui/material";
+import { Box, Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, FormControl, FormHelperText, IconButton, InputLabel, MenuItem, Select, Stack, TextField } from "@mui/material";
 import { useCallback, useState, useEffect } from "react";
 import { useHotkeysContext } from 'react-hotkeys-hook';
 import { List as ImmutableList, OrderedMap } from "immutable";
@@ -135,8 +135,11 @@ function InfoDialog({scenario, dispatch, openSignal, onClose}){
 						}}>
 							加入
 						</Button>
-						<FormControl>
+						<FormControl sx={{width: "10em"}}>
+							<InputLabel id="insert-common-key">選擇常用Key</InputLabel>
 							<Select
+								labelId="insert-common-key"
+								label="選擇常用Key"
 								value={chooseKey}
 								onChange={(e) => setChooseKey(e.target.value)}
 								size="small"

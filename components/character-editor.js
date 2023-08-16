@@ -77,7 +77,7 @@ export default function CharacterEditor({scenario, dispatch, sx}){
 							{index === 0 ? <Divider component="li" /> : ""}
 							<ListItem
 								ref={provided.innerRef}
-								sx={snapshot.isDragging && { background: "rgb(235, 235, 235)" }}
+								sx={snapshot.isDragging ? { background: "rgb(235, 235, 235)" } : {}}
 								secondaryAction={
 									<>
 										<Tooltip title={scenario.characters.reference[uuid].name ? `編輯 ${scenario.characters.reference[uuid].name} 的資訊` : "編輯"}>

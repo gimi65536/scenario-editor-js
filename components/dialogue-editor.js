@@ -217,7 +217,7 @@ export default function DialogueEditor({scenario, dispatch, sx}) {
 					return ImmutableSet().withMutations(set => {
 						for (const duuid in scenario.dialogues.reference) {
 							const dialogue = scenario.dialogues.reference[duuid];
-							if (chosenSet.isSuperset(dialogue.speakers_list)) {
+							if (chosenSet.isSubset(dialogue.speakers_list)) {
 								set = set.add(duuid);
 							}
 						}

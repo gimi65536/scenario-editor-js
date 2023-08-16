@@ -234,6 +234,7 @@ export default function DialogueEditor({scenario, dispatch, sx}) {
 			<Tooltip title="免費版MUI不提供多選，請搭配篩選器使用。免費版MUI最多一頁100句台詞，但要注意不只這一頁，所有頁面都在更改範圍。">
 				<Button
 					onClick={() => setSelectedIdsEditSpeaker(ImmutableSet.of(...gridFilteredSortedRowIdsSelector(apiRef)))}
+					variant="outlined"
 				>
 					批次更改顯示中台詞的說話者
 				</Button>

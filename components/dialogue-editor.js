@@ -1,5 +1,12 @@
 import { useState, useMemo, Fragment, useCallback } from "react";
-import { DataGrid, GridActionsCellItem, useGridApiContext, useGridApiRef, gridFilteredSortedRowIdsSelector } from "@mui/x-data-grid";
+import {
+	DataGrid,
+	GridActionsCellItem,
+	useGridApiContext,
+	useGridApiRef,
+	gridFilteredSortedRowIdsSelector,
+	getGridStringOperators
+} from "@mui/x-data-grid";
 import { ArrowUpward, ArrowDownward, Add, Delete, Merge } from "@mui/icons-material";
 import {
 	Button,
@@ -24,6 +31,7 @@ import SentenceEditor from '@/components/sentence-editor';
 import { renderMacro } from '@/lib/macro';
 import { componentsToSlate, slateToComponents } from '@/lib/slate-dialogue';
 import { Set as ImmutableSet, OrderedMap } from "immutable";
+import { isHydrated } from "@/lib/scenario";
 
 /**
  * @typedef {import('@/lib/scenario').Scenario} Scenario
@@ -106,6 +114,36 @@ function Macro({ identifier, children }) {
 	);
 }
 
+function SpeakersFilterInput({ scenario, item, applyValue, focusElementRef }) {
+	const [chosen, setChosen] = useState(/** @type {OrderedMap<String, Boolean>} */(null));
+	const handleFilterChange = useCallback((chosenSpeaker) => {
+		applyValue({...item, value: chosenSpeaker});
+	}, [applyValue, item])
+	if(chosen === null){
+		// Initialize
+		if(item.value){
+			// When re-opening the filter UI
+			setChosen(item.value);
+		}else{
+			const map = OrderedMap().withMutations(map => {
+				for (const cuuid of scenario.characters.order) {
+					map = map.set(cuuid, false);
+				}
+			});
+			setChosen(map);
+		}
+	}
+	return <SpeakersListGroup
+		scenario={scenario}
+		onChange={(e, uuid) => {
+			const newChosen = chosen.set(uuid, e.target.checked);
+			setChosen(newChosen);
+			handleFilterChange(newChosen);
+		}}
+		chosenSpeaker={chosen}
+	/>;
+}
+
 /**
  * The scenario should be in AM1 normalization.
  * @param {Object} param
@@ -127,6 +165,69 @@ export default function DialogueEditor({scenario, dispatch, sx}) {
 		}
 	}), [scenario]);
 
+	const speakersFilterOperators = useMemo(() => [
+		{
+			label: "包含其中一人",
+			value: "exists_speaker",
+			InputComponent: SpeakersFilterInput,
+			InputComponentProps: {scenario},
+			getApplyFilterFn: (filterItem) => {
+				if (!filterItem.field || !filterItem.value || !filterItem.operator) {
+					return null;
+				}
+				const chosenSeq = filterItem.value.filter((chosen) => chosen).keySeq();
+				const satisfied = isHydrated(scenario) ? (
+					ImmutableSet().withMutations(set => {
+						for (const cuuid of chosenSeq) {
+							set = set.union(scenario.__hydration.characterToDialogue.get(cuuid));
+						}
+					})
+				) : (() => {
+					const chosenSet = ImmutableSet(chosenSeq);
+					return ImmutableSet().withMutations(set => {
+						for (const duuid in scenario.dialogues.reference) {
+							const dialogue = scenario.dialogues.reference[duuid];
+							if(!chosenSet.union(dialogue.speakers_list).isEmpty()){
+								set = set.add(duuid);
+							}
+						}
+					});
+				})();
+				return (params) => (satisfied.has(params.row.id));
+			}
+		},
+		{
+			label: "包含所有人",
+			value: "forall_speaker",
+			InputComponent: SpeakersFilterInput,
+			InputComponentProps: { scenario },
+			getApplyFilterFn: (filterItem) => {
+				if (!filterItem.field || !filterItem.value || !filterItem.operator) {
+					return null;
+				}
+				const chosenSeq = filterItem.value.filter((chosen) => chosen).keySeq();
+				const satisfied = isHydrated(scenario) ? (
+					ImmutableSet(scenario.__hydration.dialogueSet).withMutations(set => {
+						for (const cuuid of chosenSeq) {
+							set = set.intersect(scenario.__hydration.characterToDialogue.get(cuuid));
+						}
+					})
+				) : (() => {
+					const chosenSet = ImmutableSet(chosenSeq);
+					return ImmutableSet().withMutations(set => {
+						for (const duuid in scenario.dialogues.reference) {
+							const dialogue = scenario.dialogues.reference[duuid];
+							if (chosenSet.isSuperset(dialogue.speakers_list)) {
+								set = set.add(duuid);
+							}
+						}
+					});
+				})();
+				return (params) => (satisfied.has(params.row.id));
+			}
+		},
+	], [scenario]);
+
 	const columns = useMemo(() => [
 		{
 			field: 'lineno',
@@ -137,6 +238,7 @@ export default function DialogueEditor({scenario, dispatch, sx}) {
 			field: 'speaker',
 			headerName: 'Speaker',
 			editable: true,
+			filterOperators: [...speakersFilterOperators, ...getGridStringOperators()]
 		},
 		{
 			field: 'components',
@@ -194,7 +296,7 @@ export default function DialogueEditor({scenario, dispatch, sx}) {
 				/>,
 			]
 		}
-	], [dispatch])
+	], [dispatch, speakersFilterOperators])
 
 	const handleEditStart = (params, e) => {
 		// Only call dialog when editing the text field
@@ -354,18 +456,14 @@ function SpeakerDialog({scenario, dispatch, selected, onClose}){
 					<FormHelperText sx={{ color: 'red' }}>已更改此欄位，所有台詞都將被更改</FormHelperText>
 					: ""
 				}
-				<FormGroup>
-					{chosenSpeaker.entrySeq().map(([cuuid, chosen]) => <FormControlLabel
-						key={cuuid}
-						label={scenario.characters.reference[cuuid].name || "(無名氏)"}
-						control={
-							<Checkbox checked={chosen} onChange={(e) => {
-								setChosenSpeaker(chosenSpeaker.set(cuuid, e.target.checked));
-								setChosenSpeakerModified(true);
-							}} />
-						}
-					/>)}
-				</FormGroup>
+				<SpeakersListGroup
+					scenario={scenario}
+					chosenSpeaker={chosenSpeaker}
+					onChange={(e, cuuid) => {
+						setChosenSpeaker(chosenSpeaker.set(cuuid, e.target.checked));
+						setChosenSpeakerModified(true);
+					}}
+				/>
 			</FormControl>
 		</DialogContent>
 		<DialogActions>
@@ -373,4 +471,16 @@ function SpeakerDialog({scenario, dispatch, selected, onClose}){
 			<Button onClick={handleClose}>確定</Button>
 		</DialogActions>
 	</Dialog>);
+}
+
+function SpeakersListGroup({scenario, onChange, chosenSpeaker}){
+	return (<FormGroup>
+		{chosenSpeaker.entrySeq().map(([cuuid, chosen]) => <FormControlLabel
+			key={cuuid}
+			label={scenario.characters.reference[cuuid].name || "(無名氏)"}
+			control={
+				<Checkbox checked={chosen} onChange={(e) => onChange(e, cuuid)} />
+			}
+		/>)}
+	</FormGroup>);
 }

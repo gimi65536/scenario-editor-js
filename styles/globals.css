@@ -3,6 +3,10 @@
   --border-style: solid;
 }
 
+body {
+  overflow-y: scroll;
+}
+
 @media (max-width: 1200px) {
   body {
     width: max-width;
@@ -25,4 +29,20 @@ dl {
   margin: auto;
   max-width: 800px;
   line-height: 150%;
+}
+
+/* Scrollbar style in webkit browsers */
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: grey;
+}
+
+/* Scrollbar style in FireFox */
+* {
+  scrollbar-color: grey rgba(255, 255, 255, 0);
+  scrollbar-width: thin;
 }

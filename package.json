@@ -13,6 +13,7 @@
     "@emotion/styled": "^11.11.0",
     "@hyperjump/json-schema": "^1.4.4",
     "@mui/icons-material": "^5.14.3",
+    "@mui/lab": "^5.0.0-alpha.140",
     "@mui/material": "^5.14.4",
     "@mui/x-data-grid": "^6.1.0",
     "antlr4": "^4.12.0",

@@ -1,11 +1,14 @@
 import {
+	Box,
 	Button,
+	Checkbox,
 	Dialog,
 	DialogActions,
 	DialogContent,
 	DialogContentText,
 	DialogTitle,
 	Divider,
+	FormControlLabel,
 	IconButton,
 	List,
 	ListItem,
@@ -35,6 +38,7 @@ import { MuiColorInput } from "mui-color-input";
  */
 export default function CharacterEditor({scenario, dispatch, sx}){
 	const [editingCharacter, setEditingCharacter] = useState(null);
+	const [fullMode, setFullMode] = useState(true);
 
 	const onDragEnd = useCallback(({destination, source}) => {
 		if(!destination){
@@ -95,7 +99,7 @@ export default function CharacterEditor({scenario, dispatch, sx}){
 							>
 								<ListItemText
 									primary={scenario.characters.reference[uuid].name || "(無名氏)"}
-									secondary={<div>
+									secondary={fullMode ? <div>
 										{scenario.characters.reference[uuid].abbreviated ? <div>{scenario.characters.reference[uuid].abbreviated}</div> : ""}
 										{scenario.characters.reference[uuid].color ?
 											<Typography sx={{ color: scenario.characters.reference[uuid].color }} variant="inherit"><Circle /></Typography> : ""}
@@ -108,7 +112,7 @@ export default function CharacterEditor({scenario, dispatch, sx}){
 											</Typography>
 											句台詞
 										</div>
-									</div>}
+									</div> : ""}
 								/>
 							</ListItem>
 							<Divider component="li" />
@@ -121,7 +125,19 @@ export default function CharacterEditor({scenario, dispatch, sx}){
 					)}
 				</Droppable>
 			</DragDropContext>
-			<Button variant="contained" onClick={() => dispatch({ type: 'add_character' })}>點擊新增角色</Button>
+			<Box>
+				<Button variant="contained" onClick={() => dispatch({ type: 'add_character' })} sx={{ mx: 5 }}>點擊新增角色</Button>
+				<FormControlLabel
+					label="顯示角色資訊"
+					control={
+						<Checkbox
+							checked={fullMode}
+							onChange={(e) => setFullMode(e.target.checked)}
+						/>
+					}
+					sx={{ mx: 5 }}
+				/>
+			</Box>
 			<CharacterInfoDialog
 				scenario={scenario}
 				dispatch={dispatch}

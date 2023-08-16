@@ -19,13 +19,14 @@ import {
 	Typography
 } from "@mui/material";
 import { Circle, Edit, Delete } from "@mui/icons-material";
-import { useCallback, useState } from "react";
+import { useCallback, useState, useEffect } from "react";
 import {
 	DragDropContext,
 	Draggable
 } from "react-beautiful-dnd";
 import Droppable from '@/components/dnd/StrictModeDroppable';
 import { MuiColorInput } from "mui-color-input";
+import { useHotkeysContext } from 'react-hotkeys-hook';
 
 /**
  * @typedef {import('@/lib/scenario').Scenario} Scenario
@@ -163,6 +164,8 @@ function CharacterInfoDialog({scenario, dispatch, uuid, onClose}){
 	const [gender, setGender] = useState("");
 	const [cast, setCast] = useState("");
 
+	const { enableScope, disableScope } = useHotkeysContext();
+
 	if(!open && uuid){
 		// Initialize
 		setOpen(true);
@@ -175,6 +178,14 @@ function CharacterInfoDialog({scenario, dispatch, uuid, onClose}){
 	}else if(open && !uuid){
 		setOpen(false);
 	}
+
+	useEffect(() => {
+		if (open) {
+			disableScope("scenario-record");
+		} else {
+			enableScope("scenario-record");
+		}
+	}, [disableScope, enableScope, open])
 
 	const handleClose = useCallback(() => {
 		dispatch({

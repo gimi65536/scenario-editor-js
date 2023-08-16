@@ -1,4 +1,4 @@
-import { useState, useMemo, Fragment, useCallback } from "react";
+import { useState, useMemo, Fragment, useCallback, useEffect } from "react";
 import {
 	DataGrid,
 	GridActionsCellItem,
@@ -32,6 +32,7 @@ import { renderMacro } from '@/lib/macro';
 import { componentsToSlate, slateToComponents } from '@/lib/slate-dialogue';
 import { Set as ImmutableSet, OrderedMap } from "immutable";
 import { isHydrated } from "@/lib/scenario";
+import { useHotkeysContext } from 'react-hotkeys-hook';
 
 /**
  * @typedef {import('@/lib/scenario').Scenario} Scenario
@@ -366,6 +367,8 @@ function SpeakerDialog({scenario, dispatch, selected, onClose}){
 	const [displayNameModified, setDisplayNameModified] = useState(false);
 	const [chosenSpeakerModified, setChosenSpeakerModified] = useState(false);
 
+	const { enableScope, disableScope } = useHotkeysContext();
+
 	if(!open && !selected.isEmpty()){
 		// Initialize
 		setOpen(true);
@@ -399,6 +402,14 @@ function SpeakerDialog({scenario, dispatch, selected, onClose}){
 	}else if(open && selected.isEmpty()){
 		setOpen(false);
 	}
+
+	useEffect(() => {
+		if(open){
+			disableScope("scenario-record");
+		} else {
+			enableScope("scenario-record");
+		}
+	}, [disableScope, enableScope, open])
 
 	const handleClose = useCallback(() => {
 		const actions = [];

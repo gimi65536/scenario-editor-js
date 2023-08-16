@@ -17,12 +17,15 @@ import useUndoReducer from '@/lib/undo';
 import reducer from "@/lib/reducer";
 import { enableMapSet } from "immer";
 import CharacterEditor from '@/components/character-editor';
+import { useHotkeys } from 'react-hotkeys-hook';
 enableMapSet();
 
 export default function TestScenario(){
 	const [scenario, isModified, undo, redo, update, setScenario, irreversibleSetScenario, setUnmodified, reset] = useUndoReducer(reducer, null);
 	const [willLoadFile, setWillLoadFile] = useState('');
 	const [tabPage, setTabPage] = useState('1');
+	useHotkeys('ctrl+z', (e) => undo(), { scopes: "scenario-record" }, [undo]);
+	useHotkeys('ctrl+y', (e) => redo(), { scopes: "scenario-record" }, [redo]);
 
 	const loadFile = useCallback((file) => {
 		console.log(file);

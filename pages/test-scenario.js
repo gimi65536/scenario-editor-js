@@ -57,7 +57,7 @@ export default function TestScenario(){
 	return (
 		<Box>
 			<Head>
-				<title>{scenario !== null ? ((isModified ? "*" : "") + (scenario.title || "(無標題)") + " - ") : ""}台本編輯器</title>
+				<title>{(scenario !== null ? ((isModified ? "*" : "") + (scenario.title || "(無標題)") + " - ") : "") + "台本編輯器"}</title>
 			</Head>
 			<TabContext value={tabPage}>
 				<Box>

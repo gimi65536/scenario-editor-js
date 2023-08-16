@@ -256,7 +256,7 @@ export default function DialogueEditor({scenario, dispatch, sx}) {
 			flex: 0.5,
 			getActions: (params) => [
 				<GridActionsCellItem key={params.row.id}
-					icon={<ArrowUpward />}
+					icon={<Tooltip title="向上"><ArrowUpward /></Tooltip>}
 					label="向上"
 					onClick={() => dispatch({
 						type: 'moveon_dialogue',
@@ -264,7 +264,7 @@ export default function DialogueEditor({scenario, dispatch, sx}) {
 					})}
 				/>,
 				<GridActionsCellItem key={params.row.id}
-					icon={<ArrowDownward />}
+					icon={<Tooltip title="向下"><ArrowDownward /></Tooltip>}
 					label="向下"
 					onClick={() => dispatch({
 						type: 'movedown_dialogue',
@@ -272,7 +272,7 @@ export default function DialogueEditor({scenario, dispatch, sx}) {
 					})}
 				/>,
 				<GridActionsCellItem key={params.row.id}
-					icon={<Add />}
+					icon={<Tooltip title="向下新增"><Add /></Tooltip>}
 					label="向下新增"
 					onClick={() => dispatch({
 						type: 'add_dialogue_below',
@@ -280,7 +280,7 @@ export default function DialogueEditor({scenario, dispatch, sx}) {
 					})}
 				/>,
 				<GridActionsCellItem key={params.row.id}
-					icon={<Merge />}
+					icon={<Tooltip title="向上合併"><Merge /></Tooltip>}
 					label="向上合併"
 					onClick={() => dispatch({
 						type: 'merge_to_above',
@@ -288,7 +288,7 @@ export default function DialogueEditor({scenario, dispatch, sx}) {
 					})}
 				/>,
 				<GridActionsCellItem key={params.row.id}
-					icon={<Delete />}
+					icon={<Tooltip title="刪除"><Delete /></Tooltip>}
 					label="刪除"
 					onClick={() => dispatch({
 						type: 'delete_dialogue',

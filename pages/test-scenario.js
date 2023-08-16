@@ -18,6 +18,7 @@ import reducer from "@/lib/reducer";
 import { enableMapSet } from "immer";
 import CharacterEditor from '@/components/character-editor';
 import { useHotkeys } from 'react-hotkeys-hook';
+import Head from 'next/head';
 enableMapSet();
 
 export default function TestScenario(){
@@ -32,8 +33,6 @@ export default function TestScenario(){
 		const reader = new FileReader();
 		reader.onload = async (e) => {
 			const json = JSON.parse(e.target.result);
-			// Do sanitization here...
-			console.log(json);
 			const result = await processObject2Scenario(json);
 			reset(hydrateImmutable(normalizeImmutable(validate(result), 1)));
 		};
@@ -56,6 +55,9 @@ export default function TestScenario(){
 
 	return (
 		<Box>
+			<Head>
+				<title>{scenario !== null ? ((isModified ? "*" : "") + (scenario.title || "(無標題)") + " - ") : ""}台本編輯器</title>
+			</Head>
 			<TabContext value={tabPage}>
 				<Box>
 					<TabList onChange={(e, v) => setTabPage(v)}>
@@ -109,6 +111,7 @@ export default function TestScenario(){
 					component="a"
 					href={`data:text/json;chatset=utf-8,${encodeURIComponent(JSON.stringify(scenario))}`}
 					download={`${scenario.title}.json`}
+					onClick={() => setUnmodified()}
 				>
 					Download
 				</Button>

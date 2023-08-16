@@ -11,12 +11,13 @@ import {
 import { TabContext, TabList, TabPanel } from '@mui/lab';
 import { useCallback, useState } from 'react';
 import DialogueEditor from "@/components/dialogue-editor";
+import CharacterEditor from '@/components/character-editor';
+import InfoEditor from '@/components/info-editor';
 import json from '@/test/NTUCCC 109SS VAD07-gimi65536 0.1.0.json';
 import { processObject2Scenario, hydrateImmutable, dehydrateImmutable, normalizeImmutable, validate } from '@/lib/scenario';
 import useUndoReducer from '@/lib/undo';
 import reducer from "@/lib/reducer";
 import { enableMapSet } from "immer";
-import CharacterEditor from '@/components/character-editor';
 import { useHotkeys } from 'react-hotkeys-hook';
 import Head from 'next/head';
 enableMapSet();
@@ -66,7 +67,15 @@ export default function TestScenario(){
 						<Tab label="台詞" value="3" />
 					</TabList>
 				</Box>
-				<TabPanel value="1">基本資訊</TabPanel>
+				<TabPanel value="1">
+					{scenario ?
+						<InfoEditor
+							scenario={scenario}
+							dispatch={update}
+							sx={{ height: "80vh" }}
+						/>
+						: ""
+					}</TabPanel>
 				<TabPanel value="2">
 					{scenario ?
 						<CharacterEditor

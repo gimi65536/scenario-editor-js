@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 import { useState, useCallback, useRef, useEffect } from "react";
 import { useImmer } from "use-immer";
 import { Box, Button, CircularProgress, Dialog } from '@mui/material';

@@ -4,7 +4,7 @@ import { Box, Button, CircularProgress } from '@mui/material';
 import VideoComponent from '@/lib/video-js';
 import { createScheduler, createWorker } from "tesseract.js";
 
-export default function VideoPreview({ ocrWorker = 4 }){
+export default function VideoPreview(){
 	const [option, updateOption] = useImmer({
 		autoplay: false,
 		controls: true,
@@ -15,7 +15,7 @@ export default function VideoPreview({ ocrWorker = 4 }){
 			type: undefined
 		}]
 	});
-	const [timerId, setTimerId] = useState(null);
+	const [doingOCR, setDoingOCR] = useState(false);
 	const canvasRef = useRef(null);
 	const videoRef = useRef(null);
 	const schedulerRef = useRef(null);
@@ -27,32 +27,19 @@ export default function VideoPreview({ ocrWorker = 4 }){
 		canvasRef.current.height = 0;
 		schedulerRef.current = createScheduler();
 		const initScheduler = async () => {
-			for (let i = 0; i < ocrWorker; i++){
-				const worker = await createWorker({
-					langPath: "https://github.com/tesseract-ocr/tessdata_best/raw/main"
-				});
-				await worker.loadLanguage('chi_tra+jpn+chi_sim');
-				await worker.initialize('chi_tra+jpn+chi_sim');
-				schedulerRef.current.addWorker(worker);
-			}
+			const worker = await createWorker({
+				langPath: "https://github.com/tesseract-ocr/tessdata_best/raw/main"
+			});
+			await worker.loadLanguage('chi_tra+jpn+chi_sim');
+			await worker.initialize('chi_tra+jpn+chi_sim');
+			schedulerRef.current.addWorker(worker);
 		};
 		initScheduler();
-	}, [ocrWorker]);
-
-	const stopTimer = useCallback(() => {
-		if(timerId === null){
-			return;
-		}
-		clearInterval(timerId);
-		setTimerId(null);
-		//canvasRef.current.width = 0;
-		//canvasRef.current.height = 0;
-	}, [timerId])
+	}, []);
 
 	useEffect(() => {
-		// Auto remove timer when destroying
-		return () => stopTimer;
-	}, [stopTimer])
+		// Do some destroy...
+	}, [])
 
 	const doOCR = useCallback(async () => {
 		const c = canvasRef.current;
@@ -64,16 +51,8 @@ export default function VideoPreview({ ocrWorker = 4 }){
 		const {data: {text}} = await schedulerRef.current.addJob('recognize', c);
 		textareaRef.current.value += text + '\n\n';
 		// ...
+		setDoingOCR(false);
 	}, []);
-
-	const toggleOCR = useCallback(() => {
-		if(timerId === null){
-			// Start OCR
-			setTimerId(setInterval(doOCR, 1000));
-		}else{
-			stopTimer();
-		}
-	}, [doOCR, stopTimer, timerId]);
 
 	const handleFileChange = useCallback((e) => {
 		const file = e.target.files[0];
@@ -93,8 +72,7 @@ export default function VideoPreview({ ocrWorker = 4 }){
 			console.log(file.size);
 		};
 		reader.readAsDataURL(file);
-		stopTimer()
-	}, [option.sources, stopTimer, updateOption]);
+	}, [option.sources, updateOption]);
 
 	return (
 		<>
@@ -110,11 +88,14 @@ export default function VideoPreview({ ocrWorker = 4 }){
 					/>
 				</Button>
 				{option.sources[0].src ?
-					<Button variant="outlined" sx={{ mx: 2 }} onClick={toggleOCR}>
-						{timerId === null ? "OCR關閉中" : (<>
+					<Button variant="outlined" sx={{ mx: 2 }} onClick={() => {
+						setDoingOCR(true);
+						doOCR();
+					}} disabled={doingOCR}>
+						{doingOCR ? (<>
 							<CircularProgress size="1em" sx={{ mr: 1 }} />
 							OCR運行中
-						</>)}
+						</>) : "OCR"}
 					</Button>
 				: ""}
 				<textarea style={{ width: "100%", height: "50vh" }} ref={textareaRef} />

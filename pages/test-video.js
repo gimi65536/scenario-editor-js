@@ -1,12 +1,12 @@
 import { useState, useCallback, useRef, useEffect } from "react";
 import { useImmer } from "use-immer";
-import { Box, Button, CircularProgress } from '@mui/material';
+import { Box, Button, CircularProgress, Dialog } from '@mui/material';
 import VideoComponent from '@/lib/video-js';
 import { createScheduler, createWorker } from "tesseract.js";
-import { ScreenCapture } from "react-screen-capture";
+import { ReactCrop } from "react-image-crop";
 
 export default function VideoPreview(){
-	const DISABLE_OCR = true; // OCR is erroneous now, so disabled by default
+	const DISABLE_OCR = false; // OCR is erroneous now, so disabled by default
 	const [option, updateOption] = useImmer({
 		autoplay: false,
 		controls: true,
@@ -18,9 +18,12 @@ export default function VideoPreview(){
 		}]
 	});
 	const [captured, setCaptured] = useState("");
+	const [cropping, setCropping] = useState(false);
+	const [fullImage, setFullImage] = useState("");
 	const videoRef = useRef(null);
 	const schedulerRef = useRef(null);
 	const textareaRef = useRef(null);
+	const canvasRef = useRef(null);
 
 	// Initialize
 	useEffect(() => {
@@ -56,6 +59,18 @@ export default function VideoPreview(){
 		setCaptured(imgUrl);
 		doOCR(imgUrl);
 	}, [doOCR])
+
+	const handleOpenDialog = useCallback(() => {
+		// Make image
+		const c = canvasRef.current;
+		const d = videoRef.current.currentDimensions();
+		c.width = d.width;
+		c.height = d.height;
+		c.getContext('2d').drawImage(videoRef.current.children()[0], 0, 0, d.width, d.height);
+		setFullImage(c.toDataURL())
+		setCropping(true);
+		c.getContext('2d').clearRect(0, 0, d.width, d.height);
+	}, []);
 
 	const handleFileChange = useCallback((e) => {
 		const file = e.target.files[0];
@@ -96,20 +111,86 @@ export default function VideoPreview(){
 						OCR運行中
 					</Button>
 				:
-					<ScreenCapture onEndCapture={handleCapture}>
-						{({ onStartCapture }) => {
-							if (option.sources[0].src){
-								return <Button variant="outlined" sx={{ mx: 2 }} onClick={onStartCapture} disabled={DISABLE_OCR}>
-									OCR{DISABLE_OCR ? "（目前尚未實裝）" : ""}
-								</Button>;
-							}else{
-								return "";
-							}
-						}}
-					</ScreenCapture>
+					(option.sources[0].src ?
+						<Button variant="outlined" sx={{ mx: 2 }} onClick={handleOpenDialog} disabled={DISABLE_OCR}>
+							OCR{DISABLE_OCR ? "（目前尚未實裝）" : ""}
+						</Button>
+					: "")
 				}
 				<textarea style={{ width: "100%", height: "50vh" }} ref={textareaRef} />
 			</Box>
+			<CropDialog
+				openSignal={cropping}
+				imageData={fullImage}
+				saveCapture={handleCapture}
+				onClose={() => setCropping(false)}
+			/>
+			<canvas ref={canvasRef} hidden />
 		</Box>
 	);
+}
+
+function CropDialog({openSignal, onClose, saveCapture, imageData}){
+	const [open, setOpen] = useState(false);
+	const [crop, setCrop] = useState();
+	const imgRef = useRef(null);
+	const canvasRef = useRef(null);
+
+	const handleCapture = useCallback((crop) => {
+		if(crop?.width && crop.height){
+			const c = canvasRef.current;
+			const ctx = c.getContext('2d');
+			const pixelRatio = window.devicePixelRatio;
+			const image = imgRef.current;
+			c.width = Math.floor(crop.width * pixelRatio);
+			c.height = Math.floor(crop.height * pixelRatio);
+			ctx.scale(pixelRatio, pixelRatio);
+
+			ctx.save();
+			ctx.translate(-crop.x, -crop.y);
+			ctx.drawImage(
+				image,
+				0,
+				0,
+				image.naturalWidth,
+				image.naturalHeight,
+				0,
+				0,
+				image.naturalWidth,
+				image.naturalHeight,
+			);
+			ctx.restore();
+
+			saveCapture(c.toDataURL());
+
+			//...
+			onClose();
+		}
+	}, [onClose, saveCapture]);
+
+	if(!open && openSignal){
+		if(!imageData){
+			return;
+		}
+		// Initialize
+		setOpen(true);
+		setCrop(undefined);
+	}else if(open && !openSignal){
+		setOpen(false);
+	}
+
+	return (<Dialog open={open} onClose={onClose} maxWidth="lg">
+		<ReactCrop
+			crop={crop}
+			onChange={(c, percentCrop) => setCrop(percentCrop)} // set percentage to prevent overflow
+			onComplete={handleCapture}
+		>
+			<img
+				alt="Crop"
+				src={imageData}
+				ref={imgRef}
+			/>
+		</ReactCrop>
+		<canvas ref={canvasRef} hidden />
+	</Dialog>);
 }

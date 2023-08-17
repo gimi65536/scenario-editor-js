@@ -5,6 +5,8 @@ import VideoComponent from '@/lib/video-js';
 import { createScheduler, createWorker } from "tesseract.js";
 import { ReactCrop } from "react-image-crop";
 
+import 'react-image-crop/dist/ReactCrop.css';
+
 export default function VideoPreview(){
 	const DISABLE_OCR = false; // OCR is erroneous now, so disabled by default
 	const [option, updateOption] = useImmer({

@@ -9,7 +9,7 @@ import { useHotkeysContext } from 'react-hotkeys-hook';
 
 import 'react-image-crop/dist/ReactCrop.css';
 
-export default function VideoPreview({sx, enableOCR = false}){
+export default function VideoPreview({sx, moreOptions = {}, enableOCR = false}){
 	const [option, updateOption] = useImmer({
 		autoplay: false,
 		controls: true,
@@ -18,7 +18,8 @@ export default function VideoPreview({sx, enableOCR = false}){
 		sources: [{
 			src: undefined,
 			type: undefined
-		}]
+		}],
+		...moreOptions
 	});
 	const [captured, setCaptured] = useState("");
 	const [fullImage, setFullImage] = useState("");
@@ -111,7 +112,7 @@ export default function VideoPreview({sx, enableOCR = false}){
 			<Box>
 				<Stack direction="row" justifyContent="center" sx={{ my: 2 }}>
 					<Button variant="contained" component="label" sx={{ mx: 2 }}>
-						Upload
+						讀取影片
 						<input
 							hidden
 							accept="video/*"
@@ -132,7 +133,7 @@ export default function VideoPreview({sx, enableOCR = false}){
 							: "")
 					}
 				</Stack>
-				<textarea style={{ width: "100%", height: "50vh" }} ref={textareaRef} />
+				{enableOCR ? <textarea style={{ width: "100%", height: "50vh" }} ref={textareaRef} />: ""}
 			</Box>
 			<CropDialog
 				imageData={fullImage}

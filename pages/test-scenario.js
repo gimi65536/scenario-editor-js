@@ -6,7 +6,11 @@ import {
 	DialogContentText,
 	DialogActions,
 	Tab,
-	Box
+	Box,
+	Accordion,
+	AccordionSummary,
+	AccordionDetails,
+	Stack
 } from '@mui/material';
 import { TabContext, TabList, TabPanel } from '@mui/lab';
 import { useCallback, useState } from 'react';
@@ -20,7 +24,12 @@ import reducer from "@/lib/reducer";
 import { enableMapSet } from "immer";
 import { useHotkeys } from 'react-hotkeys-hook';
 import Head from 'next/head';
+import { ExpandMore } from '@mui/icons-material';
+import VideoPreview from '@/components/video-preview';
+import "videojs-hotkeys";
 enableMapSet();
+
+const TEST = true;
 
 export default function TestScenario(){
 	const [scenario, isModified, undo, redo, update, setScenario, irreversibleSetScenario, setUnmodified, reset] = useUndoReducer(reducer, null);
@@ -59,6 +68,25 @@ export default function TestScenario(){
 			<Head>
 				<title>{(scenario !== null ? ((isModified ? "*" : "") + (scenario.title || "(無標題)") + " - ") : "") + "台本編輯器"}</title>
 			</Head>
+			<Accordion sx={{ my:2 }}>
+				<AccordionSummary
+					expandIcon={<ExpandMore/>}
+				>
+					動畫影像
+				</AccordionSummary>
+				<AccordionDetails>
+					<VideoPreview
+						moreOptions={{
+							plugins: {
+								hotkeys: {
+									enableVolumeScroll: false,
+									enableHoverScroll: true,
+								},
+							},
+						}}
+					/>
+				</AccordionDetails>
+			</Accordion>
 			<TabContext value={tabPage}>
 				<Box>
 					<TabList onChange={(e, v) => setTabPage(v)}>
@@ -97,9 +125,9 @@ export default function TestScenario(){
 					}
 				</TabPanel>
 			</TabContext>
-			<div>
-				<Button variant="contained" component="label">
-					Upload
+			<Stack direction="row" justifyContent="center" sx={{ my: 2 }}>
+				<Button variant="contained" component="label" sx={{ mx: 2 }}>
+					上傳台本
 					<input
 						hidden
 						accept="application/json"
@@ -107,25 +135,26 @@ export default function TestScenario(){
 						onChange={handleFileChange}
 					/>
 				</Button>
-				<Button variant="contained" component="label" onClick={() => {
+				{scenario ?
+					<Button
+						variant="contained"
+						component="a"
+						href={`data:text/json;chatset=utf-8,${encodeURIComponent(JSON.stringify(scenario))}`}
+						download={`${scenario.title}.json`}
+						onClick={() => setUnmodified()}
+						sx={{ mx: 2 }}
+					>
+						下載台本
+					</Button>
+					: ""
+				}
+				{TEST ? <Button variant="outlined" component="label" sx={{ mx: 2 }} onClick={() => {
 					reset(hydrateImmutable(normalizeImmutable(validate(json), 1)));
 				}}>
-					Load Default
-				</Button>
-			</div>
-			<textarea style={{ width: "100%", height: "50vh" }} defaultValue={scenario && JSON.stringify(dehydrateImmutable(scenario))} />
-			{scenario ?
-				<Button
-					variant="contained"
-					component="a"
-					href={`data:text/json;chatset=utf-8,${encodeURIComponent(JSON.stringify(scenario))}`}
-					download={`${scenario.title}.json`}
-					onClick={() => setUnmodified()}
-				>
-					Download
-				</Button>
-				: ""
-			}
+					讀取測試台本
+				</Button> : ""}
+			</Stack>
+			{TEST ? <textarea style={{ width: "100%", height: "50vh" }} defaultValue={scenario && JSON.stringify(dehydrateImmutable(scenario))} /> : ""}
 			<LoadDialog
 				file={willLoadFile}
 				onConfirm={() => {

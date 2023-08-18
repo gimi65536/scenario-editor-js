@@ -43,8 +43,11 @@ export default function VideoPreview({sx, enableOCR = false}){
 			});
 			schedulerRef.current.addWorker(worker);
 		};
-		initScheduler();
-	}, []);
+		if (enableOCR){
+			initScheduler();
+		}
+		
+	}, [enableOCR]);
 
 	useEffect(() => {
 		// Do some destroy...

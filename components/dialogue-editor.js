@@ -1,4 +1,4 @@
-import { useState, useMemo, Fragment, useCallback, useEffect } from "react";
+import { useState, useMemo, Fragment, useCallback, useEffect, useRef } from "react";
 import {
 	DataGrid,
 	GridActionsCellItem,
@@ -24,14 +24,15 @@ import {
 	Checkbox,
 	Typography,
 	Tooltip,
-	Stack
+	Stack,
+	Box
 } from "@mui/material";
 import { Element } from "slate";
 import SentenceEditor from '@/components/sentence-editor';
 import { renderMacro } from '@/lib/macro';
 import { componentsToSlate, slateToComponents } from '@/lib/slate-dialogue';
 import { Set as ImmutableSet, OrderedMap } from "immutable";
-import { isHydrated } from "@/lib/scenario";
+import { isHydrated, parseDialogue } from "@/lib/scenario";
 import { useHotkeysContext } from 'react-hotkeys-hook';
 
 /**
@@ -154,6 +155,8 @@ export default function DialogueEditor({scenario, dispatch, sx}) {
 	const [selectedId, setSelectedId] = useState(/** @type {?String} */(null));
 	const [selectedIdsEditSpeaker, setSelectedIdsEditSpeaker] =
 		useState(/** @type {ImmutableSet<String>} */(ImmutableSet()));
+	const [batchAddDialog, setBatchAddDialog] = useState(false);
+	const [batchAddBelow, setBatchAddBelow] = useState(null);
 	const apiRef = useGridApiRef();
 
 	// This could be a performance neck
@@ -334,19 +337,43 @@ export default function DialogueEditor({scenario, dispatch, sx}) {
 				apiRef={apiRef}
 				sx={{ alignSelf: "stretch" }}
 			/>
-			<Tooltip title="免費版MUI不提供多選，請搭配篩選器使用。免費版MUI最多一頁100句台詞，但要注意不只這一頁，所有頁面都在更改範圍。">
-				<Button
-					onClick={() => setSelectedIdsEditSpeaker(ImmutableSet.of(...gridFilteredSortedRowIdsSelector(apiRef)))}
-					variant="outlined"
-				>
-					批次更改顯示中台詞的說話者
+			<Box sx={{alignSelf: "center"}}>
+				<Button variant="contained" sx={{ mx: 2 }} onClick={() => {
+					setBatchAddDialog(true);
+					// If selected
+					const selected = apiRef.current.getSelectedRows();
+					if (selected.size === 0){
+						setBatchAddBelow(null);
+					}else{
+						// For free version, only one can be selected
+						// For Pro... I don't know
+						const rowModel = selected.values().next().value;
+						setBatchAddBelow(rowModel.index);
+					}
+				}}>
+					加入大量台詞
 				</Button>
-			</Tooltip>
+				<Tooltip title="免費版MUI不提供多選，請搭配篩選器使用。免費版MUI最多一頁100句台詞，但要注意不只這一頁，所有頁面都在更改範圍。" sx={{ mx: 2 }}>
+					<Button
+						onClick={() => setSelectedIdsEditSpeaker(ImmutableSet.of(...gridFilteredSortedRowIdsSelector(apiRef)))}
+						variant="outlined"
+					>
+						批次更改顯示中台詞的說話者
+					</Button>
+				</Tooltip>
+			</Box>
 			<SpeakerDialog
 				scenario={scenario}
 				dispatch={dispatch}
 				selected={selectedIdsEditSpeaker}
 				onClose={() => setSelectedIdsEditSpeaker(selectedIdsEditSpeaker.clear())}
+			/>
+			<BatchAddDialog
+				scenario={scenario}
+				dispatch={dispatch}
+				openSignal={batchAddDialog}
+				onClose={() => setBatchAddDialog(false)}
+				below={batchAddBelow}
 			/>
 		</Stack>
 	);
@@ -494,4 +521,53 @@ function SpeakersListGroup({scenario, onChange, chosenSpeaker}){
 			}
 		/>)}
 	</FormGroup>);
+}
+
+/**
+ * @param {Object} param
+ * @param {Scenario} param.scenario
+ * @param {Boolean} param.openSignal
+ * @param {number} param.below
+ */
+function BatchAddDialog({ scenario, dispatch, openSignal, onClose, below }){
+	const [open, setOpen] = useState(false);
+	const [stripSpeaker, setStripSpeaker] = useState(true);
+	const textRef = useRef(null);
+
+	if(!open && openSignal){
+		setOpen(true);
+		setStripSpeaker(true);
+	}else if(open && !openSignal){
+		setOpen(false);
+	}
+
+	const handleClose = useCallback(() => {
+		const lines = textRef.current.value.split('\n');
+		dispatch({
+			type: "batch_add_below",
+			below: below ?? -1,
+			lines: lines,
+			strip: stripSpeaker
+		});
+		for(const line of lines){
+			console.log(line);
+		}
+		onClose();
+	}, [below, dispatch, onClose, stripSpeaker]);
+
+	//...
+	return (<Dialog open={open} onClose={onClose} maxWidth="lg" fullWidth>
+		<DialogTitle>大量加入台詞{below !== null ? `於第${below + 1}行之下` : ""}</DialogTitle>
+		<DialogContent>
+			<DialogContentText sx={{ textAlign: "center", mb: 2 }}>在這邊輸入多行台詞</DialogContentText>
+			<TextField label="加入台詞" multiline inputRef={textRef} fullWidth />
+			<FormControl>
+				<FormControlLabel control={<Checkbox checked={stripSpeaker} onChange={(e) => setStripSpeaker(e.target.checked)} />} label="自動取得「顯示說話者」" />
+			</FormControl>
+		</DialogContent>
+		<DialogActions>
+			<Button onClick={onClose}>取消</Button>
+			<Button onClick={handleClose}>確定</Button>
+		</DialogActions>
+	</Dialog>);
 }

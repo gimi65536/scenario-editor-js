@@ -534,12 +534,22 @@ function BatchAddDialog({ scenario, dispatch, openSignal, onClose, below }){
 	const [stripSpeaker, setStripSpeaker] = useState(true);
 	const textRef = useRef(null);
 
+	const { enableScope, disableScope } = useHotkeysContext();
+
 	if(!open && openSignal){
 		setOpen(true);
 		setStripSpeaker(true);
 	}else if(open && !openSignal){
 		setOpen(false);
 	}
+
+	useEffect(() => {
+		if (open) {
+			disableScope("scenario-record");
+		} else {
+			enableScope("scenario-record");
+		}
+	}, [disableScope, enableScope, open])
 
 	const handleClose = useCallback(() => {
 		const lines = textRef.current.value.split('\n');

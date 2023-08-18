@@ -5,6 +5,7 @@ import { Box, Button, CircularProgress, Dialog } from '@mui/material';
 import VideoComponent from '@/lib/video-js';
 import { PSM, createScheduler, createWorker } from "tesseract.js";
 import { ReactCrop } from "react-image-crop";
+import { useHotkeysContext } from 'react-hotkeys-hook';
 
 import 'react-image-crop/dist/ReactCrop.css';
 
@@ -145,6 +146,8 @@ function CropDialog({onClose, saveCapture, imageData}){
 	const imgRef = useRef(null); // Put the capture
 	const canvasRef = useRef(null); // Used to render the cropped capture
 
+	const { enableScope, disableScope } = useHotkeysContext();
+
 	const handleCapture = useCallback((crop) => {
 		if(crop?.width && crop?.height){
 			const c = canvasRef.current;
@@ -183,6 +186,15 @@ function CropDialog({onClose, saveCapture, imageData}){
 	} else if (open && !imageData){
 		setOpen(false);
 	}
+
+	useEffect(() => {
+		if (open) {
+			disableScope("scenario-record");
+		} else {
+			enableScope("scenario-record");
+		}
+	}, [disableScope, enableScope, open])
+
 
 	return (<Dialog open={open} onClose={onClose} maxWidth="lg">
 		<ReactCrop

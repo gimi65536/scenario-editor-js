@@ -3,7 +3,7 @@ import { useState, useCallback, useRef, useEffect } from "react";
 import { useImmer } from "use-immer";
 import { Box, Button, CircularProgress, Dialog } from '@mui/material';
 import VideoComponent from '@/lib/video-js';
-import { createScheduler, createWorker } from "tesseract.js";
+import { PSM, createScheduler, createWorker } from "tesseract.js";
 import { ReactCrop } from "react-image-crop";
 
 import 'react-image-crop/dist/ReactCrop.css';
@@ -21,22 +21,26 @@ export default function VideoPreview(){
 		}]
 	});
 	const [captured, setCaptured] = useState("");
-	const [cropping, setCropping] = useState(false);
 	const [fullImage, setFullImage] = useState("");
-	const videoRef = useRef(null);
+	const videoRef = useRef(null); // The video-js element
 	const schedulerRef = useRef(null);
-	const textareaRef = useRef(null);
-	const canvasRef = useRef(null);
+	const textareaRef = useRef(null); // The OCR result output
+	const canvasRef = useRef(null); // Used to render the video capture
 
 	// Initialize
 	useEffect(() => {
 		schedulerRef.current = createScheduler();
 		const initScheduler = async () => {
 			const worker = await createWorker({
-				langPath: "https://github.com/tesseract-ocr/tessdata_best/raw/main"
+				langPath: "https://raw.githubusercontent.com/naptha/tessdata/gh-pages/4.0.0_best",
+				//langPath: ".",
+				//gzip: false,
 			});
 			await worker.loadLanguage('chi_tra');
 			await worker.initialize('chi_tra');
+			await worker.setParameters({
+				tessedit_pageseg_mode: PSM.SINGLE_LINE
+			});
 			schedulerRef.current.addWorker(worker);
 		};
 		initScheduler();
@@ -53,7 +57,7 @@ export default function VideoPreview(){
 			return;
 		}
 		const { data: { text } } = await schedulerRef.current.addJob('recognize', imgUrl);
-		textareaRef.current.value += text + '\n\n';
+		textareaRef.current.value += text;
 		// ...
 		setCaptured("");
 	}, []);
@@ -67,11 +71,14 @@ export default function VideoPreview(){
 		// Make image
 		const c = canvasRef.current;
 		const d = videoRef.current.currentDimensions();
+		if(!c.width || !c.height){
+			return;
+		}
+		videoRef.current.pause();
 		c.width = d.width;
 		c.height = d.height;
 		c.getContext('2d').drawImage(videoRef.current.children()[0], 0, 0, d.width, d.height);
 		setFullImage(c.toDataURL())
-		setCropping(true);
 		c.getContext('2d').clearRect(0, 0, d.width, d.height);
 	}, []);
 
@@ -123,24 +130,23 @@ export default function VideoPreview(){
 				<textarea style={{ width: "100%", height: "50vh" }} ref={textareaRef} />
 			</Box>
 			<CropDialog
-				openSignal={cropping}
 				imageData={fullImage}
 				saveCapture={handleCapture}
-				onClose={() => setCropping(false)}
+				onClose={() => setFullImage("")}
 			/>
 			<canvas ref={canvasRef} hidden />
 		</Box>
 	);
 }
 
-function CropDialog({openSignal, onClose, saveCapture, imageData}){
+function CropDialog({onClose, saveCapture, imageData}){
 	const [open, setOpen] = useState(false);
 	const [crop, setCrop] = useState();
-	const imgRef = useRef(null);
-	const canvasRef = useRef(null);
+	const imgRef = useRef(null); // Put the capture
+	const canvasRef = useRef(null); // Used to render the cropped capture
 
 	const handleCapture = useCallback((crop) => {
-		if(crop?.width && crop.height){
+		if(crop?.width && crop?.height){
 			const c = canvasRef.current;
 			const ctx = c.getContext('2d');
 			const pixelRatio = window.devicePixelRatio;
@@ -166,19 +172,15 @@ function CropDialog({openSignal, onClose, saveCapture, imageData}){
 
 			saveCapture(c.toDataURL());
 
-			//...
 			onClose();
 		}
 	}, [onClose, saveCapture]);
 
-	if(!open && openSignal){
-		if(!imageData){
-			return;
-		}
+	if (!open && imageData){
 		// Initialize
 		setOpen(true);
 		setCrop(undefined);
-	}else if(open && !openSignal){
+	} else if (open && !imageData){
 		setOpen(false);
 	}
 

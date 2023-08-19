@@ -26,7 +26,7 @@ import { useHotkeys, useHotkeysContext } from 'react-hotkeys-hook';
 import Head from 'next/head';
 import { ExpandMore } from '@mui/icons-material';
 import VideoPreview from '@/components/video-preview';
-import { getTexEnv } from '@/lib/extract';
+import { getTexEnv, getTxtEnv } from '@/lib/extract';
 import "videojs-hotkeys";
 import styles from '@/styles/Home.module.css'
 enableMapSet();
@@ -162,6 +162,21 @@ export default function TestScenario() {
 						}}
 					>
 						匯出成TeX
+					</Button>
+					: ""
+				}
+				{scenario ?
+					<Button
+						variant="contained"
+						sx={{ mx: 2 }}
+						onClick={() => {
+							const anchor = document.createElement('a');
+							anchor.href = `data:text/json;chatset=utf-8,${encodeURIComponent(getTxtEnv().render('template.txt.njk', { scenario }))}`;
+							anchor.download = `${scenario.title}.txt`;
+							anchor.click();
+						}}
+					>
+						匯出成純文字
 					</Button>
 					: ""
 				}

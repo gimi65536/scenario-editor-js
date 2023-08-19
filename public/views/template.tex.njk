@@ -1,0 +1,49 @@
+\documentclass{vadscript}
+
+{#- Render the gimi65536's scenario with version >= 0.1.0 #}
+{#- Which macros can have submacros is not decided by the template. #}
+{&- macro components_printer(components) &}
+{#- #}{& for component in components &}
+{#-       #}{& if component|is_str &}{| component|etex |}
+{#-       #}{& elif component.identifier == 'separate' &}
+{#-             #}{& if component.children|length == 0 &}\ruleline{& else &}\begin{inrule}{| components_printer(component.children[0]) |}\end{inrule}{& endif &}
+{#-       #}{& elif component.identifier == 'center' &}
+{#-             #}\begin{incenter}{| components_printer(component.children[0]) |}\end{incenter}
+{#-       #}{& elif component.identifier == 'ruby' &}
+{#-             #}\ruby[g]{{| components_printer(component.children[0]) |}}{{| components_printer(component.children[1]) |}}
+{#-       #}{& endif &}
+{#- #}{& endfor &}
+{&- endmacro &}
+
+\begin{document}
+
+\gentitle{{| scenario.info.index|etex |}}{{| scenario.info.date|etex |}}{{| scenario.title|etex |}}
+
+% Add image as title image in HERE
+\begin{myfigure}[blanker]
+\centering \includegraphics[width=\linewidth, height=\myspace, keepaspectratio]{HERE}
+\end{myfigure}
+
+%\setstretch{1.0}
+{&- for duuid in scenario.dialogues.order &}
+{#  #}{&- set speakers_list = scenario.dialogues.reference[duuid].speakers_list|reorderspeakers(scenario) &}
+{#  #}{&- if scenario.dialogues.reference[duuid].speaker &}
+{#        #}\begin{sentence}{{| scenario.dialogues.reference[duuid].speaker|etex |}}
+{#- #}{&- elif scenario.dialogues.reference[duuid].speakers_list|length == 0 &}
+{#        #}\begin{sentence}{}
+{#- #}{&- else &}
+{#        #}\begin{sentence}{{| scenario.characters.reference|getitem_by_list(speakers_list)|map('abbreviated')|join('、')|etex |}}
+{#- #}{&- endif &}
+{#- #}{| components_printer(scenario.dialogues.reference[duuid].components) |}
+{#- #}\end{sentence}
+{&- endfor &}
+
+{& for info in scenario.characters.reference|getitem_by_list(scenario.characters.order) &}
+\addchara{{| info.name|etex |}}{{| info.abbreviated|etex |}}{{| info.gender|etex |},{| info.cast|etex |}}
+{& endfor &}
+
+\writecast
+
+% Add a comma list as image files in HERE
+\picturepadding{HERE}
+\end{document}

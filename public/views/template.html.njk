@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+{#- Render the gimi65536's scenario with version >= 0.1.0 #}
+{#- Which macros can have submacros is not decided by the template. #}
+{%- macro components_printer(components) %}
+	{%- for component in components %}
+		{%- if component|is_str %}
+				{{ component|e }}
+		{%- elif component.identifier == 'separate' %}
+				<span class="ruleline">{%- if component.children|length != 0 %}{{ components_printer(component.children[0]) }}{% endif %}</span>
+		{%- elif component.identifier == 'center' %}
+				<span class="center">{{ components_printer(component.children[0]) }}</span>
+		{%- elif component.identifier == 'ruby' %}
+				<ruby>{{ components_printer(component.children[0]) }}<rp>（</rp><rt>{{ components_printer(component.children[1]) }}</rt><rp>）</rp></ruby>
+	{%- endif -%}
+	{%- endfor %}
+{%- endmacro %}
+
+<html lang="zh-Hant-TW">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width = device-width, initial-scale = 1.0">
+	<title>{{ scenario.title|e }}</title>
+	<style>
+		:root{
+			--border-width: 1px;
+			--border-style: solid;
+		}
+		body{
+			font-family: Calibri, 'Noto Sans JP', 'Noto Sans TC', 'Microsoft JhengHei', sans-serif;
+		}
+		@media (max-width: 1200px) {
+			body{
+				width: max-width;
+			}
+		}
+		@media (min-width: 1201px) {
+			body{
+				width: 1200px;
+				margin: 0 auto;
+			}
+		}
+		h1, h2{
+			text-align:center;
+		}
+		dl{
+			margin: auto;
+			max-width: 800px;
+			line-height: 150%;
+		}
+		.dialogue{
+			background-color: transparent;
+			border-style: var(--border-style);
+			border-width: var(--border-width);
+			padding: 5px;
+			font-size: 1rem;
+		}
+		.dialogue > * {
+			margin-top: 10px;
+		}
+		.dialogue > *:first-child{
+			margin-top: 0;
+		}
+		.sentence{
+			display: flex;
+		}
+		.speaker{
+			margin-right: 0;
+		}
+		.speaker::after{
+			content: "：";
+		}
+		.text{
+			flex-grow: 1;
+		}
+		.ruleline{
+			display: flex;
+			flex-direction: row;
+		}
+		.ruleline::before, .ruleline::after{
+			content: "";
+			flex: 1 1;
+			border-bottom: 1px solid #000;
+			margin: auto;
+		}
+		.center{
+			display: flex;
+			flex-direction: row;
+		}
+		.center::before, .center::after{
+			content: "";
+			flex: 1 1;
+			margin: auto;
+		}
+		.cast{
+			margin: 10px auto;
+			display: table;
+			width: inherit;
+			border-collapse: separate;
+			border-spacing: 10px;
+		}
+		.cast-row{
+			display: table-row;
+		}
+		.cast-head, .cast-button, .cast-name, .cast-abbr, .cast-gender, .cast-casting, .cast-showing{
+			display: table-cell;
+		}
+		.cast-head{
+			font-weight: bold;
+		}
+		.line-counter{
+			font-size: 0.6rem;
+			display: inline-block;
+			width: 1.5rem;
+			flex-shrink: 0;
+		}
+		.line-manager{
+			margin: 10px auto;
+			display: flex;
+			align-items: center;
+		}
+		.line-button{
+			flex-shrink: 0;
+			margin-right: 1rem;
+		}
+		/* Turn on to use vertical writing */
+		/*body{
+			writing-mode: vertical-rl;
+		}
+		.dialogue > * {
+			margin-top: 0;
+			margin-right: 10px;
+		}
+		.dialogue > *:first-child{
+			margin-right: 0;
+		}
+		.ruleline::before, .ruleline::after{
+			content: "";
+			flex: 1 1;
+			border-bottom: none;
+			border-left: 1px solid #000;
+			margin: auto;
+		}
+		.cast {
+			margin: auto 10px;
+		}*/
+{%- for cuuid in scenario.characters.order %}
+		.highlight-{{ cuuid }}{
+			background-color: {{ scenario.characters.reference[cuuid].color }};
+		}
+{%- endfor %}
+	</style>
+</head>
+<body>
+	<h2>{{ scenario.info.index|e }}</h2>
+	<h2>{{ scenario.info.date|e }}</h2>
+	<h1>{{ scenario.title|e }}</h1>
+	<div class="dialogue">
+{%- for duuid in scenario.dialogues.order %}
+{%- set speakers_list = scenario.dialogues.reference[duuid].speakers_list|reorderspeakers(scenario) %}
+{%- set abb_list = scenario.characters.reference|getitem_by_list(speakers_list)|map('abbreviated') %}
+		<div class="sentence">
+{%- if scenario.dialogues.reference[duuid].speaker %}
+			<div class="speaker {{ speakers_list|join(' ') }}">{{ scenario.dialogues.reference[duuid].speaker|e }}</div>
+{%- elif speakers_list|length > 0 %}
+			<div class="speaker {{ speakers_list|join(' ') }}">{{ abb_list|join('、')|e }}</div>
+{%- endif %}
+			<div class="text">
+{{- components_printer(scenario.dialogues.reference[duuid].components) -}}
+			</div>
+		</div>
+{%- endfor %}
+	</div>
+	<div class="line-manager">
+		<div class="line-button"><button onclick="switchLineNumber();">切換行號顯示</button></div>
+		<div class="line-info" id="line-info"></div>
+	</div>
+	<div class="cast">
+		<div class="cast-row">
+			<div class="cast-head"></div>
+			<div class="cast-head">角色名稱</div>
+			<div class="cast-head">簡稱</div>
+			<div class="cast-head">性別</div>
+			<div class="cast-head">聲優</div>
+			<div class="cast-head">顯示中</div>
+		</div>
+{%-for cuuid in scenario.characters.order %}
+	{%- set info = scenario.characters.reference[cuuid] %}
+		<div class="cast-row">
+			<div class="cast-button"><button onclick="switchColor(`{{ cuuid }}`, `{{ info.color }}`);">切換顯示</button></div>
+			<div class="cast-name">{{ info.name|e }}</div>
+			<div class="cast-abbr">{{ info.abbreviated|e }}</div>
+			<div class="cast-gender">{{ info.gender|e }}</div>
+			<div class="cast-casting">{{ info.cast|e }}</div>
+			<div class="cast-showing show-{{ cuuid }}">No</div>
+		</div>
+{%- endfor %}
+	</div>
+	<script>
+		const state_table = new Map();
+		let linenumber_enable = false;
+		const linenumber_info = new Map();
+		const linenumber_counter = new Map();
+		function switchColor(cls, color) {
+			if(!state_table.has(cls)){
+				state_table.set(cls, false);
+			}
+			if(state_table.get(cls)){
+				state_table.set(cls, false);
+				for (const i of document.getElementsByClassName(cls)) {
+					i.classList.remove('highlight-' + cls);
+				}
+				for (const i of document.getElementsByClassName('show-' + cls)) {
+					i.textContent = 'No';
+				}
+				updateLine(cls, -1);
+			}else{
+				state_table.set(cls, true);
+				for (const i of document.getElementsByClassName(cls)) {
+					i.classList.add('highlight-' + cls);
+				}
+				for (const i of document.getElementsByClassName('show-' + cls)) {
+					i.textContent = 'Yes';
+				}
+				updateLine(cls, 1);
+			}
+		}
+		function switchLineNumber() {
+			if(!linenumber_enable){
+				linenumber_enable = true;
+				for(const dia of document.getElementsByClassName('dialogue')){
+					let number = 0;
+					for (let sen of dia.querySelectorAll(':scope > .sentence')){
+						if(sen.querySelectorAll(':scope > .speaker').length > 0){
+							const newnode = document.createElement('div');
+							newnode.classList.add('line-counter');
+							newnode.textContent = (++number);
+							sen.prepend(newnode);
+						}
+					}
+				}
+				state_table.forEach((value, cls) => {
+					if(value){
+						updateLine(cls, 1);
+					}
+				});
+			}else{
+				linenumber_enable = false;
+				for(const newnode of document.querySelectorAll('.line-counter')){
+					newnode.remove();
+				}
+				document.getElementById('line-info').textContent = "";
+				for(const key of linenumber_counter.keys()){
+					linenumber_counter.set(key, 0);
+				}
+			}
+		}
+		function updateLine(cls, offset) {
+			if(!linenumber_enable){
+				return;
+			}
+			if(!linenumber_info.has(cls)){
+				const list = [];
+				for(const speaker of document.querySelectorAll('.sentence > .speaker.' + cls)){
+					const parent = speaker.parentElement;
+					const linenumber_element = parent.querySelector('.line-counter');
+					if(linenumber_element != null){
+						list.push(parseInt(linenumber_element.textContent))
+					}
+				}
+				linenumber_info.set(cls, list);
+			}
+			const list = linenumber_info.get(cls);
+			for(const i of list){
+				if(!linenumber_counter.has(i)){
+					linenumber_counter.set(i, 0);
+				}
+				let count = linenumber_counter.get(i);
+				count += offset;
+				linenumber_counter.set(i, (count >= 0 ? count : 0));
+			}
+			const active = [];
+			linenumber_counter.forEach((count, line) => {
+				if(count > 0){
+					active.push(line);
+				}
+			});
+			active.sort((a, b) => a - b);
+			const lineinfo_element = document.getElementById('line-info');
+			lineinfo_element.textContent = active.join(', ');
+		}
+	</script>
+</body>
+</html>

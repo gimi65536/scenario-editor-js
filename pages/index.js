@@ -26,7 +26,7 @@ import { useHotkeys, useHotkeysContext } from 'react-hotkeys-hook';
 import Head from 'next/head';
 import { ExpandMore } from '@mui/icons-material';
 import VideoPreview from '@/components/video-preview';
-import { getTexEnv, getTxtEnv } from '@/lib/extract';
+import { getTexEnv, getGeneralEnv } from '@/lib/extract';
 import "videojs-hotkeys";
 import styles from '@/styles/Home.module.css'
 enableMapSet();
@@ -171,12 +171,27 @@ export default function TestScenario() {
 						sx={{ mx: 2 }}
 						onClick={() => {
 							const anchor = document.createElement('a');
-							anchor.href = `data:text/json;chatset=utf-8,${encodeURIComponent(getTxtEnv().render('template.txt.njk', { scenario }))}`;
+							anchor.href = `data:text/json;chatset=utf-8,${encodeURIComponent(getGeneralEnv().render('template.txt.njk', { scenario }))}`;
 							anchor.download = `${scenario.title}.txt`;
 							anchor.click();
 						}}
 					>
 						匯出成純文字
+					</Button>
+					: ""
+				}
+				{scenario ?
+					<Button
+						variant="contained"
+						sx={{ mx: 2 }}
+						onClick={() => {
+							const anchor = document.createElement('a');
+							anchor.href = `data:text/json;chatset=utf-8,${encodeURIComponent(getGeneralEnv().render('template.html.njk', { scenario }))}`;
+							anchor.download = `${scenario.title}.html`;
+							anchor.click();
+						}}
+					>
+						匯出成網頁
 					</Button>
 					: ""
 				}

@@ -12,13 +12,14 @@ import {
 	IconButton,
 	List,
 	ListItem,
+	ListItemIcon,
 	ListItemText,
 	Stack,
 	TextField,
 	Tooltip,
 	Typography
 } from "@mui/material";
-import { Circle, Edit, Delete } from "@mui/icons-material";
+import { Circle, Edit, Delete, DragIndicator } from "@mui/icons-material";
 import { useCallback, useState, useEffect } from "react";
 import {
 	DragDropContext,
@@ -98,6 +99,7 @@ export default function CharacterEditor({scenario, dispatch, sx}){
 								{...provided.draggableProps}
 								{...provided.dragHandleProps}
 							>
+								<ListItemIcon><DragIndicator /></ListItemIcon>
 								<ListItemText
 									primary={scenario.characters.reference[uuid].name || "(無名氏)"}
 									secondary={fullMode ? <div>
@@ -127,7 +129,7 @@ export default function CharacterEditor({scenario, dispatch, sx}){
 				</Droppable>
 			</DragDropContext>
 			<Box>
-				<Button variant="contained" onClick={() => dispatch({ type: 'add_character' })} sx={{ mx: 5 }}>點擊新增角色</Button>
+				<Tooltip title="總是新增在最底下"><Button variant="contained" onClick={() => dispatch({ type: 'add_character' })} sx={{ mx: 5 }}>點擊新增角色</Button></Tooltip>
 				<FormControlLabel
 					label="顯示角色資訊"
 					control={

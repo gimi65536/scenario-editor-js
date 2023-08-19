@@ -240,13 +240,13 @@ export default function DialogueEditor({scenario, dispatch, sx}) {
 		},
 		{
 			field: 'speaker',
-			headerName: 'Speaker',
+			headerName: '說話者',
 			editable: true,
 			filterOperators: [...speakersFilterOperators, ...getGridStringOperators()]
 		},
 		{
 			field: 'components',
-			headerName: 'Text',
+			headerName: '台詞',
 			editable: true,
 			flex: 1,
 			renderCell: renderText,
@@ -254,7 +254,7 @@ export default function DialogueEditor({scenario, dispatch, sx}) {
 		},
 		{
 			field: 'action',
-			headerName: 'Action',
+			headerName: '操作',
 			type: 'actions',
 			flex: 0.5,
 			getActions: (params) => [
@@ -338,22 +338,24 @@ export default function DialogueEditor({scenario, dispatch, sx}) {
 				sx={{ alignSelf: "stretch" }}
 			/>
 			<Box sx={{alignSelf: "center"}}>
-				<Button variant="contained" sx={{ mx: 2 }} onClick={() => {
-					setBatchAddDialog(true);
-					// If selected
-					const selected = apiRef.current.getSelectedRows();
-					if (selected.size === 0){
-						setBatchAddBelow(null);
-					}else{
-						// For free version, only one can be selected
-						// For Pro... I don't know
-						const rowModel = selected.values().next().value;
-						setBatchAddBelow(rowModel.index);
-					}
-				}}>
-					加入大量台詞
-				</Button>
-				<Tooltip title="免費版MUI不提供多選，請搭配篩選器使用。免費版MUI最多一頁100句台詞，但要注意不只這一頁，所有頁面都在更改範圍。" sx={{ mx: 2 }}>
+				<Tooltip title="如果沒有選擇台詞則新增在最底下，如果選擇了則新增在所選台詞的底下">
+					<Button variant="contained" sx={{ mx: 2 }} onClick={() => {
+						setBatchAddDialog(true);
+						// If selected
+						const selected = apiRef.current.getSelectedRows();
+						if (selected.size === 0) {
+							setBatchAddBelow(null);
+						} else {
+							// For free version, only one can be selected
+							// For Pro... I don't know
+							const rowModel = selected.values().next().value;
+							setBatchAddBelow(rowModel.index);
+						}
+					}}>
+						加入大量台詞
+					</Button>
+				</Tooltip>
+				<Tooltip title="免費版MUI不提供多選，請搭配篩選器(Filter)使用。免費版MUI最多一頁100句台詞，但要注意不只這一頁，所有頁面都在更改範圍。" sx={{ mx: 2 }}>
 					<Button
 						onClick={() => setSelectedIdsEditSpeaker(ImmutableSet.of(...gridFilteredSortedRowIdsSelector(apiRef)))}
 						variant="outlined"
@@ -569,10 +571,11 @@ function BatchAddDialog({ scenario, dispatch, openSignal, onClose, below }){
 	return (<Dialog open={open} onClose={onClose} maxWidth="lg" fullWidth>
 		<DialogTitle>大量加入台詞{below !== null ? `於第${below + 1}行之下` : ""}</DialogTitle>
 		<DialogContent>
-			<DialogContentText sx={{ textAlign: "center", mb: 2 }}>在這邊輸入多行台詞</DialogContentText>
+			<DialogContentText sx={{ textAlign: "center" }}>在這邊輸入多行台詞</DialogContentText>
+			<DialogContentText sx={{ textAlign: "center", mb: 2 }}>每行都各自被視為一句獨立台詞</DialogContentText>
 			<TextField label="加入台詞" multiline inputRef={textRef} fullWidth />
 			<FormControl>
-				<FormControlLabel control={<Checkbox checked={stripSpeaker} onChange={(e) => setStripSpeaker(e.target.checked)} />} label="自動取得「顯示說話者」" />
+				<FormControlLabel control={<Checkbox checked={stripSpeaker} onChange={(e) => setStripSpeaker(e.target.checked)} />} label="將第一個冒號前的文字視為「顯示說話者」" />
 			</FormControl>
 		</DialogContent>
 		<DialogActions>

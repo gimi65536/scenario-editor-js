@@ -10,7 +10,8 @@ import {
 	Accordion,
 	AccordionSummary,
 	AccordionDetails,
-	Stack
+	Stack,
+	Tooltip
 } from '@mui/material';
 import { TabContext, TabList, TabPanel } from '@mui/lab';
 import { useCallback, useEffect, useState } from 'react';
@@ -18,7 +19,14 @@ import DialogueEditor from "@/components/dialogue-editor";
 import CharacterEditor from '@/components/character-editor';
 import InfoEditor from '@/components/info-editor';
 import json from '@/test/NTUCCC 109SS VAD07-gimi65536 0.1.0.json';
-import { processObject2Scenario, hydrateImmutable, dehydrateImmutable, normalizeImmutable, validate } from '@/lib/scenario';
+import {
+	processObject2Scenario,
+	hydrateImmutable,
+	dehydrateImmutable,
+	normalizeImmutable,
+	validate,
+	emptyScenario
+} from '@/lib/scenario';
 import useUndoReducer from '@/lib/undo';
 import reducer from "@/lib/reducer";
 import { enableMapSet } from "immer";
@@ -103,7 +111,7 @@ export default function TestScenario() {
 						<InfoEditor
 							scenario={scenario}
 							dispatch={update}
-							sx={{ height: "80vh" }}
+							sx={{ height: "70vh" }}
 						/>
 						: ""
 					}</TabPanel>
@@ -112,7 +120,7 @@ export default function TestScenario() {
 						<CharacterEditor
 							scenario={scenario}
 							dispatch={update}
-							sx={{ height: "80vh" }}
+							sx={{ height: "70vh" }}
 						/>
 						: ""
 					}
@@ -122,78 +130,98 @@ export default function TestScenario() {
 						<DialogueEditor
 							scenario={scenario}
 							dispatch={update}
-							sx={{ height: "80vh" }}
+							sx={{ height: "70vh" }}
 						/>
 						: ""
 					}
 				</TabPanel>
 			</TabContext>
 			<Stack direction="row" justifyContent="center" sx={{ my: 2 }}>
-				<Button variant="contained" component="label" sx={{ mx: 2 }}>
-					上傳台本
-					<input
-						hidden
-						accept="application/json"
-						type="file"
-						onChange={handleFileChange}
-					/>
-				</Button>
-				{scenario ?
+				<Tooltip title="上傳代表台本的json檔案以繼續編輯" placement="top">
+					<Button variant="contained" component="label" sx={{ mx: 2 }}>
+						上傳台本
+						<input
+							hidden
+							accept="application/json"
+							type="file"
+							onChange={handleFileChange}
+						/>
+					</Button>
+				</Tooltip>
+				{scenario ? ""
+					:
 					<Button
-						variant="contained"
-						component="a"
-						href={`data:text/json;chatset=utf-8,${encodeURIComponent(JSON.stringify(scenario))}`}
-						download={`${scenario.title}.json`}
-						onClick={() => setUnmodified()}
+						variant="outlined"
+						onClick={() => reset(emptyScenario())}
 						sx={{ mx: 2 }}
 					>
-						下載台本
+						新建空白台本
 					</Button>
+				}
+				{scenario ?
+					<Tooltip title="將代表台本的json檔案下載到電腦，以便日後上傳繼續編輯" placement="top">
+						<Button
+							variant="contained"
+							component="a"
+							href={`data:text/json;chatset=utf-8,${encodeURIComponent(JSON.stringify(scenario))}`}
+							download={`${scenario.title}.json`}
+							onClick={() => setUnmodified()}
+							sx={{ mx: 2 }}
+						>
+							下載台本
+						</Button>
+					</Tooltip>
 					: ""
 				}
 				{scenario ?
-					<Button
-						variant="contained"
-						sx={{ mx: 2 }}
-						onClick={() => {
-							const anchor = document.createElement('a');
-							anchor.href = `data:text/json;chatset=utf-8,${encodeURIComponent(getTexEnv().render('template.tex.njk', { scenario }))}`;
-							anchor.download = `${scenario.title}.tex`;
-							anchor.click();
-						}}
-					>
-						匯出成TeX
-					</Button>
+					<Tooltip title="將台本匯出成LaTeX檔案" placement="top">
+						<Button
+							variant="contained"
+							sx={{ mx: 2 }}
+							onClick={() => {
+								const anchor = document.createElement('a');
+								anchor.href = `data:text/json;chatset=utf-8,${encodeURIComponent(getTexEnv().render('template.tex.njk', { scenario }))}`;
+								anchor.download = `${scenario.title}.tex`;
+								anchor.click();
+							}}
+						>
+							匯出成TeX
+						</Button>
+					</Tooltip>
 					: ""
 				}
 				{scenario ?
-					<Button
-						variant="contained"
-						sx={{ mx: 2 }}
-						onClick={() => {
-							const anchor = document.createElement('a');
-							anchor.href = `data:text/json;chatset=utf-8,${encodeURIComponent(getGeneralEnv().render('template.txt.njk', { scenario }))}`;
-							anchor.download = `${scenario.title}.txt`;
-							anchor.click();
-						}}
-					>
-						匯出成純文字
-					</Button>
+					<Tooltip title="將台本匯出成純文字檔案，適合複製貼上到WORD檔" placement="top">
+						<Button
+							variant="contained"
+							sx={{ mx: 2 }}
+							onClick={() => {
+								const anchor = document.createElement('a');
+								anchor.href = `data:text/json;chatset=utf-8,${encodeURIComponent(getGeneralEnv().render('template.txt.njk', { scenario }))}`;
+								anchor.download = `${scenario.title}.txt`;
+								anchor.click();
+							}}
+						>
+							匯出成純文字
+						</Button>
+					</Tooltip>
 					: ""
 				}
 				{scenario ?
-					<Button
-						variant="contained"
-						sx={{ mx: 2 }}
-						onClick={() => {
-							const anchor = document.createElement('a');
-							anchor.href = `data:text/json;chatset=utf-8,${encodeURIComponent(getGeneralEnv().render('template.html.njk', { scenario }))}`;
-							anchor.download = `${scenario.title}.html`;
-							anchor.click();
-						}}
-					>
-						匯出成網頁
-					</Button>
+					<Tooltip title="將台本匯出成網頁檔案，可Highlight角色台詞，可離線存取" placement="top">
+						<Button
+							variant="contained"
+							sx={{ mx: 2 }}
+							onClick={() => {
+								const anchor = document.createElement('a');
+								anchor.href = `data:text/json;chatset=utf-8,${encodeURIComponent(getGeneralEnv().render('template.html.njk', { scenario }))}`;
+								anchor.download = `${scenario.title}.html`;
+								anchor.click();
+							}}
+						>
+							匯出成網頁
+						</Button>
+					</Tooltip>
 					: ""
 				}
 				{TEST ? <Button variant="outlined" component="label" sx={{ mx: 2 }} onClick={() => {

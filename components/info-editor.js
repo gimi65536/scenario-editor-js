@@ -1,4 +1,4 @@
-import { Box, Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, FormControl, FormHelperText, IconButton, InputLabel, MenuItem, Select, Stack, TextField } from "@mui/material";
+import { Box, Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, FormControl, FormHelperText, IconButton, InputLabel, MenuItem, Select, Stack, TextField, Typography } from "@mui/material";
 import { useCallback, useState, useEffect } from "react";
 import { useHotkeysContext } from 'react-hotkeys-hook';
 import { List as ImmutableList, OrderedMap } from "immutable";
@@ -29,13 +29,13 @@ export default function InfoEditor({scenario, dispatch, sx}){
 	const [open, setOpen] = useState(false);
 
 	return (<Stack sx={sx}>
-		<div>
-			標題：{scenario.title || "(無標題)"}
-		</div>
-		<Stack>
-			<p>其它參數</p>
+		<Box>
+			<Typography variant="h4">標題：{scenario.title || "(無標題)"}</Typography>
+		</Box>
+		<Stack sx={{ mt: 1 }}>
+			<Box>其它參數</Box>
 			{Object.entries(scenario.info).map(([key, value]) => (
-				<p key={key}>{key}: {value}</p>
+				<Box key={key} sx={{ my: 1 }}>{key}: {value}</Box>
 			))}
 		</Stack>
 		<Button variant="contained" sx={{alignSelf: "center"}} onClick={() => setOpen(true)}>
@@ -95,6 +95,7 @@ function InfoDialog({scenario, dispatch, openSignal, onClose}){
 		<DialogTitle>更改台本資訊</DialogTitle>
 		<DialogContent>
 			<DialogContentText>台本標題必備，其它可選</DialogContentText>
+			<DialogContentText>通常會有 index date 兩個項目，參考下方「加入」右方的「選擇常用Key」</DialogContentText>
 			<Stack>
 				<TextField
 					label="台本標題"
@@ -105,14 +106,14 @@ function InfoDialog({scenario, dispatch, openSignal, onClose}){
 				{info.map(([key, value], index) => (
 					<Stack key={index} sx={{flexDirection: "row"}}>
 						<TextField
-							label="Key"
+							label="項目"
 							helperText={commonKeys.has(key) ? commonKeys.get(key).helperText : ""}
 							value={key}
 							onChange={(e) => setInfo(info.set(index, [e.target.value, value]))}
 							sx={{ m: 2, width: "10em" }}
 						/>
 						<TextField
-							label="Value"
+							label="內容"
 							value={value}
 							onChange={(e) => setInfo(info.set(index, [key, e.target.value]))}
 							sx={{ m: 2, width: "20em" }}
@@ -136,10 +137,10 @@ function InfoDialog({scenario, dispatch, openSignal, onClose}){
 							加入
 						</Button>
 						<FormControl sx={{width: "10em"}}>
-							<InputLabel id="insert-common-key">選擇常用Key</InputLabel>
+							<InputLabel id="insert-common-key">選擇常用項目</InputLabel>
 							<Select
 								labelId="insert-common-key"
-								label="選擇常用Key"
+								label="選擇常用項目"
 								value={chooseKey}
 								onChange={(e) => setChooseKey(e.target.value)}
 								size="small"

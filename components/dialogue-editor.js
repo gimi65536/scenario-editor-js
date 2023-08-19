@@ -165,6 +165,7 @@ export default function DialogueEditor({scenario, dispatch, sx}) {
 			index: index,
 			lineno: index + 1,
 			id: uuid,
+			speakers_list_n: scenario.dialogues.reference[uuid].speakers_list?.length ?? 0,
 			...scenario.dialogues.reference[uuid],
 		}
 	}), [scenario]);
@@ -243,6 +244,10 @@ export default function DialogueEditor({scenario, dispatch, sx}) {
 			headerName: '說話者',
 			editable: true,
 			filterOperators: [...speakersFilterOperators, ...getGridStringOperators()]
+		},
+		{
+			field: 'speakers_list_n',
+			headerName: '說話者人數',
 		},
 		{
 			field: 'components',

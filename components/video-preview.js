@@ -133,7 +133,7 @@ export default function VideoPreview({sx, moreOptions = {}, enableOCR = false}){
 							: "")
 					}
 				</Stack>
-				{enableOCR ? <textarea style={{ width: "100%", height: "50vh" }} ref={textareaRef} />: ""}
+				{enableOCR ? <textarea style={{ width: "100%", height: "20vh" }} ref={textareaRef} />: ""}
 			</Box>
 			<CropDialog
 				imageData={fullImage}

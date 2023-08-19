@@ -31,7 +31,7 @@ import "videojs-hotkeys";
 import styles from '@/styles/Home.module.css'
 enableMapSet();
 
-const TEST = true;
+const TEST = process.env.NODE_ENV === 'development';
 
 export default function TestScenario() {
 	const [scenario, isModified, undo, redo, update, setScenario, irreversibleSetScenario, setUnmodified, reset] = useUndoReducer(reducer, null);
@@ -78,6 +78,7 @@ export default function TestScenario() {
 				</AccordionSummary>
 				<AccordionDetails>
 					<VideoPreview
+						enableOCR
 						moreOptions={{
 							plugins: {
 								hotkeys: {

@@ -11,6 +11,7 @@
 {#-             #}\begin{incenter}{| components_printer(component.children[0]) |}\end{incenter}
 {#-       #}{& elif component.identifier == 'ruby' &}
 {#-             #}\ruby[g]{{| components_printer(component.children[0]) |}}{{| components_printer(component.children[1]) |}}
+{#-       #}{& endif &}
 {#- #}{& endfor &}
 {&- endmacro &}
 
@@ -25,7 +26,7 @@
 
 %\setstretch{1.0}
 {&- for duuid in scenario.dialogues.order &}
-{#  #}{&- set speakers_list = scenario.dialogues.reference[duuid].speakers_list|reorderspeakers &}
+{#  #}{&- set speakers_list = scenario.dialogues.reference[duuid].speakers_list|reorderspeakers(scenario) &}
 {#  #}{&- if scenario.dialogues.reference[duuid].speaker &}
 {#        #}\begin{sentence}{{| scenario.dialogues.reference[duuid].speaker|etex |}}
 {#- #}{&- elif scenario.dialogues.reference[duuid].speakers_list|length == 0 &}

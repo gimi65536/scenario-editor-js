@@ -26,6 +26,7 @@ import { useHotkeys, useHotkeysContext } from 'react-hotkeys-hook';
 import Head from 'next/head';
 import { ExpandMore } from '@mui/icons-material';
 import VideoPreview from '@/components/video-preview';
+import { getTexEnv } from '@/lib/extract';
 import "videojs-hotkeys";
 import styles from '@/styles/Home.module.css'
 enableMapSet();
@@ -146,6 +147,18 @@ export default function TestScenario() {
 						sx={{ mx: 2 }}
 					>
 						下載台本
+					</Button>
+					: ""
+				}
+				{scenario ?
+					<Button
+						variant="contained"
+						component="a"
+						href={`data:text/json;chatset=utf-8,${encodeURIComponent(getTexEnv().render('template.tex.njk', {scenario}))}`}
+						download={`${scenario.title}.tex`}
+						sx={{ mx: 2 }}
+					>
+						匯出成TeX
 					</Button>
 					: ""
 				}

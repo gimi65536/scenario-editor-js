@@ -153,10 +153,13 @@ export default function TestScenario() {
 				{scenario ?
 					<Button
 						variant="contained"
-						component="a"
-						href={`data:text/json;chatset=utf-8,${encodeURIComponent(getTexEnv().render('template.tex.njk', {scenario}))}`}
-						download={`${scenario.title}.tex`}
 						sx={{ mx: 2 }}
+						onClick={() => {
+							const anchor = document.createElement('a');
+							anchor.href = `data:text/json;chatset=utf-8,${encodeURIComponent(getTexEnv().render('template.tex.njk', { scenario }))}`;
+							anchor.download = `${scenario.title}.tex`;
+							anchor.click();
+						}}
 					>
 						匯出成TeX
 					</Button>

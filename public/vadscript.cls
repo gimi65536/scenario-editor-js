@@ -6,7 +6,6 @@
 %Load basic packages for latex3
 \RequirePackage{expl3}
 \RequirePackage{xparse}
-\RequirePackage{l3keys2e}
 
 \ExplSyntaxOn
 \tl_new:N \g_vadscript_font_tl
@@ -66,7 +65,7 @@
 	}
 }
 
-\ProcessKeysOptions{vadscript}
+\ProcessKeyOptions[vadscript]
 
 %Load packages after options passed
 \LoadClass{article}

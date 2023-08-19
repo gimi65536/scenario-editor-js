@@ -163,7 +163,7 @@ export default function TestScenario() {
 						<Button
 							variant="contained"
 							component="a"
-							href={`data:text/json;chatset=utf-8,${encodeURIComponent(JSON.stringify(scenario))}`}
+							href={`data:text/json;chatset=utf-8,${encodeURIComponent(JSON.stringify(dehydrateImmutable(scenario)))}`}
 							download={`${scenario.title}.json`}
 							onClick={() => setUnmodified()}
 							sx={{ mx: 2 }}

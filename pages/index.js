@@ -13,7 +13,7 @@ import {
 	Stack
 } from '@mui/material';
 import { TabContext, TabList, TabPanel } from '@mui/lab';
-import { useCallback, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import DialogueEditor from "@/components/dialogue-editor";
 import CharacterEditor from '@/components/character-editor';
 import InfoEditor from '@/components/info-editor';
@@ -22,7 +22,7 @@ import { processObject2Scenario, hydrateImmutable, dehydrateImmutable, normalize
 import useUndoReducer from '@/lib/undo';
 import reducer from "@/lib/reducer";
 import { enableMapSet } from "immer";
-import { useHotkeys } from 'react-hotkeys-hook';
+import { useHotkeys, useHotkeysContext } from 'react-hotkeys-hook';
 import Head from 'next/head';
 import { ExpandMore } from '@mui/icons-material';
 import VideoPreview from '@/components/video-preview';
@@ -171,7 +171,25 @@ export default function TestScenario() {
 }
 
 function LoadDialog({ file, onConfirm, onClose }) {
-	return (<Dialog open={file !== ''} onClose={onClose}>
+	const [open, setOpen] = useState(false);
+
+	const { enableScope, disableScope } = useHotkeysContext();
+
+	if(!open && file !== ''){
+		setOpen(true);
+	}else if(open && file === ''){
+		setOpen(false);
+	}
+
+	useEffect(() => {
+		if (open) {
+			disableScope("scenario-record");
+		} else {
+			enableScope("scenario-record");
+		}
+	}, [disableScope, enableScope, open])
+
+	return (<Dialog open={open} onClose={onClose}>
 		<DialogTitle>確認是否讀取台本</DialogTitle>
 		<DialogContent>
 			<DialogContentText>還有變更尚未儲存！是否直接讀取？</DialogContentText>

@@ -1,0 +1,27 @@
+{#- Render the gimi65536's scenario with version >= 0.1.0 #}
+{#- Which macros can have submacros is not decided by the template. #}
+{%- macro components_printer(components) %}
+{#- #}{% for component in components %}
+{#-       #}{% if component|is_str %}{{ component }}
+{#-       #}{% elif component.identifier == 'separate' %}
+{#-             #}{% if component.children|length == 0 %}────────────────{% else %}────────{{ components_printer(component.children[0]) }}────────{% endif %}
+{#-       #}{% elif component.identifier == 'center' %}
+{#-             #}　　　　　　{{ components_printer(component.children[0]) }}　　　　　　
+{#-       #}{% elif component.identifier == 'ruby' %}
+{#-             #}{{ components_printer(component.children[0]) }}（{{ components_printer(component.children[1]) }}）
+{#-       #}{% endif %}
+{#- #}{% endfor %}
+{%- endmacro %}
+{%- for duuid in scenario.dialogues.order %}
+{#- #}{%- set speakers_list = scenario.dialogues.reference[duuid].speakers_list|reorderspeakers(scenario) %}
+{#- #}{%- if scenario.dialogues.reference[duuid].speaker %}{{ scenario.dialogues.reference[duuid].speaker }}：
+{#- #}{%- elif scenario.dialogues.reference[duuid].speakers_list|length == 0 %}
+{#- #}{%- else %}{{ scenario.characters.reference|getitem_by_list(speakers_list)|map('abbreviated')|join('、') }}：
+{#- #}{%- endif %}
+{#- #}{{ components_printer(scenario.dialogues.reference[duuid].components) }}
+{% endfor %}
+ＣＡＳＴ
+
+{%- for info in scenario.characters.reference|getitem_by_list(scenario.characters.order) %}
+{{ info.name }}	{{ info.abbreviated }}	{{ info.gender }}	{{ info.cast }}
+{%- endfor %}

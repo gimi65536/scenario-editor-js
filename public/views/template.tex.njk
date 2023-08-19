@@ -34,8 +34,8 @@
 {#- #}{&- else &}
 {#        #}\begin{sentence}{{| scenario.characters.reference|getitem_by_list(speakers_list)|map('abbreviated')|join('、')|etex |}}
 {#- #}{&- endif &}
-{#  #}{| components_printer(scenario.dialogues.reference[duuid].components) |}
-{#  #}\end{sentence}
+{#- #}{| components_printer(scenario.dialogues.reference[duuid].components) |}
+{#- #}\end{sentence}
 {&- endfor &}
 
 {& for info in scenario.characters.reference|getitem_by_list(scenario.characters.order) &}

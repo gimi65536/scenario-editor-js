@@ -165,7 +165,7 @@ export default function DialogueEditor({scenario, dispatch, sx}) {
 			index: index,
 			lineno: index + 1,
 			id: uuid,
-			speakers_list_n: scenario.dialogues.reference[uuid].speakers_list?.length ?? 0,
+			scenario: scenario, // Keep a reference
 			...scenario.dialogues.reference[uuid],
 		}
 	}), [scenario]);
@@ -243,11 +243,17 @@ export default function DialogueEditor({scenario, dispatch, sx}) {
 			field: 'speaker',
 			headerName: '說話者',
 			editable: true,
-			filterOperators: [...speakersFilterOperators, ...getGridStringOperators()]
 		},
 		{
-			field: 'speakers_list_n',
-			headerName: '說話者人數',
+			field: 'speakers_list',
+			headerName: '參與者列表',
+			filterOperators: [...speakersFilterOperators, ...getGridStringOperators()],
+			renderCell: (params) => {
+				return (<Stack>
+					{params.value.map((cuuid) => <span key={cuuid}>{params.row.scenario.characters.reference[cuuid].name}</span>)}
+				</Stack>);
+			},
+			editable: true,
 		},
 		{
 			field: 'components',
@@ -311,7 +317,7 @@ export default function DialogueEditor({scenario, dispatch, sx}) {
 		// Only call dialog when editing the text field
 		if (params.field === 'components') {
 			setSelectedId(params.row.id);
-		}else if(params.field === 'speaker'){
+		} else if (params.field === 'speaker' || params.field === 'speakers_list'){
 			// Do not use the default editing system
 			e.defaultMuiPrevented = true;
 			// Open dialog
@@ -480,7 +486,7 @@ function SpeakerDialog({scenario, dispatch, selected, onClose}){
 				label="顯示說話者"
 				helperText={
 					<>
-						<div>在台詞冒號前方顯示的名稱</div>
+						<div>在台詞冒號前方顯示的名稱，若留空則將從參與者列表自動生成</div>
 						{selected.size >= 2 && displayNameModified ?
 							<div><Typography sx={{color: 'red'}} variant="inherit">已更改此欄位，所有台詞都將被更改</Typography></div>
 							: ""
@@ -495,8 +501,8 @@ function SpeakerDialog({scenario, dispatch, selected, onClose}){
 				sx={{ m: 2 }}
 			/>
 			<FormControl sx={{ m: 2 }} component="fieldset" variant="standard">
-				<FormLabel>選擇說話者</FormLabel>
-				<FormHelperText>用來Highlight角色有哪些台詞</FormHelperText>
+				<FormLabel>調整參與者列表</FormLabel>
+				<FormHelperText>這句台詞有哪些角色參與，用來Highlight角色有哪些台詞</FormHelperText>
 				{selected.size >= 2 && chosenSpeakerModified ?
 					<FormHelperText sx={{ color: 'red' }}>已更改此欄位，所有台詞都將被更改</FormHelperText>
 					: ""

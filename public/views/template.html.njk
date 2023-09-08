@@ -3,14 +3,13 @@
 {#- Which macros can have submacros is not decided by the template. #}
 {%- macro components_printer(components) %}
 	{%- for component in components %}
-		{%- if component|is_str %}
-				{{ component|e }}
+		{%- if component|is_str %}{{ component|e }}
 		{%- elif component.identifier == 'separate' %}
-				<span class="ruleline">{%- if component.children|length != 0 %}{{ components_printer(component.children[0]) }}{% endif %}</span>
+{#-           #}<span class="ruleline">{%- if component.children|length != 0 %}{{ components_printer(component.children[0]) }}{% endif %}</span>
 		{%- elif component.identifier == 'center' %}
-				<span class="center">{{ components_printer(component.children[0]) }}</span>
+{#-           #}<span class="center">{{ components_printer(component.children[0]) }}</span>
 		{%- elif component.identifier == 'ruby' %}
-				<ruby>{{ components_printer(component.children[0]) }}<rp>（</rp><rt>{{ components_printer(component.children[1]) }}</rt><rp>）</rp></ruby>
+{#-           #}<ruby>{{ components_printer(component.children[0]) }}<rp>（</rp><rt>{{ components_printer(component.children[1]) }}</rt><rp>）</rp></ruby>
 	{%- endif -%}
 	{%- endfor %}
 {%- endmacro %}

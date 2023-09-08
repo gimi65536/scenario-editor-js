@@ -27,12 +27,11 @@ import {
 	Stack,
 	Box
 } from "@mui/material";
-import { Element } from "slate";
 import SentenceEditor from '@/components/sentence-editor';
 import { renderMacro } from '@/lib/macro';
 import { componentsToSlate, slateToComponents } from '@/lib/slate-dialogue';
 import { Set as ImmutableSet, OrderedMap } from "immutable";
-import { isHydrated, parseDialogue } from "@/lib/scenario";
+import { isHydrated } from "@/lib/scenario";
 import { useHotkeysContext } from 'react-hotkeys-hook';
 
 /**
@@ -40,7 +39,7 @@ import { useHotkeysContext } from 'react-hotkeys-hook';
  */
 
 function convertTo(components_or_element, to) {
-	if (components_or_element.length > 0 && Element.isElement(components_or_element[0])) {
+	if (components_or_element.length > 0 && components_or_element[0].__slate) {
 		// Slate element
 		if (to === 'element') {
 			return components_or_element;

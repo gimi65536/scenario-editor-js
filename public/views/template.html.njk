@@ -153,6 +153,9 @@
 	<h2>{{ scenario.info.index|e }}</h2>
 	<h2>{{ scenario.info.date|e }}</h2>
 	<h1>{{ scenario.title|e }}</h1>
+{%- if scenario.info.subtitle %}
+	<h2>{{ scenario.info.subtitle }}</h2>
+{%- endif %}
 	<div class="dialogue">
 {%- for duuid in scenario.dialogues.order %}
 {%- set speakers_list = scenario.dialogues.reference[duuid].speakers_list|reorderspeakers(scenario) %}

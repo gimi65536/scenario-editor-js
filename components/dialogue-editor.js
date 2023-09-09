@@ -175,7 +175,8 @@ export default function DialogueEditor({scenario, dispatch, sx}) {
 			value: "exists_speaker",
 			InputComponent: SpeakersFilterInput,
 			InputComponentProps: {scenario},
-			getApplyFilterFn: (filterItem) => {
+			getApplyFilterFn: () => {},
+			getApplyFilterFnV7: (filterItem) => {
 				if (!filterItem.field || !filterItem.value || !filterItem.operator) {
 					return null;
 				}
@@ -191,13 +192,15 @@ export default function DialogueEditor({scenario, dispatch, sx}) {
 					return ImmutableSet().withMutations(set => {
 						for (const duuid in scenario.dialogues.reference) {
 							const dialogue = scenario.dialogues.reference[duuid];
-							if(!chosenSet.union(dialogue.speakers_list).isEmpty()){
+							if (!chosenSet.union(dialogue.speakers_list).isEmpty()) {
 								set = set.add(duuid);
 							}
 						}
 					});
 				})();
-				return (params) => (satisfied.has(params.row.id));
+				return (value, row, column, apiRef) => {
+					return satisfied.has(row.id);
+				};
 			}
 		},
 		{
@@ -205,7 +208,8 @@ export default function DialogueEditor({scenario, dispatch, sx}) {
 			value: "forall_speaker",
 			InputComponent: SpeakersFilterInput,
 			InputComponentProps: { scenario },
-			getApplyFilterFn: (filterItem) => {
+			getApplyFilterFn: () => {},
+			getApplyFilterFnV7: (filterItem) => {
 				if (!filterItem.field || !filterItem.value || !filterItem.operator) {
 					return null;
 				}
@@ -227,7 +231,9 @@ export default function DialogueEditor({scenario, dispatch, sx}) {
 						}
 					});
 				})();
-				return (params) => (satisfied.has(params.row.id));
+				return (value, row, column, apiRef) => {
+					return satisfied.has(row.id);
+				};
 			}
 		},
 	], [scenario]);

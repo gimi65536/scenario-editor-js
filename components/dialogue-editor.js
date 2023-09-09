@@ -341,6 +341,12 @@ export default function DialogueEditor({scenario, dispatch, sx}) {
 			<DataGrid
 				rows={rows}
 				columns={columns}
+				slots={{
+					noRowsOverlay: () => <NoRowsOverlay onClick={() => dispatch({
+						type: 'add_dialogue_below',
+						index: -1 // Whatever
+					})} />
+				}}
 				onCellEditStart={handleEditStart}
 				onCellEditStop={handleEditStop}
 				getRowHeight={() => 'auto'}
@@ -389,6 +395,12 @@ export default function DialogueEditor({scenario, dispatch, sx}) {
 			/>
 		</Stack>
 	);
+}
+
+function NoRowsOverlay({onClick}){
+	return (<Stack height="100%" alignItems="center" justifyContent="center">
+		<Button onClick={onClick} variant="contained">點擊新增第一句台詞</Button>
+	</Stack>);
 }
 
 /**

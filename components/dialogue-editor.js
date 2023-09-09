@@ -175,29 +175,23 @@ export default function DialogueEditor({scenario, dispatch, sx}) {
 			value: "exists_speaker",
 			InputComponent: SpeakersFilterInput,
 			InputComponentProps: {scenario},
-			getApplyFilterFn: (filterItem) => {
+			getApplyFilterFn: () => {},
+			getApplyFilterFnV7: (filterItem) => {
 				if (!filterItem.field || !filterItem.value || !filterItem.operator) {
 					return null;
 				}
-				const chosenSeq = filterItem.value.filter((chosen) => chosen).keySeq();
-				const satisfied = isHydrated(scenario) ? (
-					ImmutableSet().withMutations(set => {
-						for (const cuuid of chosenSeq) {
-							set = set.union(scenario.__hydration.characterToDialogue.get(cuuid));
-						}
-					})
-				) : (() => {
-					const chosenSet = ImmutableSet(chosenSeq);
-					return ImmutableSet().withMutations(set => {
-						for (const duuid in scenario.dialogues.reference) {
-							const dialogue = scenario.dialogues.reference[duuid];
-							if(!chosenSet.union(dialogue.speakers_list).isEmpty()){
-								set = set.add(duuid);
-							}
-						}
-					});
-				})();
-				return (params) => (satisfied.has(params.row.id));
+				const chosenSeq = ImmutableSet(filterItem.value.filter((chosen) => chosen).keySeq());
+				return (value, row, column, apiRef) => {
+					let compared;
+					if(isHydrated(scenario)){
+						// An ES6 set
+						compared = scenario.__hydration.speakersSet.get(row.id);
+					}else{
+						// An ES array
+						compared = scenario.dialogues.reference[uuid].speakers_list;
+					}
+					return !chosenSeq.intersect(compared).isEmpty();
+				};
 			}
 		},
 		{
@@ -205,29 +199,23 @@ export default function DialogueEditor({scenario, dispatch, sx}) {
 			value: "forall_speaker",
 			InputComponent: SpeakersFilterInput,
 			InputComponentProps: { scenario },
-			getApplyFilterFn: (filterItem) => {
+			getApplyFilterFn: () => {},
+			getApplyFilterFnV7: (filterItem) => {
 				if (!filterItem.field || !filterItem.value || !filterItem.operator) {
 					return null;
 				}
-				const chosenSeq = filterItem.value.filter((chosen) => chosen).keySeq();
-				const satisfied = isHydrated(scenario) ? (
-					ImmutableSet(scenario.__hydration.dialogueSet).withMutations(set => {
-						for (const cuuid of chosenSeq) {
-							set = set.intersect(scenario.__hydration.characterToDialogue.get(cuuid));
-						}
-					})
-				) : (() => {
-					const chosenSet = ImmutableSet(chosenSeq);
-					return ImmutableSet().withMutations(set => {
-						for (const duuid in scenario.dialogues.reference) {
-							const dialogue = scenario.dialogues.reference[duuid];
-							if (chosenSet.isSubset(dialogue.speakers_list)) {
-								set = set.add(duuid);
-							}
-						}
-					});
-				})();
-				return (params) => (satisfied.has(params.row.id));
+				const chosenSeq = ImmutableSet(filterItem.value.filter((chosen) => chosen).keySeq());
+				return (value, row, column, apiRef) => {
+					let compared;
+					if (isHydrated(scenario)) {
+						// An ES6 set
+						compared = scenario.__hydration.speakersSet.get(row.id);
+					} else {
+						// An ES array
+						compared = scenario.dialogues.reference[uuid].speakers_list;
+					}
+					return chosenSeq.isSubset(compared);
+				};
 			}
 		},
 	], [scenario]);

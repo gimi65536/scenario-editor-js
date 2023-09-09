@@ -236,7 +236,7 @@ export default function DialogueEditor({scenario, dispatch, sx}) {
 		{
 			field: 'lineno',
 			headerName: '#',
-			filterable: false,
+			type: 'number',
 		},
 		{
 			field: 'speaker',

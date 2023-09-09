@@ -392,13 +392,14 @@
 		\int_set:Nn \l_image_to_insert_int {\seq_count:N \l_images_seq}
 	}{
 		\int_compare:nNnTF {\l_pageremfour_int} = {0} {
-			\dim_compare:nNnTF {\textheight - \pagetotal} < {0.5\textheight}{
+			\dim_compare:nNnTF {\textheight - \pagetotal} < {0.49\textheight}{
 				\int_set:Nn \l_image_to_insert_int {0}
 			}{
 				\int_set:Nn \l_image_to_insert_int {1}
 			}
 		}{
-			\dim_compare:nNnTF {\textheight - \pagetotal} < {0.5\textheight}{
+		% Use 0.5 to compute height, but use 0.49 to 
+			\dim_compare:nNnTF {\textheight - \pagetotal} < {0.49\textheight}{
 				\int_set:Nn \l_image_to_insert_int {(4 - \l_pageremfour_int) * 2}
 			}{
 				\int_set:Nn \l_image_to_insert_int {(4 - \l_pageremfour_int) * 2 + 1}
@@ -420,7 +421,7 @@
 			}
 		}
 			\centering
-			\adjustimage{max~width = \textwidth, max~height = 0.5\textheight, keepaspectratio}{##1}
+			\adjustimage{max~width = \textwidth, max~height = 0.49\textheight, keepaspectratio}{##1}
 			\bool_if:NTF \l_tmpb_bool {
 			\end{myfigure}
 				\bool_set_false:N \l_tmpb_bool

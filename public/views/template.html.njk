@@ -65,7 +65,11 @@
 		.speaker{
 			margin-right: 0;
 		}
-		.speaker::after{
+		.speaker_text{
+			color: white; /* The default background color */
+			filter: invert(1) grayscale(1) brightness(300%);
+		}
+		.speaker_text::after{
 			content: "：";
 		}
 		.text{
@@ -146,6 +150,9 @@
 		.highlight-{{ cuuid }}{
 			background-color: {{ scenario.characters.reference[cuuid].color }};
 		}
+		.highlight-{{ cuuid }} .speaker_text{
+			color: {{ scenario.characters.reference[cuuid].color }};
+		}
 {%- endfor %}
 	</style>
 </head>
@@ -162,9 +169,9 @@
 {%- set abb_list = scenario.characters.reference|getitem_by_list(speakers_list)|map('abbreviated') %}
 		<div class="sentence">
 {%- if scenario.dialogues.reference[duuid].speaker %}
-			<div class="speaker {{ speakers_list|join(' ') }}">{{ scenario.dialogues.reference[duuid].speaker|e }}</div>
+			<div class="speaker {{ speakers_list|join(' ') }}"><span class="speaker_text">{{ scenario.dialogues.reference[duuid].speaker|e }}</span></div>
 {%- elif speakers_list|length > 0 %}
-			<div class="speaker {{ speakers_list|join(' ') }}">{{ abb_list|join('、')|e }}</div>
+			<div class="speaker {{ speakers_list|join(' ') }}"><span class="speaker_text">{{ abb_list|join('、')|e }}</span></div>
 {%- endif %}
 			<div class="text">
 {{- components_printer(scenario.dialogues.reference[duuid].components) -}}

@@ -98,18 +98,14 @@
 \setmainfont{\tl_use:N \g_vadscript_font_tl}[AutoFakeBold, Mapping = ]
 \setCJKmainfont{\tl_use:N \g_vadscript_font_tl}
 
-\bool_new:N \g_vadscript_modify_puncstyle_b
-\bool_if:nTF {!\g_vadscript_kern_b} {
-	\xeCJKDeclarePunctStyle {mypunctstyle} {}
-	\bool_if:nTF {!\g_vadscript_kern_b} {
-		\xeCJKEditPunctStyle {mypunctstyle} {enabled-kerning = false}
-	}{}
-	%...
-	\xeCJKsetup{PunctStyle = mypunctstyle}
-	\bool_gset_true:N \g_vadscript_modify_puncstyle_b
+\xeCJKDeclarePunctStyle {mypunctstyle} {}
+\bool_if:nTF {\g_vadscript_kern_b} {
+	\xeCJKEditPunctStyle {mypunctstyle} {enabled-kerning = true}
 }{
-	\bool_gset_false:N \g_vadscript_modify_puncstyle_b
+	\xeCJKEditPunctStyle {mypunctstyle} {enabled-kerning = false}
 }
+%...
+\xeCJKsetup{PunctStyle = mypunctstyle}
 
 % interchar
 \bool_if:NTF \g_vadscript_baselatin_calibri_b {

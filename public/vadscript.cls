@@ -5,11 +5,15 @@
 
 %Load basic packages for latex3
 \RequirePackage{expl3}
-\RequirePackage{xparse}
+%\RequirePackage{xparse} %obsolete since 2020-10
 
 \ExplSyntaxOn
 \tl_new:N \g_vadscript_font_tl
 \tl_gset:Nn \g_vadscript_font_tl {新細明體}
+\clist_new:N \g_vadscript_font_callback_clist
+\clist_gset:Nn \g_vadscript_font_callback_clist {}
+\bool_new:N \g_enable_notoserif_b
+\bool_gset_false:N \g_enable_notoserif_b
 \dim_new:N \g_vadscript_font_size_dim
 \dim_gset:Nn \g_vadscript_font_size_dim {10pt}
 \dim_new:N \g_vadscript_cast_size_dim
@@ -37,6 +41,10 @@
 \keys_define:nn {vadscript} {
 	font .value_required:n = true,
 	font .tl_gset:N = \g_vadscript_font_tl,
+	font-callback .value_required:n = true,
+	font-callback .clist_gset:N = \g_vadscript_font_callback_clist,
+	notoserif .value_forbidden:n = true,
+	notoserif .code:n = {\bool_gset_true:N \g_enable_notoserif_b},
 	fontsize .value_required:n = true,
 	fontsize .dim_gset:N = \g_vadscript_font_size_dim,
 	castsize .value_required:n = true,
@@ -69,7 +77,7 @@
 
 %Load packages after options passed
 \LoadClass{article}
-\RequirePackage{xeCJK}
+\RequirePackage[AutoFallBack]{xeCJK}
 \bool_if:NTF \g_paper_horizontal_b {
 	\RequirePackage[a5paper, margin = 1.27cm, footskip = 1cm, headsep = 10pt, includefoot, landscape]{geometry}
 }{
@@ -90,6 +98,7 @@
 \RequirePackage{environ}
 \RequirePackage{pxrubrica}
 \RequirePackage{fontsize}
+% \RequirePackage{ucharclasses}
 
 \changefontsize{\g_vadscript_font_size_dim}
 
@@ -97,6 +106,22 @@
 
 \setmainfont{\tl_use:N \g_vadscript_font_tl}[AutoFakeBold, Mapping = ]
 \setCJKmainfont{\tl_use:N \g_vadscript_font_tl}
+
+\clist_if_empty:NF \g_vadscript_font_callback_clist {
+	\setCJKfallbackfamilyfont{\CJKrmdefault}[AutoFakeBold, Mapping = ]{
+		\clist_use:N \g_vadscript_font_callback_clist
+	}
+}
+
+%Use "CJKfamily+" to apply the fonts to all characters no matter they are CJK or not
+\bool_if:nT {\g_enable_notoserif_b} {
+	\setCJKfamilyfont{notoseriftc}{Noto~Serif~TC}[AutoFakeBold, Mapping = ]
+	\setCJKfamilyfont{notoserifjp}{Noto~Serif~JP}[AutoFakeBold, Mapping = ]
+	\setCJKfamilyfont{notoserifsc}{Noto~Serif~SC}[AutoFakeBold, Mapping = ]
+	\newcommand*\notoseriftc{\CJKfamily+{notoseriftc}}
+	\newcommand*\notoserifjp{\CJKfamily+{notoserifjp}}
+	\newcommand*\notoserifsc{\CJKfamily+{notoserifsc}}
+}
 
 \xeCJKDeclarePunctStyle {mypunctstyle} {}
 \bool_if:nTF {\g_vadscript_kern_b} {
@@ -108,8 +133,9 @@
 \xeCJKsetup{PunctStyle = mypunctstyle}
 
 % interchar
-\bool_if:NTF \g_vadscript_baselatin_calibri_b {
-	%\setTransitionTo{BasicLatin}{\calibri}
+\bool_if:NT \g_vadscript_baselatin_calibri_b {
+	% The ucharclasses way behaves weird in my block environments such as "sentence"
+	% \setTransitionsFor{BasicLatin}{\begingroup\calibri}{\endgroup}
 	\XeTeXinterchartokenstate=1
 	\newXeTeXintercharclass\ASCIIclass
 	\XeTeXinterchartoks 0 \ASCIIclass = {\begingroup\calibri}
@@ -121,7 +147,7 @@
 	  \XeTeXcharclass\count255=\ASCIIclass
 	  \advance\count255 by 1
 	\repeat
-}{}
+}
 
 \ExplSyntaxOff
 
@@ -227,7 +253,7 @@
 	\group_begin:
 	\seq_set_split:Nnn \l_column_seq {,} {#1}
 	\int_set:Nx \l_tmpa_int {\seq_count:N \l_column_seq}
-	\int_compare:nNnTF {\l_tmpa_int} > {#2} {
+	\int_compare:nNnT {\l_tmpa_int} > {#2} {
 		\int_gset:Nn #2 {\l_tmpa_int}
 	}
 	\group_end:
@@ -403,7 +429,7 @@
 		}
 	}
 	\seq_map_inline:Nn \l_images_seq {
-		\int_compare:nNnTF {\l_image_to_insert_int} = {0} {\seq_map_break:} {}
+		\int_compare:nNnT {\l_image_to_insert_int} = {0} {\seq_map_break:}
 		\int_compare:nNnTF {\int_mod:nn {\l_image_to_insert_int} {2}} = {0} {
 			%\int_show:N \l_image_to_insert_int
 			\newpage
